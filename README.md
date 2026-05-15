@@ -1,5 +1,5 @@
 # 🏚️ World Decay
-*[Descripción en español](https://steamcommunity.com/workshop/filedetails/discussion/3719766602/844004941778481142/)*
+*[Descripción en español](https://steamcommunity.com/workshop/filedetails/discussion/3725803503/836124531564327067/)*
 
 ## 📦 What is this mod?
 The world didn't end with a bang. It ended with a whimper — and then it started to rot. **World Decay** transforms Knox County into a crumbling, overgrown wasteland where every corner shows the scars of abandonment. Cracked roads, collapsed roofs, shattered windows, rusted vehicles, and vegetation that devours everything in its path.
