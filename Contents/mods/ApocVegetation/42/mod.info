@@ -1,0 +1,10 @@
+name=World Decay [B42]
+id=WorldDecay
+description=Transforms Knox County into a decaying post-apocalyptic wasteland. Advanced vegetation, urban decay, abandoned vehicles, barricades, trash, and a full cleaning system. Fully configurable via sandbox options. Save-safe.
+poster=poster.png
+pzversion=42
+modversion=2.0.0
+versionMin=42.18.0
+author=Ledezma
+pack=Maniks_a_decade_later
+pack=GrassLands

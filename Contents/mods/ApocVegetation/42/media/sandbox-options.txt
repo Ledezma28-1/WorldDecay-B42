@@ -1,0 +1,384 @@
+VERSION = 1,
+
+option ApocVeg.ReadPlease
+{
+	type = boolean,
+	default = false,
+	page = ApocVeg,
+	translation = ApocVeg_ReadPlease,
+}
+
+option ApocVeg.timeBudgetMs
+{
+	type = integer,
+	min = 25,
+	max = 500,
+	default = 200,
+	page = ApocVeg,
+	translation = ApocVeg_timeBudgetMs,
+}
+
+option ApocVeg.scanInterval
+{
+	type = integer,
+	min = 20,
+	max = 500,
+	default = 100,
+	page = ApocVeg,
+	translation = ApocVeg_scanInterval,
+}
+
+option ApocVeg.scanRadius
+{
+	type = integer,
+	min = 5,
+	max = 40,
+	default = 15,
+	page = ApocVeg,
+	translation = ApocVeg_scanRadius,
+}
+
+option ApocVeg.priorityRadius
+{
+	type = integer,
+	min = 2,
+	max = 15,
+	default = 5,
+	page = ApocVeg,
+	translation = ApocVeg_priorityRadius,
+}
+
+option ApocVeg.debugMode
+{
+	type = boolean,
+	default = false,
+	page = ApocVeg,
+	translation = ApocVeg_debugMode,
+}
+
+option ApocVeg.treePercentage
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 17,
+	page = ApocVeg_Nature,
+	translation = ApocVeg_treePercentage,
+}
+
+option ApocVeg.treePercentageOnRoad
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 0,
+	page = ApocVeg_Nature,
+	translation = ApocVeg_treePercentageOnRoad,
+}
+
+option ApocVeg.bushesPercentage
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 17,
+	page = ApocVeg_Nature,
+	translation = ApocVeg_bushesPercentage,
+}
+
+option ApocVeg.bushesPercentageOnRoad
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 0,
+	page = ApocVeg_Nature,
+	translation = ApocVeg_bushesPercentageOnRoad,
+}
+
+option ApocVeg.indoorBushesPercentage
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 5,
+	page = ApocVeg_Nature,
+	translation = ApocVeg_indoorBushesPercentage,
+}
+
+option ApocVeg.grassPercentage
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 40,
+	page = ApocVeg_Nature,
+	translation = ApocVeg_grassPercentage,
+}
+
+option ApocVeg.grassPercentageOnRoad
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 40,
+	page = ApocVeg_Nature,
+	translation = ApocVeg_grassPercentageOnRoad,
+}
+
+option ApocVeg.customGrassPercentage
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 20,
+	page = ApocVeg_Nature,
+	translation = ApocVeg_customGrassPercentage,
+}
+
+option ApocVeg.customGrassPercentageOnRoad
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 20,
+	page = ApocVeg_Nature,
+	translation = ApocVeg_customGrassPercentageOnRoad,
+}
+
+option ApocVeg.indoorGrassPercentage
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 30,
+	page = ApocVeg_Nature,
+	translation = ApocVeg_indoorGrassPercentage,
+}
+
+option ApocVeg.vinePercentage
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 80,
+	page = ApocVeg_Nature,
+	translation = ApocVeg_vinePercentage,
+}
+
+option ApocVeg.multiFloorVines
+{
+	type = boolean,
+	default = true,
+	page = ApocVeg_Nature,
+	translation = ApocVeg_multiFloorVines,
+}
+
+option ApocVeg.vinesExteriorOnly
+{
+	type = boolean,
+	default = false,
+	page = ApocVeg_Nature,
+	translation = ApocVeg_vinesExteriorOnly,
+}
+
+option ApocVeg.vinesOnWalls
+{
+	type = boolean,
+	default = true,
+	page = ApocVeg_Nature,
+	translation = ApocVeg_vinesOnWalls,
+}
+
+option ApocVeg.vinesOnFences
+{
+	type = boolean,
+	default = true,
+	page = ApocVeg_Nature,
+	translation = ApocVeg_vinesOnFences,
+}
+
+option ApocVeg.trashPercentage
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 0,
+	page = ApocVeg_Nature,
+	translation = ApocVeg_trashPercentage,
+}
+
+option ApocVeg.trashPercentageOnRoad
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 5,
+	page = ApocVeg_Nature,
+	translation = ApocVeg_trashPercentageOnRoad,
+}
+
+option ApocVeg.roadCrackOverlayPercentage
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 10,
+	page = ApocVeg_UrbanDecay,
+	translation = ApocVeg_roadCrackOverlayPercentage,
+}
+
+option ApocVeg.dirtCrackOverlayPercentage
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 10,
+	page = ApocVeg_UrbanDecay,
+	translation = ApocVeg_dirtCrackOverlayPercentage,
+}
+
+option ApocVeg.wallPercentage
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 10,
+	page = ApocVeg_UrbanDecay,
+	translation = ApocVeg_wallPercentage,
+}
+
+option ApocVeg.barricadePercentage
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 40,
+	page = ApocVeg_UrbanDecay,
+	translation = ApocVeg_barricadePercentage,
+}
+
+option ApocVeg.destroyedDoorsPercentage
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 40,
+	page = ApocVeg_UrbanDecay,
+	translation = ApocVeg_destroyedDoorsPercentage,
+}
+
+option ApocVeg.destroyedWindowsPercentage
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 40,
+	page = ApocVeg_UrbanDecay,
+	translation = ApocVeg_destroyedWindowsPercentage,
+}
+
+option ApocVeg.fencePercentage
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 40,
+	page = ApocVeg_UrbanDecay,
+	translation = ApocVeg_fencePercentage,
+}
+
+option ApocVeg.fenceBreakChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 30,
+	page = ApocVeg_UrbanDecay,
+	translation = ApocVeg_fenceBreakChance,
+}
+
+option ApocVeg.fenceBendChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 30,
+	page = ApocVeg_UrbanDecay,
+	translation = ApocVeg_fenceBendChance,
+}
+
+option ApocVeg.fenceDestroyWeight
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 20,
+	page = ApocVeg_UrbanDecay,
+	translation = ApocVeg_fenceDestroyWeight,
+}
+
+option ApocVeg.fenceBendSeverity
+{
+	type = enum,
+	numValues = 4,
+	default = 4,
+	page = ApocVeg_UrbanDecay,
+	translation = ApocVeg_fenceBendSeverity,
+}
+
+option ApocVeg.roofPercentage
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 50,
+	page = ApocVeg_UrbanDecay,
+	translation = ApocVeg_roofPercentage,
+}
+
+option ApocVeg.roofGrassPercentage
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 70,
+	page = ApocVeg_UrbanDecay,
+	translation = ApocVeg_roofGrassPercentage,
+}
+
+option ApocVeg.roofCustomGrassPercentage
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 40,
+	page = ApocVeg_UrbanDecay,
+	translation = ApocVeg_roofCustomGrassPercentage,
+}
+
+option ApocVeg.vehicleRarity
+{
+	type = enum,
+	numValues = 5,
+	default = 2,
+	page = ApocVeg_World,
+	translation = ApocVeg_vehicleRarity,
+}
+
+option ApocVeg.storiesRarity
+{
+	type = enum,
+	numValues = 5,
+	default = 2,
+	page = ApocVeg_World,
+	translation = ApocVeg_storiesRarity,
+}
+
+option ApocVeg.enableLegacyOverlays
+{
+	type = boolean,
+	default = false,
+	page = ApocVeg_World,
+	translation = ApocVeg_enableLegacyOverlays,
+}
