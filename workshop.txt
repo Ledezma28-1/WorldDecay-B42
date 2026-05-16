@@ -55,7 +55,7 @@ description=[list]
 description=[*]English (EN)
 description=[*]Español / Spanish (ES)
 description=[*]Deutsch / German (DE)
-description=[*]Português Brasileiro / Brazilian Portuguese (PT-BR)
+description=[*]Português Brasileiro / Brazilian Portuguese (PT-BR) [url=https://steamcommunity.com/profiles/76561198795044894/]Revive: Okijiu[/url]
 description=[/list]
 description=
 description=
