@@ -1,5 +1,5 @@
 version=1
-id=3719766602
+id=3725803503
 title=World Decay [B42.18]
 description=[h1]🏚️ World Decay[/h1]
 description=[i][url=https://steamcommunity.com/workshop/filedetails/discussion/3719766602/844004941778481142/]Descripción en español[/url][/i]
@@ -74,7 +74,7 @@ description=[/code]
 description=
 description=[h2]📋 Mod Information[/h2]
 description=[list]
-description=[*][b]Workshop ID:[/b] 3719766602
+description=[*][b]Workshop ID:[/b] 3725803503
 description=[*][b]Mod ID:[/b] WorldDecay
 description=[*][b]Game Version:[/b] Build 42.17
 description=[*][b]Save-Safe:[/b] Yes — Can be added or removed mid-save.
