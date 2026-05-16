@@ -55,6 +55,7 @@ description=[list]
 description=[*]English (EN)
 description=[*]Español / Spanish (ES)
 description=[*]Deutsch / German (DE)
+description=[*]Português Brasileiro / Portugues Brasil (PTBR)
 description=[/list]
 description=
 description=
