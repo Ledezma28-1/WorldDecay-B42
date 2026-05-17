@@ -1,4 +1,4 @@
-local ApocVeg_Fences = require('ApocVeg_Fences/ApocVeg_Fences')
+local WDecay_Fences = require('WDecay_Fences/WDecay_Fences')
 
 local cachedFencePercentage = nil
 local cachedFenceBreakChance = nil
@@ -7,35 +7,35 @@ local cachedFenceDestroyWeight = nil
 local cachedFenceBendSeverity = nil
 local function getFencePercentage()
     if cachedFencePercentage == nil then
-        local opt = getSandboxOptions():getOptionByName('ApocVeg.fencePercentage')
+        local opt = getSandboxOptions():getOptionByName('WDecay.fencePercentage')
         cachedFencePercentage = opt and opt:getValue() or 20
     end
     return cachedFencePercentage
 end
 local function getFenceBreakChance()
     if cachedFenceBreakChance == nil then
-        local opt = getSandboxOptions():getOptionByName('ApocVeg.fenceBreakChance')
+        local opt = getSandboxOptions():getOptionByName('WDecay.fenceBreakChance')
         cachedFenceBreakChance = opt and opt:getValue() or 0
     end
     return cachedFenceBreakChance
 end
 local function getFenceBendChance()
     if cachedFenceBendChance == nil then
-        local opt = getSandboxOptions():getOptionByName('ApocVeg.fenceBendChance')
+        local opt = getSandboxOptions():getOptionByName('WDecay.fenceBendChance')
         cachedFenceBendChance = opt and opt:getValue() or 0
     end
     return cachedFenceBendChance
 end
 local function getFenceDestroyWeight()
     if cachedFenceDestroyWeight == nil then
-        local opt = getSandboxOptions():getOptionByName('ApocVeg.fenceDestroyWeight')
+        local opt = getSandboxOptions():getOptionByName('WDecay.fenceDestroyWeight')
         cachedFenceDestroyWeight = opt and opt:getValue() or 20
     end
     return cachedFenceDestroyWeight
 end
 local function getFenceBendSeverity()
     if cachedFenceBendSeverity == nil then
-        local opt = getSandboxOptions():getOptionByName('ApocVeg.fenceBendSeverity')
+        local opt = getSandboxOptions():getOptionByName('WDecay.fenceBendSeverity')
         cachedFenceBendSeverity = opt and opt:getValue() or 4
     end
     return cachedFenceBendSeverity
@@ -53,24 +53,24 @@ local function LoadGridsquare(square, checkResult)
 
     for i = 0, objects:size() - 1 do
         local obj = objects:get(i)
-        if obj and ApocVeg_Fences.isFence(obj) then
-            if not ApocVeg_Fences.isAlreadyDamaged(obj) then
-                if ApocVeg_Fences.isBreakableFence(obj) then
+        if obj and WDecay_Fences.isFence(obj) then
+            if not WDecay_Fences.isAlreadyDamaged(obj) then
+                if WDecay_Fences.isBreakableFence(obj) then
                     local chance = getFenceBreakChance()
                     if chance > 0 and chance >= ZombRand(1, 101) then
-                        ApocVeg_Fences.applyBreakableFenceDamage(obj, getFenceDestroyWeight())
+                        WDecay_Fences.applyBreakableFenceDamage(obj, getFenceDestroyWeight())
                         local objModData = obj:getModData()
-                        if objModData and not objModData["ApocVeg_Cleanable"] then
-                            objModData["ApocVeg_Cleanable"] = "fence"
+                        if objModData and not objModData["WDecay_Cleanable"] then
+                            objModData["WDecay_Cleanable"] = "fence"
                         end
                     end
-                elseif ApocVeg_Fences.isBendableFence(obj) then
+                elseif WDecay_Fences.isBendableFence(obj) then
                     local chance = getFenceBendChance()
                     if chance > 0 and chance >= ZombRand(1, 101) then
-                        ApocVeg_Fences.applyBendableFenceDamage(obj, getFenceBendSeverity())
+                        WDecay_Fences.applyBendableFenceDamage(obj, getFenceBendSeverity())
                         local objModData = obj:getModData()
-                        if objModData and not objModData["ApocVeg_Cleanable"] then
-                            objModData["ApocVeg_Cleanable"] = "fence"
+                        if objModData and not objModData["WDecay_Cleanable"] then
+                            objModData["WDecay_Cleanable"] = "fence"
                         end
                     end
                 end
@@ -79,7 +79,7 @@ local function LoadGridsquare(square, checkResult)
     end
 end
 
-if not ApocVeg_ModifierGenerators then ApocVeg_ModifierGenerators = {} end
-table.insert(ApocVeg_ModifierGenerators, LoadGridsquare)
+if not WDecay_ModifierGenerators then WDecay_ModifierGenerators = {} end
+table.insert(WDecay_ModifierGenerators, LoadGridsquare)
 
-return ApocVeg_Fences
+return WDecay_Fences

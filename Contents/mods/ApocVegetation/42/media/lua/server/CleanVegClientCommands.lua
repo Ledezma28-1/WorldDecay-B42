@@ -11,7 +11,7 @@ local function onCleanVegCommand(module, command, player, args)
                 if not object then return false end
 
                 local modData = object:getModData()
-                if modData and modData["ApocVeg_Cleanable"] then
+                if modData and modData["WDecay_Cleanable"] then
                     sq:transmitRemoveItemFromSquare(object)
                     return true
                 end
@@ -102,14 +102,14 @@ local function onCleanVegCommand(module, command, player, args)
                 end
 
                 if object:getClass() == IsoTree.class then
-                    if object:getModData()["ApocVeg_Tree"] then
+                    if object:getModData()["WDecay_Tree"] then
                         sq:transmitRemoveItemFromSquare(object)
                         return true
                     end
                 end
 
                 if object:getClass() == IsoBarricade.class then
-                    if object:getModData()["ApocVeg_Barricade"] then
+                    if object:getModData()["WDecay_Barricade"] then
                         sq:transmitRemoveItemFromSquare(object)
                         return true
                     end

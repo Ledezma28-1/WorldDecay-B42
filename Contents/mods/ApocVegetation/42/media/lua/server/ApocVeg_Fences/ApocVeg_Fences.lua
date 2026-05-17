@@ -1,21 +1,21 @@
-local ApocVeg_Fences = {}
+local WDecay_Fences = {}
 
-function ApocVeg_Fences.isBreakableFence(obj)
+function WDecay_Fences.isBreakableFence(obj)
     if not obj then return false end
     return BrokenFences.getInstance():isBreakableObject(obj)
 end
 
-function ApocVeg_Fences.isBendableFence(obj)
+function WDecay_Fences.isBendableFence(obj)
     if not obj then return false end
     return BentFences.getInstance():isBendableFence(obj)
 end
 
-function ApocVeg_Fences.isFence(obj)
+function WDecay_Fences.isFence(obj)
     if not obj then return false end
-    return ApocVeg_Fences.isBreakableFence(obj) or ApocVeg_Fences.isBendableFence(obj)
+    return WDecay_Fences.isBreakableFence(obj) or WDecay_Fences.isBendableFence(obj)
 end
 
-function ApocVeg_Fences.isAlreadyDamaged(obj)
+function WDecay_Fences.isAlreadyDamaged(obj)
     if not obj then return false end
     local sprite = obj:getSprite()
     if not sprite then return false end
@@ -24,7 +24,7 @@ function ApocVeg_Fences.isAlreadyDamaged(obj)
     return luautils.stringStarts(spriteName, "fencing_damaged_")
 end
 
-function ApocVeg_Fences.determineDirection(obj)
+function WDecay_Fences.determineDirection(obj)
     if not obj then return nil end
     local sprite = obj:getSprite()
     if not sprite then return nil end
@@ -48,7 +48,7 @@ function ApocVeg_Fences.determineDirection(obj)
     return nil
 end
 
-function ApocVeg_Fences.getRandomStage(severity)
+function WDecay_Fences.getRandomStage(severity)
     severity = severity or 4
     if severity == 1 then
         return 1
@@ -68,10 +68,10 @@ function ApocVeg_Fences.getRandomStage(severity)
     end
 end
 
-function ApocVeg_Fences.applyBreakableFenceDamage(obj, destroyWeight)
+function WDecay_Fences.applyBreakableFenceDamage(obj, destroyWeight)
     if not obj then return false end
 
-    local dir = ApocVeg_Fences.determineDirection(obj)
+    local dir = WDecay_Fences.determineDirection(obj)
     if not dir then return false end
 
     destroyWeight = destroyWeight or 20
@@ -89,8 +89,8 @@ function ApocVeg_Fences.applyBreakableFenceDamage(obj, destroyWeight)
                         if luautils.stringStarts(name, "fencing_damaged_") or
                            luautils.stringStarts(name, "carpentry_02_") then
                             local md = o:getModData()
-                            if md and not md["ApocVeg_Cleanable"] then
-                                md["ApocVeg_Cleanable"] = "fence"
+                            if md and not md["WDecay_Cleanable"] then
+                                md["WDecay_Cleanable"] = "fence"
                             end
                         end
                     end
@@ -117,13 +117,13 @@ function ApocVeg_Fences.applyBreakableFenceDamage(obj, destroyWeight)
     return true
 end
 
-function ApocVeg_Fences.applyBendableFenceDamage(obj, severity)
+function WDecay_Fences.applyBendableFenceDamage(obj, severity)
     if not obj then return false end
 
-    local dir = ApocVeg_Fences.determineDirection(obj)
+    local dir = WDecay_Fences.determineDirection(obj)
     if not dir then return false end
 
-    local stage = ApocVeg_Fences.getRandomStage(severity)
+    local stage = WDecay_Fences.getRandomStage(severity)
 
     BentFences.getInstance():swapTiles(obj, dir, true, stage)
     local sq = obj:getSquare()
@@ -135,8 +135,8 @@ function ApocVeg_Fences.applyBendableFenceDamage(obj, severity)
                 if o and o:getSprite() and o:getSprite():getName() and
                    luautils.stringStarts(o:getSprite():getName(), "fencing_damaged_") then
                     local md = o:getModData()
-                    if md and not md["ApocVeg_Cleanable"] then
-                        md["ApocVeg_Cleanable"] = "fence"
+                    if md and not md["WDecay_Cleanable"] then
+                        md["WDecay_Cleanable"] = "fence"
                     end
                 end
             end
@@ -146,4 +146,4 @@ function ApocVeg_Fences.applyBendableFenceDamage(obj, severity)
     return true
 end
 
-return ApocVeg_Fences
+return WDecay_Fences

@@ -1,6 +1,6 @@
-local ApocVeg_Trash = {}
+local WDecay_Trash = {}
 
-ApocVeg_Trash.trashSprites = {
+WDecay_Trash.trashSprites = {
     "trash_01_0",
     "trash_01_1",
     "trash_01_2",
@@ -55,7 +55,7 @@ ApocVeg_Trash.trashSprites = {
     "trash_01_51"
 }
 
-ApocVeg_Trash.customName = {
+WDecay_Trash.customName = {
     ["trash_01_0"] = "Trash",
     ["trash_01_1"] = "Trash",
     ["trash_01_2"] = "Trash",
@@ -110,20 +110,20 @@ ApocVeg_Trash.customName = {
     ["trash_01_51"] = "Trash"
 }
 
-function ApocVeg_Trash.getRandomTrash()
-    if #ApocVeg_Trash.trashSprites == 0 then
+function WDecay_Trash.getRandomTrash()
+    if #WDecay_Trash.trashSprites == 0 then
         return nil
     end
-    return ApocVeg_Trash.trashSprites[ZombRand(1, #ApocVeg_Trash.trashSprites + 1)]
+    return WDecay_Trash.trashSprites[ZombRand(1, #WDecay_Trash.trashSprites + 1)]
 end
 
-function ApocVeg_Trash.getCustomName(spriteName)
-    return ApocVeg_Trash.customName[spriteName] or nil
+function WDecay_Trash.getCustomName(spriteName)
+    return WDecay_Trash.customName[spriteName] or nil
 end
 
-function ApocVeg_Trash.isTrash(spriteName)
+function WDecay_Trash.isTrash(spriteName)
     if not spriteName then return false end
     return luautils.stringStarts(spriteName, "trash_01_")
 end
 
-return ApocVeg_Trash
+return WDecay_Trash

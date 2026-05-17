@@ -1,9 +1,9 @@
-local ApocVeg_Vines = require('ApocVeg_Vines/ApocVeg_Vines')
+local WDecay_Vines = require('WDecay_Vines/WDecay_Vines')
 
 local cachedVinePercentage = nil
 local function getVinePercentage()
     if cachedVinePercentage == nil then
-        local opt = getSandboxOptions():getOptionByName('ApocVeg.vinePercentage')
+        local opt = getSandboxOptions():getOptionByName('WDecay.vinePercentage')
         cachedVinePercentage = opt and opt:getValue() or 15
     end
     return cachedVinePercentage
@@ -12,7 +12,7 @@ end
 local cachedMultiFloorVines = nil
 local function getMultiFloorVines()
     if cachedMultiFloorVines == nil then
-        local opt = getSandboxOptions():getOptionByName('ApocVeg.multiFloorVines')
+        local opt = getSandboxOptions():getOptionByName('WDecay.multiFloorVines')
         cachedMultiFloorVines = opt and opt:getValue() or false
     end
     return cachedMultiFloorVines
@@ -21,7 +21,7 @@ end
 local cachedVinesExteriorOnly = nil
 local function isVinesExteriorOnly()
     if cachedVinesExteriorOnly == nil then
-        local opt = getSandboxOptions():getOptionByName('ApocVeg.vinesExteriorOnly')
+        local opt = getSandboxOptions():getOptionByName('WDecay.vinesExteriorOnly')
         cachedVinesExteriorOnly = opt and opt:getValue()
         if cachedVinesExteriorOnly == nil then cachedVinesExteriorOnly = true end
     end
@@ -70,9 +70,9 @@ local function LoadGridsquare(square, checkResult)
     
     local modData = square:getModData()
     if not modData then return end
-    if modData["ApocVeg_Vines"] then return end
+    if modData["WDecay_Vines"] then return end
     
-    modData["ApocVeg_Vines"] = true
+    modData["WDecay_Vines"] = true
     
     if not getMultiFloorVines() and square:getZ() ~= 0 then return end
     
@@ -102,10 +102,10 @@ local function LoadGridsquare(square, checkResult)
 
 
                             if hasWallProperty(sprite, "WallNW") then
-                                local randomOverlay = ApocVeg_Vines.getRandomWallNW()
+                                local randomOverlay = WDecay_Vines.getRandomWallNW()
 
                                 if isLowFenceObj then
-                                    randomOverlay = ApocVeg_Vines.getRandomWallNWLow()
+                                    randomOverlay = WDecay_Vines.getRandomWallNWLow()
                                 end
 
                                 if randomOverlay then
@@ -113,7 +113,7 @@ local function LoadGridsquare(square, checkResult)
                                     square:AddTileObject(obj2)
                                     obj2:transmitCompleteItemToClients()
                                     local obj2ModData = obj2:getModData()
-                                    obj2ModData["ApocVeg_Cleanable"] = "vine"
+                                    obj2ModData["WDecay_Cleanable"] = "vine"
 
                                     if false then
                                         local neighbour = getCell():getGridSquare(square:getX(), square:getY(), square:getZ() + 1)
@@ -132,13 +132,13 @@ local function LoadGridsquare(square, checkResult)
                                                                not luautils.stringStarts(tostring(neighbourSpriteName), "walls_exterior_roofs") and
                                                                not luautils.stringStarts(tostring(neighbourSpriteName), "walls_interior") then
 
-                                                                local randomOverlay2 = ApocVeg_Vines.getRandomWallNWTop()
+                                                                local randomOverlay2 = WDecay_Vines.getRandomWallNWTop()
                                                                 if randomOverlay2 then
                                                                     local obj3 = IsoObject.new(getCell(), neighbour, randomOverlay2)
                                                                     neighbour:AddSpecialObject(obj3)
                                                                     obj3:transmitCompleteItemToClients()
                                                                     local obj3ModData = obj3:getModData()
-                                                                    obj3ModData["ApocVeg_Cleanable"] = "vine"
+                                                                    obj3ModData["WDecay_Cleanable"] = "vine"
                                                                 end
                                                                 break
                                                             end
@@ -155,10 +155,10 @@ local function LoadGridsquare(square, checkResult)
                                hasWallProperty(sprite, "doorW") or hasWallProperty(sprite, "DoorWallW") or
                                hasWallProperty(sprite, "attachedW") or hasWallProperty(sprite, "WallWTrans") then
 
-                                local randomOverlay = ApocVeg_Vines.getRandomWallW()
+                                local randomOverlay = WDecay_Vines.getRandomWallW()
 
                                 if isLowFenceObj then
-                                    randomOverlay = ApocVeg_Vines.getRandomWallWLow()
+                                    randomOverlay = WDecay_Vines.getRandomWallWLow()
                                 end
 
                                 if randomOverlay then
@@ -166,7 +166,7 @@ local function LoadGridsquare(square, checkResult)
                                     square:AddTileObject(obj2)
                                     obj2:transmitCompleteItemToClients()
                                     local obj2ModData = obj2:getModData()
-                                    obj2ModData["ApocVeg_Cleanable"] = "vine"
+                                    obj2ModData["WDecay_Cleanable"] = "vine"
 
                                     if false then
                                         local neighbour = getCell():getGridSquare(square:getX(), square:getY(), square:getZ() + 1)
@@ -185,13 +185,13 @@ local function LoadGridsquare(square, checkResult)
                                                                not luautils.stringStarts(tostring(neighbourSpriteName), "walls_exterior_roofs") and
                                                                not luautils.stringStarts(tostring(neighbourSpriteName), "walls_interior") then
 
-                                                                local randomOverlay2 = ApocVeg_Vines.getRandomWallWTop()
+                                                                local randomOverlay2 = WDecay_Vines.getRandomWallWTop()
                                                                 if randomOverlay2 then
                                                                     local obj3 = IsoObject.new(getCell(), neighbour, randomOverlay2)
                                                                     neighbour:AddSpecialObject(obj3)
                                                                     obj3:transmitCompleteItemToClients()
                                                                     local obj3ModData = obj3:getModData()
-                                                                    obj3ModData["ApocVeg_Cleanable"] = "vine"
+                                                                    obj3ModData["WDecay_Cleanable"] = "vine"
                                                                 end
                                                                 break
                                                             end
@@ -205,10 +205,10 @@ local function LoadGridsquare(square, checkResult)
                             end
 
                             if hasWallProperty(sprite, "WallN") or hasWallProperty(sprite, "WindowN") then
-                                local randomOverlay = ApocVeg_Vines.getRandomWallN()
+                                local randomOverlay = WDecay_Vines.getRandomWallN()
 
                                 if isLowFenceObj then
-                                    randomOverlay = ApocVeg_Vines.getRandomWallNLow()
+                                    randomOverlay = WDecay_Vines.getRandomWallNLow()
                                 end
 
                                 if randomOverlay then
@@ -216,7 +216,7 @@ local function LoadGridsquare(square, checkResult)
                                     square:AddTileObject(obj2)
                                     obj2:transmitCompleteItemToClients()
                                     local obj2ModData = obj2:getModData()
-                                    obj2ModData["ApocVeg_Cleanable"] = "vine"
+                                    obj2ModData["WDecay_Cleanable"] = "vine"
 
                                     if false then
                                         local neighbour = getCell():getGridSquare(square:getX(), square:getY(), square:getZ() + 1)
@@ -235,13 +235,13 @@ local function LoadGridsquare(square, checkResult)
                                                                not luautils.stringStarts(tostring(neighbourSpriteName), "walls_exterior_roofs") and
                                                                not luautils.stringStarts(tostring(neighbourSpriteName), "walls_interior") then
 
-                                                                local randomOverlay2 = ApocVeg_Vines.getRandomWallNTop()
+                                                                local randomOverlay2 = WDecay_Vines.getRandomWallNTop()
                                                                 if randomOverlay2 then
                                                                     local obj3 = IsoObject.new(getCell(), neighbour, randomOverlay2)
                                                                     neighbour:AddSpecialObject(obj3)
                                                                     obj3:transmitCompleteItemToClients()
                                                                     local obj3ModData = obj3:getModData()
-                                                                    obj3ModData["ApocVeg_Cleanable"] = "vine"
+                                                                    obj3ModData["WDecay_Cleanable"] = "vine"
                                                                 end
                                                                 break
                                                         end
@@ -261,7 +261,7 @@ local function LoadGridsquare(square, checkResult)
 end
 end
 
-if not ApocVeg_ModifierGenerators then ApocVeg_ModifierGenerators = {} end
-table.insert(ApocVeg_ModifierGenerators, LoadGridsquare)
+if not WDecay_ModifierGenerators then WDecay_ModifierGenerators = {} end
+table.insert(WDecay_ModifierGenerators, LoadGridsquare)
 
-return ApocVeg_Vines
+return WDecay_Vines

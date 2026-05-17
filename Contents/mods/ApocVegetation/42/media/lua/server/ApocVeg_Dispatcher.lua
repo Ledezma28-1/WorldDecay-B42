@@ -35,11 +35,11 @@ local function loadDispatcherConfig()
     if dispatcherConfigLoaded then return end
     dispatcherConfigLoaded = true
     local function getInt(name, default)
-        local opt = getSandboxOptions():getOptionByName('ApocVeg.' .. name)
+        local opt = getSandboxOptions():getOptionByName('WDecay.' .. name)
         return opt and opt:getValue() or default
     end
     local function getBool(name, default)
-        local opt = getSandboxOptions():getOptionByName('ApocVeg.' .. name)
+        local opt = getSandboxOptions():getOptionByName('WDecay.' .. name)
         if opt then return opt:getValue() end
         return default
     end
@@ -66,12 +66,12 @@ local function dispatchGenerators(square, checkResult)
     if checkResult and checkResult.tooManyPhysicsShapes then
         return
     end
-    if ApocVeg_PlacementGenerators then
-        for i = 1, #ApocVeg_PlacementGenerators do
-            local fn = ApocVeg_PlacementGenerators[i]
+    if WDecay_PlacementGenerators then
+        for i = 1, #WDecay_PlacementGenerators do
+            local fn = WDecay_PlacementGenerators[i]
             if fn and fn(square, checkResult) then
-                if ApocVeg_DebugCountPlacement then
-                    ApocVeg_DebugCountPlacement(i)
+                if WDecay_DebugCountPlacement then
+                    WDecay_DebugCountPlacement(i)
                 end
                 break
             end
@@ -82,52 +82,52 @@ local function dispatchGenerators(square, checkResult)
        and not checkResult.hasFences and not checkResult.hasRoof) then
         return
     end
-    if ApocVeg_ModifierGenerators then
-        local mg = ApocVeg_ModifierGenerators
+    if WDecay_ModifierGenerators then
+        local mg = WDecay_ModifierGenerators
         if checkResult.hasWalls or checkResult.hasWindows or checkResult.hasFences or checkResult.room then
             local fn = mg[1]
             if fn then fn(square, checkResult) end
-            if ApocVeg_DebugCountModifier then ApocVeg_DebugCountModifier(1) end
+            if WDecay_DebugCountModifier then WDecay_DebugCountModifier(1) end
         end
         if checkResult.isRoad then
             local fn = mg[2]
             if fn then fn(square, checkResult) end
-            if ApocVeg_DebugCountModifier then ApocVeg_DebugCountModifier(2) end
+            if WDecay_DebugCountModifier then WDecay_DebugCountModifier(2) end
         end
         if checkResult.room then
             local fn = mg[3]
             if fn then fn(square, checkResult) end
-            if ApocVeg_DebugCountModifier then ApocVeg_DebugCountModifier(3) end
+            if WDecay_DebugCountModifier then WDecay_DebugCountModifier(3) end
         end
         if checkResult.hasFences then
             local fn = mg[4]
             if fn then fn(square, checkResult) end
-            if ApocVeg_DebugCountModifier then ApocVeg_DebugCountModifier(4) end
+            if WDecay_DebugCountModifier then WDecay_DebugCountModifier(4) end
         end
         if checkResult.room then
             local fn = mg[5]
             if fn then fn(square, checkResult) end
-            if ApocVeg_DebugCountModifier then ApocVeg_DebugCountModifier(5) end
+            if WDecay_DebugCountModifier then WDecay_DebugCountModifier(5) end
         end
         if checkResult.hasWalls or checkResult.hasFences then
             local fn = mg[6]
             if fn then fn(square, checkResult) end
-            if ApocVeg_DebugCountModifier then ApocVeg_DebugCountModifier(6) end
+            if WDecay_DebugCountModifier then WDecay_DebugCountModifier(6) end
         end
         if checkResult.room then
             local fn = mg[7]
             if fn then fn(square, checkResult) end
-            if ApocVeg_DebugCountModifier then ApocVeg_DebugCountModifier(7) end
+            if WDecay_DebugCountModifier then WDecay_DebugCountModifier(7) end
         end
         if checkResult.hasRoof then
             local fn = mg[8]
             if fn then fn(square, checkResult) end
-            if ApocVeg_DebugCountModifier then ApocVeg_DebugCountModifier(8) end
+            if WDecay_DebugCountModifier then WDecay_DebugCountModifier(8) end
         end
     end
 end
 
-local ApocVeg_SquareCheck = require('apocveg_squarecheck/apocveg_squarecheck')
+local WDecay_SquareCheck = require('wdecay_squarecheck/wdecay_squarecheck')
 
 local function processChunkSquares(chunk)
     local testSquare = nil
@@ -154,18 +154,18 @@ local function processChunkSquares(chunk)
                 local square = chunk:getGridSquare(x, y, z)
                 if square and square:getChunk() then
                     local sqModData = square:getModData()
-                    if sqModData and sqModData["ApocVeg_Processed"] then
+                    if sqModData and sqModData["WDecay_Processed"] then
                     else
-                        local checkResult = ApocVeg_SquareCheck.checkAll(square)
+                        local checkResult = WDecay_SquareCheck.checkAll(square)
                         local ok, err = pcall(dispatchGenerators, square, checkResult)
                         if not ok then
                             sqErrors = sqErrors + 1
                             if sqErrors == 1 then
-                                print("[ApocVeg] Square dispatch error: " .. tostring(err):sub(1, 120))
+                                print("[WDecay] Square dispatch error: " .. tostring(err):sub(1, 120))
                             end
                         else
                             if sqModData then
-                                sqModData["ApocVeg_Processed"] = true
+                                sqModData["WDecay_Processed"] = true
                             end
                         end
                     end
@@ -174,14 +174,14 @@ local function processChunkSquares(chunk)
         end
     end
     if sqErrors > 0 then
-        print("[ApocVeg] Chunk completed with " .. sqErrors .. " square errors")
+        print("[WDecay] Chunk completed with " .. sqErrors .. " square errors")
     end
-    if ApocVeg_Debug and ApocVeg_Debug.totalChunksProcessed then
-        ApocVeg_Debug.totalChunksProcessed = ApocVeg_Debug.totalChunksProcessed + 1
+    if WDecay_Debug and WDecay_Debug.totalChunksProcessed then
+        WDecay_Debug.totalChunksProcessed = WDecay_Debug.totalChunksProcessed + 1
     end
-    if DEBUG_MODE and ApocVeg_Debug and ApocVeg_Debug.totalChunkTimeMs then
+    if DEBUG_MODE and WDecay_Debug and WDecay_Debug.totalChunkTimeMs then
         local elapsed = getTimestampMs() - chunkStartMs
-        ApocVeg_Debug.totalChunkTimeMs = ApocVeg_Debug.totalChunkTimeMs + elapsed
+        WDecay_Debug.totalChunkTimeMs = WDecay_Debug.totalChunkTimeMs + elapsed
     end
     return true
 end
@@ -222,7 +222,7 @@ local function ScanChunksAroundPos(worldX, worldY, radius)
         end
     end
     if DEBUG_MODE and queued > 0 then
-        print("[ApocVeg] Scan queued " .. queued .. " chunks around " .. worldX .. "," .. worldY)
+        print("[WDecay] Scan queued " .. queued .. " chunks around " .. worldX .. "," .. worldY)
     end
 end
 
@@ -265,7 +265,7 @@ local function OnTick()
     loadDispatcherConfig()
 
     if not modDataTable then
-        modDataTable = ModData.getOrCreate("ApocVeg_ChunkCache")
+        modDataTable = ModData.getOrCreate("WDecay_ChunkCache")
         if modDataTable then
             if not modDataTable._version or modDataTable._version ~= CACHE_VERSION then
                 local keysToClear = {}
@@ -278,7 +278,7 @@ local function OnTick()
                 modDataTable._version = CACHE_VERSION
                 seenChunks = {}
                 if DEBUG_MODE then
-                    print("[ApocVeg] Chunk cache initialized (lazy)")
+                    print("[WDecay] Chunk cache initialized (lazy)")
                 end
             else
                 for k, v in pairs(modDataTable) do
@@ -289,7 +289,7 @@ local function OnTick()
                 local count = 0
                 for _ in pairs(seenChunks) do count = count + 1 end
                 if DEBUG_MODE then
-                    print("[ApocVeg] Chunk cache loaded: " .. count .. " seen chunks")
+                    print("[WDecay] Chunk cache loaded: " .. count .. " seen chunks")
                 end
             end
             scanTimer = scanInterval
@@ -319,7 +319,7 @@ local function OnTick()
                     end
                     local ok, err = pcall(ScanChunksAroundPos, px, py, SCAN_RADIUS)
                     if not ok then
-                        print("[ApocVeg] Scan error: " .. tostring(err):sub(1, 120))
+                        print("[WDecay] Scan error: " .. tostring(err):sub(1, 120))
                     end
                 end
             else
@@ -339,7 +339,7 @@ local function OnTick()
                                     end
                                     local ok, err = pcall(ScanChunksAroundPos, px, py, SCAN_RADIUS)
                                     if not ok then
-                                        print("[ApocVeg] Scan error: " .. tostring(err):sub(1, 120))
+                                        print("[WDecay] Scan error: " .. tostring(err):sub(1, 120))
         end
     end
 end
@@ -355,7 +355,7 @@ end
                 spawnAttempts = spawnAttempts + 1
                 local ok, err = pcall(ScanChunksAroundPos, spawnX, spawnY, radius)
                 if not ok then
-                    print("[ApocVeg] Spawn scan error: " .. tostring(err):sub(1, 120))
+                    print("[WDecay] Spawn scan error: " .. tostring(err):sub(1, 120))
                 end
             end
         end
@@ -375,7 +375,7 @@ end
             debugTickCounter = 0
             local highCount = chunkQueueTailHigh - chunkQueueHeadHigh + 1
             local lowCount = chunkQueueTailLow - chunkQueueHeadLow + 1
-            print("[ApocVeg] Queue: high=" .. highCount .. " low=" .. lowCount)
+            print("[WDecay] Queue: high=" .. highCount .. " low=" .. lowCount)
         end
     end
 
@@ -395,17 +395,17 @@ end
         chunkQueueHighKeys[chunkQueueHeadHigh] = nil
         chunkQueueHeadHigh = chunkQueueHeadHigh + 1
         if chunk ~= nil then
-            if DEBUG_MODE and ApocVeg_Debug then
-                ApocVeg_Debug.chunksHigh = ApocVeg_Debug.chunksHigh + 1
+            if DEBUG_MODE and WDecay_Debug then
+                WDecay_Debug.chunksHigh = WDecay_Debug.chunksHigh + 1
             end
             if pendingChunks[key] then
                 pendingChunks[key] = nil
                 local ok, result = pcall(processChunkSquares, chunk)
-                if ApocVeg_DebugCountChunk then
-                    ApocVeg_DebugCountChunk(ok and result)
+                if WDecay_DebugCountChunk then
+                    WDecay_DebugCountChunk(ok and result)
                 end
                 if not ok then
-                    print("[ApocVeg] Chunk " .. key .. " error: " .. tostring(result):sub(1, 120))
+                    print("[WDecay] Chunk " .. key .. " error: " .. tostring(result):sub(1, 120))
                 elseif result then
                     seenChunks[key] = true
                     if modDataTable then
@@ -428,17 +428,17 @@ end
         chunkQueueLowKeys[chunkQueueHeadLow] = nil
         chunkQueueHeadLow = chunkQueueHeadLow + 1
         if chunk ~= nil then
-            if DEBUG_MODE and ApocVeg_Debug then
-                ApocVeg_Debug.chunksLow = ApocVeg_Debug.chunksLow + 1
+            if DEBUG_MODE and WDecay_Debug then
+                WDecay_Debug.chunksLow = WDecay_Debug.chunksLow + 1
             end
             if pendingChunks[key] then
                 pendingChunks[key] = nil
                 local ok, result = pcall(processChunkSquares, chunk)
-                if ApocVeg_DebugCountChunk then
-                    ApocVeg_DebugCountChunk(ok and result)
+                if WDecay_DebugCountChunk then
+                    WDecay_DebugCountChunk(ok and result)
                 end
                 if not ok then
-                    print("[ApocVeg] Chunk " .. key .. " error: " .. tostring(result):sub(1, 120))
+                    print("[WDecay] Chunk " .. key .. " error: " .. tostring(result):sub(1, 120))
                 elseif result then
                     seenChunks[key] = true
                     if modDataTable then
@@ -459,8 +459,8 @@ end
         perfTickCounter = perfTickCounter + 1
         if perfTickCounter >= 100 then
             perfTickCounter = 0
-            if ApocVeg_Debug and ApocVeg_Debug.printPerfSummary then
-                ApocVeg_Debug.printPerfSummary(debugTickCounter)
+            if WDecay_Debug and WDecay_Debug.printPerfSummary then
+                WDecay_Debug.printPerfSummary(debugTickCounter)
             end
         end
     end
@@ -475,7 +475,7 @@ end)
 
 Events.OnInitGlobalModData.Add(function(isNewGame)
     if not isServer() then return end
-    modDataTable = ModData.getOrCreate("ApocVeg_ChunkCache")
+    modDataTable = ModData.getOrCreate("WDecay_ChunkCache")
     scanTimer = scanInterval
 
     if isNewGame or not modDataTable._version or modDataTable._version ~= CACHE_VERSION then
@@ -489,7 +489,7 @@ Events.OnInitGlobalModData.Add(function(isNewGame)
         modDataTable._version = CACHE_VERSION
         seenChunks = {}
         if DEBUG_MODE then
-            print("[ApocVeg] Chunk cache initialized (new game or version upgrade)")
+            print("[WDecay] Chunk cache initialized (new game or version upgrade)")
         end
     else
         for k, v in pairs(modDataTable) do
@@ -500,7 +500,7 @@ Events.OnInitGlobalModData.Add(function(isNewGame)
         local count = 0
         for _ in pairs(seenChunks) do count = count + 1 end
         if DEBUG_MODE then
-            print("[ApocVeg] Chunk cache loaded: " .. count .. " seen chunks")
+            print("[WDecay] Chunk cache loaded: " .. count .. " seen chunks")
         end
     end
 end)
@@ -509,6 +509,6 @@ Events.LoadChunk.Add(function(chunk)
     queueChunk(chunk)
 end)
 
-function ApocVeg_Dispatcher_IsQueueIdle()
+function WDecay_Dispatcher_IsQueueIdle()
     return chunkQueueHeadHigh > chunkQueueTailHigh and chunkQueueHeadLow > chunkQueueTailLow
 end

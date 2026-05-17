@@ -1,18 +1,18 @@
-local ApocVeg_Trash = require('ApocVeg_ZZTrash/ApocVeg_Trash')
-local ApocVeg_CustomNames_Integration = require('ApocVeg_CustomNames/ApocVeg_CustomNames_Integration')
+local WDecay_Trash = require('WDecay_Trash/WDecay_Trash')
+local WDecay_CustomNames_Integration = require('WDecay_CustomNames/WDecay_CustomNames_Integration')
 
 local cachedTrashPercentage = nil
 local cachedTrashPercentageOnRoad = nil
 local function getTrashPercentage()
     if cachedTrashPercentage == nil then
-        local opt = getSandboxOptions():getOptionByName('ApocVeg.trashPercentage')
+        local opt = getSandboxOptions():getOptionByName('WDecay.trashPercentage')
         cachedTrashPercentage = opt and opt:getValue() or 8
     end
     return cachedTrashPercentage
 end
 local function getTrashPercentageOnRoad()
     if cachedTrashPercentageOnRoad == nil then
-        local opt = getSandboxOptions():getOptionByName('ApocVeg.trashPercentageOnRoad')
+        local opt = getSandboxOptions():getOptionByName('WDecay.trashPercentageOnRoad')
         cachedTrashPercentageOnRoad = opt and opt:getValue() or 8
     end
     return cachedTrashPercentageOnRoad
@@ -42,7 +42,7 @@ local function LoadGridsquare(square, checkResult)
         local currentFloorTile = square:getFloor() and square:getFloor():getSprite():getName()
         
         if currentFloorTile ~= nil then
-            local randomTrash = ApocVeg_Trash.getRandomTrash()
+            local randomTrash = WDecay_Trash.getRandomTrash()
             
             if randomTrash then
                 local newSprite = IsoObject.new(getCell(), square, randomTrash)
@@ -50,11 +50,11 @@ local function LoadGridsquare(square, checkResult)
                     square:AddSpecialObject(newSprite)
                     square:RecalcProperties()
                     
-                    ApocVeg_CustomNames_Integration.applyCustomNameToObject(newSprite)
+                    WDecay_CustomNames_Integration.applyCustomNameToObject(newSprite)
                     
                     local objModData = newSprite:getModData()
                     if objModData then
-                        objModData["ApocVeg_Cleanable"] = "trash"
+                        objModData["WDecay_Cleanable"] = "trash"
                     end
                     
                     newSprite:transmitCompleteItemToClients()
@@ -66,7 +66,7 @@ local function LoadGridsquare(square, checkResult)
     return false
 end
 
-if not ApocVeg_PlacementGenerators then ApocVeg_PlacementGenerators = {} end
-table.insert(ApocVeg_PlacementGenerators, LoadGridsquare)
+if not WDecay_PlacementGenerators then WDecay_PlacementGenerators = {} end
+table.insert(WDecay_PlacementGenerators, LoadGridsquare)
 
-return ApocVeg_Trash
+return WDecay_Trash

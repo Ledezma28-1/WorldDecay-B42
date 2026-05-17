@@ -1,12 +1,12 @@
-local ApocVeg_Walls = {}
+local WDecay_Walls = {}
 
-ApocVeg_Walls.wallProperties = {
+WDecay_Walls.wallProperties = {
     "WallNW",
     "WallW",
     "WallN"
 }
 
-ApocVeg_Walls.burnedTextures = {
+WDecay_Walls.burnedTextures = {
     WallNW = {
         "walls_exterior_wooden_01_70",
         "walls_burnt_01_2"
@@ -21,7 +21,7 @@ ApocVeg_Walls.burnedTextures = {
     }
 }
 
-function ApocVeg_Walls.hasWallProperty(sprite, propertyName)
+function WDecay_Walls.hasWallProperty(sprite, propertyName)
     if not sprite or not sprite:getProperties() then return false end
     
     local properties = sprite:getProperties():getPropertyNames()
@@ -31,19 +31,19 @@ function ApocVeg_Walls.hasWallProperty(sprite, propertyName)
     return propertyStr:contains(propertyName)
 end
 
-function ApocVeg_Walls.getBurnedTextures(wallType)
-    return ApocVeg_Walls.burnedTextures[wallType] or nil
+function WDecay_Walls.getBurnedTextures(wallType)
+    return WDecay_Walls.burnedTextures[wallType] or nil
 end
 
-function ApocVeg_Walls.getRandomBurnedTexture(wallType)
-    local textures = ApocVeg_Walls.getBurnedTextures(wallType)
+function WDecay_Walls.getRandomBurnedTexture(wallType)
+    local textures = WDecay_Walls.getBurnedTextures(wallType)
     if not textures or #textures == 0 then
         return nil
     end
     return textures[ZombRand(1, #textures + 1)]
 end
 
-function ApocVeg_Walls.isBurnedWall(spriteName)
+function WDecay_Walls.isBurnedWall(spriteName)
     if not spriteName then return false end
     return luautils.stringStarts(spriteName, "walls_burnt_") or
            (luautils.stringStarts(spriteName, "walls_exterior_wooden_01_") and
@@ -56,15 +56,15 @@ function ApocVeg_Walls.isBurnedWall(spriteName)
              spriteName == "walls_exterior_wooden_01_78"))
 end
 
-function ApocVeg_Walls.isExteriorWall(textureName)
+function WDecay_Walls.isExteriorWall(textureName)
     if not textureName then return false end
     return luautils.stringStarts(textureName, "walls_exterior_") and
            not luautils.stringStarts(textureName, "walls_exterior_roofs_")
 end
 
-function ApocVeg_Walls.isInteriorWall(textureName)
+function WDecay_Walls.isInteriorWall(textureName)
     if not textureName then return false end
     return luautils.stringStarts(textureName, "walls_interior_")
 end
 
-return ApocVeg_Walls
+return WDecay_Walls

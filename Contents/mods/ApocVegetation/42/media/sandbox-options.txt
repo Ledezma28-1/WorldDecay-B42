@@ -1,384 +1,384 @@
 VERSION = 1,
 
-option ApocVeg.ReadPlease
+option WDecay.ReadPlease
 {
 	type = boolean,
 	default = false,
-	page = ApocVeg,
-	translation = ApocVeg_ReadPlease,
+	page = WDecay,
+	translation = WDecay_ReadPlease,
 }
 
-option ApocVeg.timeBudgetMs
+option WDecay.timeBudgetMs
 {
 	type = integer,
 	min = 25,
 	max = 500,
 	default = 200,
-	page = ApocVeg,
-	translation = ApocVeg_timeBudgetMs,
+	page = WDecay,
+	translation = WDecay_timeBudgetMs,
 }
 
-option ApocVeg.scanInterval
+option WDecay.scanInterval
 {
 	type = integer,
 	min = 20,
 	max = 500,
 	default = 100,
-	page = ApocVeg,
-	translation = ApocVeg_scanInterval,
+	page = WDecay,
+	translation = WDecay_scanInterval,
 }
 
-option ApocVeg.scanRadius
+option WDecay.scanRadius
 {
 	type = integer,
 	min = 5,
 	max = 40,
 	default = 15,
-	page = ApocVeg,
-	translation = ApocVeg_scanRadius,
+	page = WDecay,
+	translation = WDecay_scanRadius,
 }
 
-option ApocVeg.priorityRadius
+option WDecay.priorityRadius
 {
 	type = integer,
 	min = 2,
 	max = 15,
 	default = 5,
-	page = ApocVeg,
-	translation = ApocVeg_priorityRadius,
+	page = WDecay,
+	translation = WDecay_priorityRadius,
 }
 
-option ApocVeg.debugMode
+option WDecay.debugMode
 {
 	type = boolean,
 	default = false,
-	page = ApocVeg,
-	translation = ApocVeg_debugMode,
+	page = WDecay,
+	translation = WDecay_debugMode,
 }
 
-option ApocVeg.treePercentage
+option WDecay.treePercentage
 {
 	type = integer,
 	min = 0,
 	max = 100,
 	default = 17,
-	page = ApocVeg_Nature,
-	translation = ApocVeg_treePercentage,
+	page = WDecay_Nature,
+	translation = WDecay_treePercentage,
 }
 
-option ApocVeg.treePercentageOnRoad
+option WDecay.treePercentageOnRoad
 {
 	type = integer,
 	min = 0,
 	max = 100,
 	default = 0,
-	page = ApocVeg_Nature,
-	translation = ApocVeg_treePercentageOnRoad,
+	page = WDecay_Nature,
+	translation = WDecay_treePercentageOnRoad,
 }
 
-option ApocVeg.bushesPercentage
+option WDecay.bushesPercentage
 {
 	type = integer,
 	min = 0,
 	max = 100,
 	default = 17,
-	page = ApocVeg_Nature,
-	translation = ApocVeg_bushesPercentage,
+	page = WDecay_Nature,
+	translation = WDecay_bushesPercentage,
 }
 
-option ApocVeg.bushesPercentageOnRoad
+option WDecay.bushesPercentageOnRoad
 {
 	type = integer,
 	min = 0,
 	max = 100,
 	default = 0,
-	page = ApocVeg_Nature,
-	translation = ApocVeg_bushesPercentageOnRoad,
+	page = WDecay_Nature,
+	translation = WDecay_bushesPercentageOnRoad,
 }
 
-option ApocVeg.indoorBushesPercentage
+option WDecay.indoorBushesPercentage
 {
 	type = integer,
 	min = 0,
 	max = 100,
 	default = 5,
-	page = ApocVeg_Nature,
-	translation = ApocVeg_indoorBushesPercentage,
+	page = WDecay_Nature,
+	translation = WDecay_indoorBushesPercentage,
 }
 
-option ApocVeg.grassPercentage
+option WDecay.grassPercentage
 {
 	type = integer,
 	min = 0,
 	max = 100,
 	default = 40,
-	page = ApocVeg_Nature,
-	translation = ApocVeg_grassPercentage,
+	page = WDecay_Nature,
+	translation = WDecay_grassPercentage,
 }
 
-option ApocVeg.grassPercentageOnRoad
+option WDecay.grassPercentageOnRoad
 {
 	type = integer,
 	min = 0,
 	max = 100,
 	default = 40,
-	page = ApocVeg_Nature,
-	translation = ApocVeg_grassPercentageOnRoad,
+	page = WDecay_Nature,
+	translation = WDecay_grassPercentageOnRoad,
 }
 
-option ApocVeg.customGrassPercentage
+option WDecay.customGrassPercentage
 {
 	type = integer,
 	min = 0,
 	max = 100,
 	default = 20,
-	page = ApocVeg_Nature,
-	translation = ApocVeg_customGrassPercentage,
+	page = WDecay_Nature,
+	translation = WDecay_customGrassPercentage,
 }
 
-option ApocVeg.customGrassPercentageOnRoad
+option WDecay.customGrassPercentageOnRoad
 {
 	type = integer,
 	min = 0,
 	max = 100,
 	default = 20,
-	page = ApocVeg_Nature,
-	translation = ApocVeg_customGrassPercentageOnRoad,
+	page = WDecay_Nature,
+	translation = WDecay_customGrassPercentageOnRoad,
 }
 
-option ApocVeg.indoorGrassPercentage
+option WDecay.indoorGrassPercentage
 {
 	type = integer,
 	min = 0,
 	max = 100,
 	default = 30,
-	page = ApocVeg_Nature,
-	translation = ApocVeg_indoorGrassPercentage,
+	page = WDecay_Nature,
+	translation = WDecay_indoorGrassPercentage,
 }
 
-option ApocVeg.vinePercentage
+option WDecay.vinePercentage
 {
 	type = integer,
 	min = 0,
 	max = 100,
 	default = 80,
-	page = ApocVeg_Nature,
-	translation = ApocVeg_vinePercentage,
+	page = WDecay_Nature,
+	translation = WDecay_vinePercentage,
 }
 
-option ApocVeg.multiFloorVines
+option WDecay.multiFloorVines
 {
 	type = boolean,
 	default = true,
-	page = ApocVeg_Nature,
-	translation = ApocVeg_multiFloorVines,
+	page = WDecay_Nature,
+	translation = WDecay_multiFloorVines,
 }
 
-option ApocVeg.vinesExteriorOnly
+option WDecay.vinesExteriorOnly
 {
 	type = boolean,
 	default = false,
-	page = ApocVeg_Nature,
-	translation = ApocVeg_vinesExteriorOnly,
+	page = WDecay_Nature,
+	translation = WDecay_vinesExteriorOnly,
 }
 
-option ApocVeg.vinesOnWalls
+option WDecay.vinesOnWalls
 {
 	type = boolean,
 	default = true,
-	page = ApocVeg_Nature,
-	translation = ApocVeg_vinesOnWalls,
+	page = WDecay_Nature,
+	translation = WDecay_vinesOnWalls,
 }
 
-option ApocVeg.vinesOnFences
+option WDecay.vinesOnFences
 {
 	type = boolean,
 	default = true,
-	page = ApocVeg_Nature,
-	translation = ApocVeg_vinesOnFences,
+	page = WDecay_Nature,
+	translation = WDecay_vinesOnFences,
 }
 
-option ApocVeg.trashPercentage
+option WDecay.trashPercentage
 {
 	type = integer,
 	min = 0,
 	max = 100,
 	default = 0,
-	page = ApocVeg_Nature,
-	translation = ApocVeg_trashPercentage,
+	page = WDecay_Nature,
+	translation = WDecay_trashPercentage,
 }
 
-option ApocVeg.trashPercentageOnRoad
+option WDecay.trashPercentageOnRoad
 {
 	type = integer,
 	min = 0,
 	max = 100,
 	default = 5,
-	page = ApocVeg_Nature,
-	translation = ApocVeg_trashPercentageOnRoad,
+	page = WDecay_Nature,
+	translation = WDecay_trashPercentageOnRoad,
 }
 
-option ApocVeg.roadCrackOverlayPercentage
+option WDecay.roadCrackOverlayPercentage
 {
 	type = integer,
 	min = 0,
 	max = 100,
 	default = 10,
-	page = ApocVeg_UrbanDecay,
-	translation = ApocVeg_roadCrackOverlayPercentage,
+	page = WDecay_UrbanDecay,
+	translation = WDecay_roadCrackOverlayPercentage,
 }
 
-option ApocVeg.dirtCrackOverlayPercentage
+option WDecay.dirtCrackOverlayPercentage
 {
 	type = integer,
 	min = 0,
 	max = 100,
 	default = 10,
-	page = ApocVeg_UrbanDecay,
-	translation = ApocVeg_dirtCrackOverlayPercentage,
+	page = WDecay_UrbanDecay,
+	translation = WDecay_dirtCrackOverlayPercentage,
 }
 
-option ApocVeg.wallPercentage
+option WDecay.wallPercentage
 {
 	type = integer,
 	min = 0,
 	max = 100,
 	default = 10,
-	page = ApocVeg_UrbanDecay,
-	translation = ApocVeg_wallPercentage,
+	page = WDecay_UrbanDecay,
+	translation = WDecay_wallPercentage,
 }
 
-option ApocVeg.barricadePercentage
+option WDecay.barricadePercentage
 {
 	type = integer,
 	min = 0,
 	max = 100,
 	default = 40,
-	page = ApocVeg_UrbanDecay,
-	translation = ApocVeg_barricadePercentage,
+	page = WDecay_UrbanDecay,
+	translation = WDecay_barricadePercentage,
 }
 
-option ApocVeg.destroyedDoorsPercentage
+option WDecay.destroyedDoorsPercentage
 {
 	type = integer,
 	min = 0,
 	max = 100,
 	default = 40,
-	page = ApocVeg_UrbanDecay,
-	translation = ApocVeg_destroyedDoorsPercentage,
+	page = WDecay_UrbanDecay,
+	translation = WDecay_destroyedDoorsPercentage,
 }
 
-option ApocVeg.destroyedWindowsPercentage
+option WDecay.destroyedWindowsPercentage
 {
 	type = integer,
 	min = 0,
 	max = 100,
 	default = 40,
-	page = ApocVeg_UrbanDecay,
-	translation = ApocVeg_destroyedWindowsPercentage,
+	page = WDecay_UrbanDecay,
+	translation = WDecay_destroyedWindowsPercentage,
 }
 
-option ApocVeg.fencePercentage
+option WDecay.fencePercentage
 {
 	type = integer,
 	min = 0,
 	max = 100,
 	default = 40,
-	page = ApocVeg_UrbanDecay,
-	translation = ApocVeg_fencePercentage,
+	page = WDecay_UrbanDecay,
+	translation = WDecay_fencePercentage,
 }
 
-option ApocVeg.fenceBreakChance
+option WDecay.fenceBreakChance
 {
 	type = integer,
 	min = 0,
 	max = 100,
 	default = 30,
-	page = ApocVeg_UrbanDecay,
-	translation = ApocVeg_fenceBreakChance,
+	page = WDecay_UrbanDecay,
+	translation = WDecay_fenceBreakChance,
 }
 
-option ApocVeg.fenceBendChance
+option WDecay.fenceBendChance
 {
 	type = integer,
 	min = 0,
 	max = 100,
 	default = 30,
-	page = ApocVeg_UrbanDecay,
-	translation = ApocVeg_fenceBendChance,
+	page = WDecay_UrbanDecay,
+	translation = WDecay_fenceBendChance,
 }
 
-option ApocVeg.fenceDestroyWeight
+option WDecay.fenceDestroyWeight
 {
 	type = integer,
 	min = 0,
 	max = 100,
 	default = 20,
-	page = ApocVeg_UrbanDecay,
-	translation = ApocVeg_fenceDestroyWeight,
+	page = WDecay_UrbanDecay,
+	translation = WDecay_fenceDestroyWeight,
 }
 
-option ApocVeg.fenceBendSeverity
+option WDecay.fenceBendSeverity
 {
 	type = enum,
 	numValues = 4,
 	default = 4,
-	page = ApocVeg_UrbanDecay,
-	translation = ApocVeg_fenceBendSeverity,
+	page = WDecay_UrbanDecay,
+	translation = WDecay_fenceBendSeverity,
 }
 
-option ApocVeg.roofPercentage
+option WDecay.roofPercentage
 {
 	type = integer,
 	min = 0,
 	max = 100,
 	default = 50,
-	page = ApocVeg_UrbanDecay,
-	translation = ApocVeg_roofPercentage,
+	page = WDecay_UrbanDecay,
+	translation = WDecay_roofPercentage,
 }
 
-option ApocVeg.roofGrassPercentage
+option WDecay.roofGrassPercentage
 {
 	type = integer,
 	min = 0,
 	max = 100,
 	default = 70,
-	page = ApocVeg_UrbanDecay,
-	translation = ApocVeg_roofGrassPercentage,
+	page = WDecay_UrbanDecay,
+	translation = WDecay_roofGrassPercentage,
 }
 
-option ApocVeg.roofCustomGrassPercentage
+option WDecay.roofCustomGrassPercentage
 {
 	type = integer,
 	min = 0,
 	max = 100,
 	default = 40,
-	page = ApocVeg_UrbanDecay,
-	translation = ApocVeg_roofCustomGrassPercentage,
+	page = WDecay_UrbanDecay,
+	translation = WDecay_roofCustomGrassPercentage,
 }
 
-option ApocVeg.vehicleRarity
+option WDecay.vehicleRarity
 {
 	type = enum,
 	numValues = 5,
 	default = 2,
-	page = ApocVeg_World,
-	translation = ApocVeg_vehicleRarity,
+	page = WDecay_World,
+	translation = WDecay_vehicleRarity,
 }
 
-option ApocVeg.storiesRarity
+option WDecay.storiesRarity
 {
 	type = enum,
 	numValues = 5,
 	default = 2,
-	page = ApocVeg_World,
-	translation = ApocVeg_storiesRarity,
+	page = WDecay_World,
+	translation = WDecay_storiesRarity,
 }
 
-option ApocVeg.enableLegacyOverlays
+option WDecay.enableLegacyOverlays
 {
 	type = boolean,
 	default = false,
-	page = ApocVeg_World,
-	translation = ApocVeg_enableLegacyOverlays,
+	page = WDecay_World,
+	translation = WDecay_enableLegacyOverlays,
 }

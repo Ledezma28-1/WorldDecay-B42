@@ -60,7 +60,7 @@ function CleanVegCursor.hasCleanable(square)
         if not object then return false end
 
         local modData = object:getModData()
-        if modData and modData["ApocVeg_Cleanable"] then
+        if modData and modData["WDecay_Cleanable"] then
             return true
         end
 

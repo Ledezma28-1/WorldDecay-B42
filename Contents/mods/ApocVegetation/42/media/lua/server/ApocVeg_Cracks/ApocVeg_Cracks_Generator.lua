@@ -1,17 +1,17 @@
-local ApocVeg_Cracks = require('ApocVeg_Cracks/ApocVeg_Cracks')
+local WDecay_Cracks = require('WDecay_Cracks/WDecay_Cracks')
 
 local cachedRoadCrackOverlayPercentage = nil
 local cachedDirtCrackOverlayPercentage = nil
 local function getRoadCrackOverlayPercentage()
     if cachedRoadCrackOverlayPercentage == nil then
-        local opt = getSandboxOptions():getOptionByName('ApocVeg.roadCrackOverlayPercentage')
+        local opt = getSandboxOptions():getOptionByName('WDecay.roadCrackOverlayPercentage')
         cachedRoadCrackOverlayPercentage = opt and opt:getValue() or 10
     end
     return cachedRoadCrackOverlayPercentage
 end
 local function getDirtCrackOverlayPercentage()
     if cachedDirtCrackOverlayPercentage == nil then
-        local opt = getSandboxOptions():getOptionByName('ApocVeg.dirtCrackOverlayPercentage')
+        local opt = getSandboxOptions():getOptionByName('WDecay.dirtCrackOverlayPercentage')
         cachedDirtCrackOverlayPercentage = opt and opt:getValue() or 10
     end
     return cachedDirtCrackOverlayPercentage
@@ -37,8 +37,8 @@ local function LoadGridsquare(square, checkResult)
 
             if spriteName then
                 local objModData = obj:getModData()
-                if objModData and objModData["ApocVeg_Crack"] == "placed" then
-                elseif ApocVeg_Cracks.isRoadTile(spriteName) then
+                if objModData and objModData["WDecay_Crack"] == "placed" then
+                elseif WDecay_Cracks.isRoadTile(spriteName) then
                     if getRoadCrackOverlayPercentage() >= ZombRand(1, 101) then
                         local blendsType = "street"
                         if ZombRand(1, 10) == 1 then
@@ -69,14 +69,14 @@ local function LoadGridsquare(square, checkResult)
                                 attachedSprites:add(overlaySprite:newInstance())
                                 local objModData2 = obj:getModData()
                                 if objModData2 then
-                                    objModData2["ApocVeg_Crack"] = "placed"
-                                    objModData2["ApocVeg_Cleanable"] = "crack"
+                                    objModData2["WDecay_Crack"] = "placed"
+                                    objModData2["WDecay_Cleanable"] = "crack"
                                 end
                                 obj:transmitCompleteItemToClients()
                             end
                         end
                     end
-                elseif ApocVeg_Cracks.isNaturalTile(spriteName) then
+                elseif WDecay_Cracks.isNaturalTile(spriteName) then
                     if getDirtCrackOverlayPercentage() >= ZombRand(1, 101) then
                         local overlayId = tostring(ZombRand(0, 32))
                         local overlayName = "blends_dirtoverlays_01_" .. overlayId
@@ -102,8 +102,8 @@ local function LoadGridsquare(square, checkResult)
                                 attachedSprites:add(overlaySprite:newInstance())
                                 local objModData2 = obj:getModData()
                                 if objModData2 then
-                                    objModData2["ApocVeg_Crack"] = "placed"
-                                    objModData2["ApocVeg_Cleanable"] = "crack"
+                                    objModData2["WDecay_Crack"] = "placed"
+                                    objModData2["WDecay_Cleanable"] = "crack"
                                 end
                                 obj:transmitCompleteItemToClients()
                             end
@@ -115,7 +115,7 @@ local function LoadGridsquare(square, checkResult)
     end
 end
 
-if not ApocVeg_ModifierGenerators then ApocVeg_ModifierGenerators = {} end
-table.insert(ApocVeg_ModifierGenerators, LoadGridsquare)
+if not WDecay_ModifierGenerators then WDecay_ModifierGenerators = {} end
+table.insert(WDecay_ModifierGenerators, LoadGridsquare)
 
-return ApocVeg_Cracks
+return WDecay_Cracks

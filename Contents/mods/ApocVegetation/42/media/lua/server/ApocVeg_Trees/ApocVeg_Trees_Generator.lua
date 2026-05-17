@@ -1,17 +1,17 @@
-local ApocVeg_Trees = require('ApocVeg_Trees/ApocVeg_Trees')
+local WDecay_Trees = require('WDecay_Trees/WDecay_Trees')
 
 local cachedTreePercentage = nil
 local cachedTreePercentageOnRoad = nil
 local function getTreePercentage()
     if cachedTreePercentage == nil then
-        local opt = getSandboxOptions():getOptionByName('ApocVeg.treePercentage')
+        local opt = getSandboxOptions():getOptionByName('WDecay.treePercentage')
         cachedTreePercentage = opt and opt:getValue() or 17
     end
     return cachedTreePercentage
 end
 local function getTreePercentageOnRoad()
     if cachedTreePercentageOnRoad == nil then
-        local opt = getSandboxOptions():getOptionByName('ApocVeg.treePercentageOnRoad')
+        local opt = getSandboxOptions():getOptionByName('WDecay.treePercentageOnRoad')
         cachedTreePercentageOnRoad = opt and opt:getValue() or 0
     end
     return cachedTreePercentageOnRoad
@@ -46,7 +46,7 @@ local function LoadGridsquare(square, checkResult)
     local percentage = isRoad and getTreePercentageOnRoad() or getTreePercentage()
     
     if percentage >= ZombRand(1, 101) then
-        local randomTreeSprite = ApocVeg_Trees.getRandomTreeSprite()
+        local randomTreeSprite = WDecay_Trees.getRandomTreeSprite()
         
         if randomTreeSprite then
             local newTree = IsoTree.new(square, getSprite(randomTreeSprite))
@@ -61,10 +61,10 @@ local function LoadGridsquare(square, checkResult)
                 if treeSprite then
                     local treeSpriteName = treeSprite:getName()
 
-                    local foliageIndex = ApocVeg_Trees.getRandomFoliageIndex()
+                    local foliageIndex = WDecay_Trees.getRandomFoliageIndex()
 
                     if foliageIndex then
-                        local foliageSpriteName = ApocVeg_Trees.getFoliageSpriteName(treeSpriteName, foliageIndex)
+                        local foliageSpriteName = WDecay_Trees.getFoliageSpriteName(treeSpriteName, foliageIndex)
 
                         if foliageSpriteName then
                             local foliageSprite = getSprite(foliageSpriteName)
@@ -78,14 +78,14 @@ local function LoadGridsquare(square, checkResult)
 
                 local treeModData = newTree:getModData()
                 if treeModData then
-                    treeModData["ApocVeg_Tree"] = true
-                    treeModData["ApocVeg_Cleanable"] = "tree"
+                    treeModData["WDecay_Tree"] = true
+                    treeModData["WDecay_Cleanable"] = "tree"
                 end
 
                 newTree:transmitCompleteItemToClients()
                 local sqModData = square:getModData()
                 if sqModData then
-                    sqModData["ApocVeg_HasTree"] = true
+                    sqModData["WDecay_HasTree"] = true
                 end
                 return true
             end
@@ -94,7 +94,7 @@ local function LoadGridsquare(square, checkResult)
     return false
 end
 
-if not ApocVeg_PlacementGenerators then ApocVeg_PlacementGenerators = {} end
-table.insert(ApocVeg_PlacementGenerators, LoadGridsquare)
+if not WDecay_PlacementGenerators then WDecay_PlacementGenerators = {} end
+table.insert(WDecay_PlacementGenerators, LoadGridsquare)
 
-return ApocVeg_Trees
+return WDecay_Trees

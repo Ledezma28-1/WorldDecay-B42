@@ -1,6 +1,6 @@
-local ApocVeg_Cracks = {}
+local WDecay_Cracks = {}
 
-ApocVeg_Cracks.roadTiles = {
+WDecay_Cracks.roadTiles = {
     'blends_street_01_0',
     'blends_street_01_5',
     'blends_street_01_16',
@@ -31,7 +31,7 @@ ApocVeg_Cracks.roadTiles = {
     'floors_exterior_tilesandstone_01_6',
 }
 
-ApocVeg_Cracks.naturalTiles = {
+WDecay_Cracks.naturalTiles = {
     'blends_natural_01_16',
     'blends_natural_01_21',
     'blends_natural_01_22',
@@ -47,7 +47,7 @@ ApocVeg_Cracks.naturalTiles = {
     'blends_natural_01_55',
 }
 
-ApocVeg_Cracks.roadCrackOverlays = {
+WDecay_Cracks.roadCrackOverlays = {
     "blends_streetoverlays_01_0",
     "blends_streetoverlays_01_1",
     "blends_streetoverlays_01_2",
@@ -82,7 +82,7 @@ ApocVeg_Cracks.roadCrackOverlays = {
     "blends_streetoverlays_01_31"
 }
 
-ApocVeg_Cracks.dirtCrackOverlays = {
+WDecay_Cracks.dirtCrackOverlays = {
     "blends_dirtoverlays_01_0",
     "blends_dirtoverlays_01_1",
     "blends_dirtoverlays_01_2",
@@ -118,11 +118,11 @@ ApocVeg_Cracks.dirtCrackOverlays = {
 }
 
 local roadTilesSet = {}
-for _, v in ipairs(ApocVeg_Cracks.roadTiles) do roadTilesSet[v] = true end
+for _, v in ipairs(WDecay_Cracks.roadTiles) do roadTilesSet[v] = true end
 local naturalTilesSet = {}
-for _, v in ipairs(ApocVeg_Cracks.naturalTiles) do naturalTilesSet[v] = true end
+for _, v in ipairs(WDecay_Cracks.naturalTiles) do naturalTilesSet[v] = true end
 
-function ApocVeg_Cracks.isTileInArray(tileName, tileArray)
+function WDecay_Cracks.isTileInArray(tileName, tileArray)
     if not tileName or not tileArray then return false end
     for i = 1, #tileArray do
         if tileArray[i] == tileName then
@@ -132,32 +132,32 @@ function ApocVeg_Cracks.isTileInArray(tileName, tileArray)
     return false
 end
 
-function ApocVeg_Cracks.getRandomRoadCrackOverlay()
-    if #ApocVeg_Cracks.roadCrackOverlays == 0 then
+function WDecay_Cracks.getRandomRoadCrackOverlay()
+    if #WDecay_Cracks.roadCrackOverlays == 0 then
         return nil
     end
-    return ApocVeg_Cracks.roadCrackOverlays[ZombRand(1, #ApocVeg_Cracks.roadCrackOverlays + 1)]
+    return WDecay_Cracks.roadCrackOverlays[ZombRand(1, #WDecay_Cracks.roadCrackOverlays + 1)]
 end
 
-function ApocVeg_Cracks.getRandomDirtCrackOverlay()
-    if #ApocVeg_Cracks.dirtCrackOverlays == 0 then
+function WDecay_Cracks.getRandomDirtCrackOverlay()
+    if #WDecay_Cracks.dirtCrackOverlays == 0 then
         return nil
     end
-    return ApocVeg_Cracks.dirtCrackOverlays[ZombRand(1, #ApocVeg_Cracks.dirtCrackOverlays + 1)]
+    return WDecay_Cracks.dirtCrackOverlays[ZombRand(1, #WDecay_Cracks.dirtCrackOverlays + 1)]
 end
 
-function ApocVeg_Cracks.isCrackOverlay(spriteName)
+function WDecay_Cracks.isCrackOverlay(spriteName)
     if not spriteName then return false end
     return luautils.stringStarts(spriteName, "blends_streetoverlays_01_") or
            luautils.stringStarts(spriteName, "blends_dirtoverlays_01_")
 end
 
-function ApocVeg_Cracks.isRoadTile(tileName)
+function WDecay_Cracks.isRoadTile(tileName)
     return roadTilesSet[tileName] == true
 end
 
-function ApocVeg_Cracks.isNaturalTile(tileName)
+function WDecay_Cracks.isNaturalTile(tileName)
     return naturalTilesSet[tileName] == true
 end
 
-return ApocVeg_Cracks
+return WDecay_Cracks

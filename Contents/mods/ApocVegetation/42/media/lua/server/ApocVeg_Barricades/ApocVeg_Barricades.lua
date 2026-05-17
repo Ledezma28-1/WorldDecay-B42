@@ -1,32 +1,32 @@
-local ApocVeg_Barricades = {}
+local WDecay_Barricades = {}
 
-ApocVeg_Barricades.barricadeTypes = {
+WDecay_Barricades.barricadeTypes = {
     "wood",
     "metal"
 }
 
-ApocVeg_Barricades.healthLevels = {
+WDecay_Barricades.healthLevels = {
     100,
     200,
     300,
     400
 }
 
-function ApocVeg_Barricades.getRandomBarricadeType()
-    if #ApocVeg_Barricades.barricadeTypes == 0 then
+function WDecay_Barricades.getRandomBarricadeType()
+    if #WDecay_Barricades.barricadeTypes == 0 then
         return nil
     end
-    return ApocVeg_Barricades.barricadeTypes[ZombRand(1, #ApocVeg_Barricades.barricadeTypes + 1)]
+    return WDecay_Barricades.barricadeTypes[ZombRand(1, #WDecay_Barricades.barricadeTypes + 1)]
 end
 
-function ApocVeg_Barricades.getRandomHealthLevel()
-    if #ApocVeg_Barricades.healthLevels == 0 then
+function WDecay_Barricades.getRandomHealthLevel()
+    if #WDecay_Barricades.healthLevels == 0 then
         return 100
     end
-    return ApocVeg_Barricades.healthLevels[ZombRand(1, #ApocVeg_Barricades.healthLevels + 1)]
+    return WDecay_Barricades.healthLevels[ZombRand(1, #WDecay_Barricades.healthLevels + 1)]
 end
 
-function ApocVeg_Barricades.isWindow(object)
+function WDecay_Barricades.isWindow(object)
     if not object then return false end
     local sprite = object:getSprite()
     if not sprite then return false end
@@ -35,7 +35,7 @@ function ApocVeg_Barricades.isWindow(object)
     return properties:has("WindowN") or properties:has("WindowW")
 end
 
-function ApocVeg_Barricades.isDoor(object)
+function WDecay_Barricades.isDoor(object)
     if not object then return false end
     local sprite = object:getSprite()
     if not sprite then return false end
@@ -44,7 +44,7 @@ function ApocVeg_Barricades.isDoor(object)
     return properties:has("DoorWallW") or properties:has("DoorWallN")
 end
 
-function ApocVeg_Barricades.isExteriorDoor(door)
+function WDecay_Barricades.isExteriorDoor(door)
     if not door then return false end
     
     if door.isExterior then
@@ -54,7 +54,7 @@ function ApocVeg_Barricades.isExteriorDoor(door)
     return false
 end
 
-function ApocVeg_Barricades.canBarricadeDoor(door)
+function WDecay_Barricades.canBarricadeDoor(door)
     if not door then return false end
     
     if door.isBarricadeAllowed then
@@ -64,7 +64,7 @@ function ApocVeg_Barricades.canBarricadeDoor(door)
     return false
 end
 
-function ApocVeg_Barricades.hasBarricade(object)
+function WDecay_Barricades.hasBarricade(object)
     if not object then return false end
     local square = object:getSquare()
     if not square then return false end
@@ -85,11 +85,11 @@ function ApocVeg_Barricades.hasBarricade(object)
     return false
 end
 
-function ApocVeg_Barricades.isApocVegBarricade(object)
+function WDecay_Barricades.isWDecayBarricade(object)
     if not object then return false end
     local modData = object:getModData()
     if not modData then return false end
-    return modData["ApocVeg_Barricade"] == true
+    return modData["WDecay_Barricade"] == true
 end
 
-return ApocVeg_Barricades
+return WDecay_Barricades

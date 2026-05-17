@@ -7,23 +7,23 @@ local function initDebugCounters()
     debugCounters.ChunksFailed = 0
     debugCounters.SquaresProcessed = 0
     
-    if not ApocVeg_PlacementGenerators then return end
-    if not ApocVeg_ModifierGenerators then return end
+    if not WDecay_PlacementGenerators then return end
+    if not WDecay_ModifierGenerators then return end
     
     debugCounters.Placement = {}
     debugCounters.Modifier = {}
     
-    for i = 1, #ApocVeg_PlacementGenerators do
+    for i = 1, #WDecay_PlacementGenerators do
         debugCounters.Placement[i] = 0
     end
-    for i = 1, #ApocVeg_ModifierGenerators do
+    for i = 1, #WDecay_ModifierGenerators do
         debugCounters.Modifier[i] = 0
     end
 end
 
 Events.OnGameStart.Add(function()
     initDebugCounters()
-    print("[ApocVeg-Debug] Counters initialized")
+    print("[WDecay-Debug] Counters initialized")
 end)
 
 Events.EveryOneMinute.Add(function()
@@ -43,44 +43,44 @@ Events.EveryOneMinute.Add(function()
         modifierTotal = modifierTotal + debugCounters.Modifier[i]
     end
     
-    print("[ApocVeg-Debug] === STATUS ===")
-    print("[ApocVeg-Debug] Chunks processed: " .. debugCounters.ChunksProcessed)
-    print("[ApocVeg-Debug] Chunks failed (not ready): " .. debugCounters.ChunksFailed)
-    print("[ApocVeg-Debug] Placement generators calls: " .. placementTotal)
-    print("[ApocVeg-Debug] Modifier generators calls: " .. modifierTotal)
+    print("[WDecay-Debug] === STATUS ===")
+    print("[WDecay-Debug] Chunks processed: " .. debugCounters.ChunksProcessed)
+    print("[WDecay-Debug] Chunks failed (not ready): " .. debugCounters.ChunksFailed)
+    print("[WDecay-Debug] Placement generators calls: " .. placementTotal)
+    print("[WDecay-Debug] Modifier generators calls: " .. modifierTotal)
     
-    if ApocVeg_PlacementGenerators then
-        for i = 1, #ApocVeg_PlacementGenerators do
+    if WDecay_PlacementGenerators then
+        for i = 1, #WDecay_PlacementGenerators do
             if debugCounters.Placement[i] > 0 then
-                print("[ApocVeg-Debug]   Placement[" .. i .. "]: " .. debugCounters.Placement[i] .. " calls")
+                print("[WDecay-Debug]   Placement[" .. i .. "]: " .. debugCounters.Placement[i] .. " calls")
             end
         end
     end
     
-    if ApocVeg_ModifierGenerators then
-        for i = 1, #ApocVeg_ModifierGenerators do
+    if WDecay_ModifierGenerators then
+        for i = 1, #WDecay_ModifierGenerators do
             if debugCounters.Modifier[i] > 0 then
-                print("[ApocVeg-Debug]   Modifier[" .. i .. "]: " .. debugCounters.Modifier[i] .. " calls")
+                print("[WDecay-Debug]   Modifier[" .. i .. "]: " .. debugCounters.Modifier[i] .. " calls")
             end
         end
     end
     
-    print("[ApocVeg-Debug] ==============")
+    print("[WDecay-Debug] ==============")
 end)
 
-function ApocVeg_DebugCountPlacement(index)
+function WDecay_DebugCountPlacement(index)
     if debugCounters.Placement and debugCounters.Placement[index] then
         debugCounters.Placement[index] = debugCounters.Placement[index] + 1
     end
 end
 
-function ApocVeg_DebugCountModifier(index)
+function WDecay_DebugCountModifier(index)
     if debugCounters.Modifier and debugCounters.Modifier[index] then
         debugCounters.Modifier[index] = debugCounters.Modifier[index] + 1
     end
 end
 
-function ApocVeg_DebugCountChunk(success)
+function WDecay_DebugCountChunk(success)
     if not debugCounters.ChunksProcessed then return end
     if success then
         debugCounters.ChunksProcessed = debugCounters.ChunksProcessed + 1
@@ -89,50 +89,50 @@ function ApocVeg_DebugCountChunk(success)
     end
 end
 
-function ApocVeg_DebugPrintStatus()
+function WDecay_DebugPrintStatus()
     if not debugCounters.Placement then
-        print("[ApocVeg-Debug] Counters not initialized yet")
+        print("[WDecay-Debug] Counters not initialized yet")
         return
     end
     
-    print("[ApocVeg-Debug] === MANUAL STATUS ===")
-    print("[ApocVeg-Debug] Chunks processed: " .. debugCounters.ChunksProcessed)
-    print("[ApocVeg-Debug] Chunks failed (not ready): " .. debugCounters.ChunksFailed)
+    print("[WDecay-Debug] === MANUAL STATUS ===")
+    print("[WDecay-Debug] Chunks processed: " .. debugCounters.ChunksProcessed)
+    print("[WDecay-Debug] Chunks failed (not ready): " .. debugCounters.ChunksFailed)
     
-    if ApocVeg_PlacementGenerators then
-        print("[ApocVeg-Debug] Placement generators (" .. #ApocVeg_PlacementGenerators .. " total):")
-        for i = 1, #ApocVeg_PlacementGenerators do
-            print("[ApocVeg-Debug]   [" .. i .. "] calls=" .. debugCounters.Placement[i])
+    if WDecay_PlacementGenerators then
+        print("[WDecay-Debug] Placement generators (" .. #WDecay_PlacementGenerators .. " total):")
+        for i = 1, #WDecay_PlacementGenerators do
+            print("[WDecay-Debug]   [" .. i .. "] calls=" .. debugCounters.Placement[i])
         end
     end
     
-    if ApocVeg_ModifierGenerators then
-        print("[ApocVeg-Debug] Modifier generators (" .. #ApocVeg_ModifierGenerators .. " total):")
-        for i = 1, #ApocVeg_ModifierGenerators do
-            print("[ApocVeg-Debug]   [" .. i .. "] calls=" .. debugCounters.Modifier[i])
+    if WDecay_ModifierGenerators then
+        print("[WDecay-Debug] Modifier generators (" .. #WDecay_ModifierGenerators .. " total):")
+        for i = 1, #WDecay_ModifierGenerators do
+            print("[WDecay-Debug]   [" .. i .. "] calls=" .. debugCounters.Modifier[i])
         end
     end
     
-    print("[ApocVeg-Debug] ===================")
+    print("[WDecay-Debug] ===================")
 end
 
-function ApocVeg_DebugPrintVineCounters()
+function WDecay_DebugPrintVineCounters()
     if not vineDebugCounters then
-        print("[ApocVeg-Debug] Vine counters not available")
+        print("[WDecay-Debug] Vine counters not available")
         return
     end
-    print("[ApocVeg-Debug] === VINE DEBUG ===")
-    print("[ApocVeg-Debug] Indoor squares checked: " .. vineDebugCounters.indoor)
-    print("[ApocVeg-Debug] Blocked by exteriorOnly: " .. vineDebugCounters.exteriorBlocked)
-    print("[ApocVeg-Debug] Failed chance check (indoor): " .. vineDebugCounters.chanceFail)
-    print("[ApocVeg-Debug] No matching walls found: " .. vineDebugCounters.noWalls)
-    print("[ApocVeg-Debug] Vines placed: " .. vineDebugCounters.placed)
-    print("[ApocVeg-Debug] ===================")
+    print("[WDecay-Debug] === VINE DEBUG ===")
+    print("[WDecay-Debug] Indoor squares checked: " .. vineDebugCounters.indoor)
+    print("[WDecay-Debug] Blocked by exteriorOnly: " .. vineDebugCounters.exteriorBlocked)
+    print("[WDecay-Debug] Failed chance check (indoor): " .. vineDebugCounters.chanceFail)
+    print("[WDecay-Debug] No matching walls found: " .. vineDebugCounters.noWalls)
+    print("[WDecay-Debug] Vines placed: " .. vineDebugCounters.placed)
+    print("[WDecay-Debug] ===================")
 end
 
-print("[ApocVeg-Debug] Debug module loaded. Type in console: ApocVeg_DebugPrintStatus()")
+print("[WDecay-Debug] Debug module loaded. Type in console: WDecay_DebugPrintStatus()")
 
-ApocVeg_Debug = {
+WDecay_Debug = {
     chunksHigh = 0,
     chunksLow = 0,
     totalChunkTimeMs = 0,
@@ -141,19 +141,19 @@ ApocVeg_Debug = {
     objectsPlacedInChunk = 0
 }
 
-function ApocVeg_Debug.resetPerfCounters()
-    ApocVeg_Debug.chunksHigh = 0
-    ApocVeg_Debug.chunksLow = 0
-    ApocVeg_Debug.totalChunkTimeMs = 0
-    ApocVeg_Debug.totalChunksProcessed = 0
-    ApocVeg_Debug.objectsPlaced = 0
+function WDecay_Debug.resetPerfCounters()
+    WDecay_Debug.chunksHigh = 0
+    WDecay_Debug.chunksLow = 0
+    WDecay_Debug.totalChunkTimeMs = 0
+    WDecay_Debug.totalChunksProcessed = 0
+    WDecay_Debug.objectsPlaced = 0
 end
 
-function ApocVeg_Debug.printPerfSummary(tickCounter)
+function WDecay_Debug.printPerfSummary(tickCounter)
     local avg = 0
-    if ApocVeg_Debug.totalChunksProcessed > 0 then
-        avg = math.floor(ApocVeg_Debug.totalChunkTimeMs / ApocVeg_Debug.totalChunksProcessed)
+    if WDecay_Debug.totalChunksProcessed > 0 then
+        avg = math.floor(WDecay_Debug.totalChunkTimeMs / WDecay_Debug.totalChunksProcessed)
     end
-    print("[ApocVeg] Perf tick=" .. tickCounter .. " chunks(H=" .. ApocVeg_Debug.chunksHigh .. "/L=" .. ApocVeg_Debug.chunksLow .. ") avg=" .. avg .. "ms total=" .. ApocVeg_Debug.totalChunksProcessed .. " placed=" .. ApocVeg_Debug.objectsPlaced)
-    ApocVeg_Debug.resetPerfCounters()
+    print("[WDecay] Perf tick=" .. tickCounter .. " chunks(H=" .. WDecay_Debug.chunksHigh .. "/L=" .. WDecay_Debug.chunksLow .. ") avg=" .. avg .. "ms total=" .. WDecay_Debug.totalChunksProcessed .. " placed=" .. WDecay_Debug.objectsPlaced)
+    WDecay_Debug.resetPerfCounters()
 end

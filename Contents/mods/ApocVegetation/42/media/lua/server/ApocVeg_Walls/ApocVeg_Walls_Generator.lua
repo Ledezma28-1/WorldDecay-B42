@@ -1,9 +1,9 @@
-local ApocVeg_Walls = require('ApocVeg_Walls/ApocVeg_Walls')
+local WDecay_Walls = require('WDecay_Walls/WDecay_Walls')
 
 local cachedWallPercentage = nil
 local function getWallPercentage()
     if cachedWallPercentage == nil then
-        local opt = getSandboxOptions():getOptionByName('ApocVeg.wallPercentage')
+        local opt = getSandboxOptions():getOptionByName('WDecay.wallPercentage')
         cachedWallPercentage = opt and opt:getValue() or 10
     end
     return cachedWallPercentage
@@ -29,7 +29,7 @@ local function LoadGridsquare(square, checkResult)
             if sprite then
                 local textureName = obj:getTextureName()
 
-                if textureName and ApocVeg_Walls.isExteriorWall(textureName) then
+                if textureName and WDecay_Walls.isExteriorWall(textureName) then
                     diagWalls = diagWalls + 1
                     if getWallPercentage() >= ZombRand(1, 101) then
                         local spriteName = sprite:getName()
@@ -39,9 +39,9 @@ local function LoadGridsquare(square, checkResult)
                                 if not (properties:has("DoorWallN") or properties:has("DoorWallW") or
                                         properties:has("WindowN") or properties:has("WindowW")) then
 
-                                    for _, prop in ipairs(ApocVeg_Walls.wallProperties) do
+                                    for _, prop in ipairs(WDecay_Walls.wallProperties) do
                                         if properties:has(prop) then
-                                            local burnedTextures = ApocVeg_Walls.getBurnedTextures(prop)
+                                            local burnedTextures = WDecay_Walls.getBurnedTextures(prop)
                                             if burnedTextures and #burnedTextures > 0 then
                                                 local randomTexture = burnedTextures[ZombRand(1, #burnedTextures + 1)]
 
@@ -50,8 +50,8 @@ local function LoadGridsquare(square, checkResult)
                                                 diagBurned = diagBurned + 1
 
                                                 local objModData = obj:getModData()
-                                                if objModData and not objModData["ApocVeg_Cleanable"] then
-                                                    objModData["ApocVeg_Cleanable"] = "wall"
+                                                if objModData and not objModData["WDecay_Cleanable"] then
+                                                    objModData["WDecay_Cleanable"] = "wall"
                                                 end
 
                                                 obj:transmitUpdatedSpriteToClients()
@@ -76,7 +76,7 @@ local function LoadGridsquare(square, checkResult)
             if sprite then
                 local textureName = obj:getTextureName()
 
-                if textureName and ApocVeg_Walls.isInteriorWall(textureName) then
+                if textureName and WDecay_Walls.isInteriorWall(textureName) then
                     if getWallPercentage() >= ZombRand(1, 101) then
                         local spriteName = sprite:getName()
                         if spriteName then
@@ -85,17 +85,17 @@ local function LoadGridsquare(square, checkResult)
                                 if not (properties:has("DoorWallN") or properties:has("DoorWallW") or
                                         properties:has("WindowN") or properties:has("WindowW")) then
 
-                                    for _, prop in ipairs(ApocVeg_Walls.wallProperties) do
+                                    for _, prop in ipairs(WDecay_Walls.wallProperties) do
                                         if properties:has(prop) then
-                                            local burnedTextures = ApocVeg_Walls.getBurnedTextures(prop)
+                                            local burnedTextures = WDecay_Walls.getBurnedTextures(prop)
                                             if burnedTextures and #burnedTextures > 0 then
                                                 local randomTexture = burnedTextures[ZombRand(1, #burnedTextures + 1)]
 
                                                 obj:setSpriteFromName(randomTexture)
 
                                                 local objModData = obj:getModData()
-                                                if objModData and not objModData["ApocVeg_Cleanable"] then
-                                                    objModData["ApocVeg_Cleanable"] = "wall"
+                                                if objModData and not objModData["WDecay_Cleanable"] then
+                                                    objModData["WDecay_Cleanable"] = "wall"
                                                 end
 
                                                 obj:transmitUpdatedSpriteToClients()
@@ -114,7 +114,7 @@ local function LoadGridsquare(square, checkResult)
     end
 end
 
-if not ApocVeg_ModifierGenerators then ApocVeg_ModifierGenerators = {} end
-table.insert(ApocVeg_ModifierGenerators, LoadGridsquare)
+if not WDecay_ModifierGenerators then WDecay_ModifierGenerators = {} end
+table.insert(WDecay_ModifierGenerators, LoadGridsquare)
 
-return ApocVeg_Walls
+return WDecay_Walls

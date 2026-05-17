@@ -1,17 +1,17 @@
-local ApocVeg_Destroyed_Doors_Windows = require('ApocVeg_Destroyed_Doors_Windows/ApocVeg_Destroyed_Doors_Windows')
+local WDecay_Destroyed_Doors_Windows = require('WDecay_Destroyed_Doors_Windows/WDecay_Destroyed_Doors_Windows')
 
 local cachedDestroyedDoorsPercentage = nil
 local cachedDestroyedWindowsPercentage = nil
 local function getDestroyedDoorsPercentage()
     if cachedDestroyedDoorsPercentage == nil then
-        local opt = getSandboxOptions():getOptionByName('ApocVeg.destroyedDoorsPercentage')
+        local opt = getSandboxOptions():getOptionByName('WDecay.destroyedDoorsPercentage')
         cachedDestroyedDoorsPercentage = opt and opt:getValue() or 30
     end
     return cachedDestroyedDoorsPercentage
 end
 local function getDestroyedWindowsPercentage()
     if cachedDestroyedWindowsPercentage == nil then
-        local opt = getSandboxOptions():getOptionByName('ApocVeg.destroyedWindowsPercentage')
+        local opt = getSandboxOptions():getOptionByName('WDecay.destroyedWindowsPercentage')
         cachedDestroyedWindowsPercentage = opt and opt:getValue() or 30
     end
     return cachedDestroyedWindowsPercentage
@@ -37,16 +37,16 @@ local function LoadGridsquare(square, checkResult)
     for _, obj in ipairs(objectsToProcess) do
         if obj == nil then
         else
-            if ApocVeg_Destroyed_Doors_Windows.isDoor(obj) then
-                if not ApocVeg_Destroyed_Doors_Windows.isDestroyed(obj) then
+            if WDecay_Destroyed_Doors_Windows.isDoor(obj) then
+                if not WDecay_Destroyed_Doors_Windows.isDestroyed(obj) then
                     if getDestroyedDoorsPercentage() >= ZombRand(1, 101) then
-                        ApocVeg_Destroyed_Doors_Windows.destroyDoor(obj)
+                        WDecay_Destroyed_Doors_Windows.destroyDoor(obj)
                     end
                 end
-            elseif ApocVeg_Destroyed_Doors_Windows.isWindow(obj) then
-                if not ApocVeg_Destroyed_Doors_Windows.isDestroyed(obj) then
+            elseif WDecay_Destroyed_Doors_Windows.isWindow(obj) then
+                if not WDecay_Destroyed_Doors_Windows.isDestroyed(obj) then
                     if getDestroyedWindowsPercentage() >= ZombRand(1, 101) then
-                        ApocVeg_Destroyed_Doors_Windows.destroyWindow(obj)
+                        WDecay_Destroyed_Doors_Windows.destroyWindow(obj)
                     end
                 end
             end
@@ -54,7 +54,7 @@ local function LoadGridsquare(square, checkResult)
     end
 end
 
-if not ApocVeg_ModifierGenerators then ApocVeg_ModifierGenerators = {} end
-table.insert(ApocVeg_ModifierGenerators, LoadGridsquare)
+if not WDecay_ModifierGenerators then WDecay_ModifierGenerators = {} end
+table.insert(WDecay_ModifierGenerators, LoadGridsquare)
 
-return ApocVeg_Destroyed_Doors_Windows
+return WDecay_Destroyed_Doors_Windows

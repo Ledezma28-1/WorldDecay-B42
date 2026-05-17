@@ -1,6 +1,6 @@
-local ApocVeg_Bushes = {}
+local WDecay_Bushes = {}
 
-ApocVeg_Bushes.bushes = {
+WDecay_Bushes.bushes = {
     "f_bushes_1_65",
     "f_bushes_1_66",
     "f_bushes_1_97",
@@ -87,7 +87,7 @@ ApocVeg_Bushes.bushes = {
     "f_bushes_1_74"
 }
 
-ApocVeg_Bushes.customName = {
+WDecay_Bushes.customName = {
     ["f_bushes_1_8"] = "Hedge",
     ["f_bushes_1_9"] = "Hedge",
     ["f_bushes_1_10"] = "Hedge",
@@ -142,20 +142,20 @@ ApocVeg_Bushes.customName = {
     ["f_bushes_2_19"] = "Ornamental Bush"
 }
 
-function ApocVeg_Bushes.getRandomBush()
-    if #ApocVeg_Bushes.bushes == 0 then
+function WDecay_Bushes.getRandomBush()
+    if #WDecay_Bushes.bushes == 0 then
         return nil
     end
-    return ApocVeg_Bushes.bushes[ZombRand(1, #ApocVeg_Bushes.bushes + 1)]
+    return WDecay_Bushes.bushes[ZombRand(1, #WDecay_Bushes.bushes + 1)]
 end
 
-function ApocVeg_Bushes.getCustomName(spriteName)
-    return ApocVeg_Bushes.customName[spriteName] or nil
+function WDecay_Bushes.getCustomName(spriteName)
+    return WDecay_Bushes.customName[spriteName] or nil
 end
 
-function ApocVeg_Bushes.isBush(spriteName)
+function WDecay_Bushes.isBush(spriteName)
     if not spriteName then return false end
     return luautils.stringStarts(spriteName, "f_bushes_")
 end
 
-return ApocVeg_Bushes
+return WDecay_Bushes

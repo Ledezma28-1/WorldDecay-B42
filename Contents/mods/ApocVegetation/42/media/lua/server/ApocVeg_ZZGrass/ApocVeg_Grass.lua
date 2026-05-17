@@ -1,6 +1,6 @@
-local ApocVeg_Grass = {}
+local WDecay_Grass = {}
 
-ApocVeg_Grass.custom_grass = {
+WDecay_Grass.custom_grass = {
     "d_generic_1_1",
     "d_generic_1_2",
     "d_generic_1_7",
@@ -29,7 +29,7 @@ ApocVeg_Grass.custom_grass = {
     "d_generic_1_47"
 }
 
-ApocVeg_Grass.vanilla_grass = {
+WDecay_Grass.vanilla_grass = {
     "e_newgrass_1_0",
     "e_newgrass_1_1",
     "e_newgrass_1_2",
@@ -112,7 +112,7 @@ ApocVeg_Grass.vanilla_grass = {
     "e_newgrass_1_89"
 }
 
-ApocVeg_Grass.customName = {
+WDecay_Grass.customName = {
     ["d_floorleaves_1_0"] = "Leaves",
     ["d_floorleaves_1_1"] = "Leaves",
     ["d_floorleaves_1_2"] = "Leaves",
@@ -179,38 +179,38 @@ ApocVeg_Grass.customName = {
 
 local grassDiagOnce = false
 
-function ApocVeg_Grass.getRandomCustomGrass()
+function WDecay_Grass.getRandomCustomGrass()
     if not grassDiagOnce then
         grassDiagOnce = true
-        print("[ApocVeg-GRASS] custom_grass table size: " .. #ApocVeg_Grass.custom_grass)
-        local sample = ApocVeg_Grass.custom_grass[1]
-        print("[ApocVeg-GRASS] first custom sprite: " .. tostring(sample))
+        print("[WDecay-GRASS] custom_grass table size: " .. #WDecay_Grass.custom_grass)
+        local sample = WDecay_Grass.custom_grass[1]
+        print("[WDecay-GRASS] first custom sprite: " .. tostring(sample))
     end
-    if #ApocVeg_Grass.custom_grass == 0 then
+    if #WDecay_Grass.custom_grass == 0 then
         return nil
     end
-    return ApocVeg_Grass.custom_grass[ZombRand(1, #ApocVeg_Grass.custom_grass + 1)]
+    return WDecay_Grass.custom_grass[ZombRand(1, #WDecay_Grass.custom_grass + 1)]
 end
 
-function ApocVeg_Grass.getRandomVanillaGrass()
-    if #ApocVeg_Grass.vanilla_grass == 0 then
+function WDecay_Grass.getRandomVanillaGrass()
+    if #WDecay_Grass.vanilla_grass == 0 then
         return nil
     end
-    return ApocVeg_Grass.vanilla_grass[ZombRand(1, #ApocVeg_Grass.vanilla_grass + 1)]
+    return WDecay_Grass.vanilla_grass[ZombRand(1, #WDecay_Grass.vanilla_grass + 1)]
 end
 
-function ApocVeg_Grass.getCustomName(spriteName)
-    return ApocVeg_Grass.customName[spriteName] or nil
+function WDecay_Grass.getCustomName(spriteName)
+    return WDecay_Grass.customName[spriteName] or nil
 end
 
-function ApocVeg_Grass.isCustomGrass(spriteName)
+function WDecay_Grass.isCustomGrass(spriteName)
     if not spriteName then return false end
     return luautils.stringStarts(spriteName, "d_generic_")
 end
 
-function ApocVeg_Grass.isVanillaGrass(spriteName)
+function WDecay_Grass.isVanillaGrass(spriteName)
     if not spriteName then return false end
     return luautils.stringStarts(spriteName, "e_newgrass_")
 end
 
-return ApocVeg_Grass
+return WDecay_Grass

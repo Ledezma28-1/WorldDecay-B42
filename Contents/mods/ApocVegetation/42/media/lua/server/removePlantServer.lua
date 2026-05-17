@@ -13,8 +13,8 @@ function ISRemovePlantCursor:getRemovableObject(square)
             local object = objects:get(i-1)
 
             local modData = object:getModData()
-            if modData and modData["ApocVeg_Cleanable"] then
-                local cleanableType = modData["ApocVeg_Cleanable"]
+            if modData and modData["WDecay_Cleanable"] then
+                local cleanableType = modData["WDecay_Cleanable"]
                 if self.removeType == "grass" and cleanableType == "grass" then
                     return object
                 elseif self.removeType == "bush" and (cleanableType == "bush" or cleanableType == "roof" or cleanableType == "wall" or cleanableType == "trash" or cleanableType == "vehicle" or cleanableType == "tree" or cleanableType == "barricade" or cleanableType == "fence" or cleanableType == "crack") then
@@ -90,13 +90,13 @@ function ISRemovePlantCursor:getRemovableObject(square)
             end
 
             if self.removeType == "bush" and object:getClass() == IsoAnimal.class then
-                if object:getModData()["ApocVeg_Animal"] then
+                if object:getModData()["WDecay_Animal"] then
                     return object
                 end
             end
 
             if self.removeType == "bush" and object:getClass() == IsoTree.class then
-                if object:getModData()["ApocVeg_Tree"] then
+                if object:getModData()["WDecay_Tree"] then
                     return object
                 end
             end
@@ -126,8 +126,8 @@ local function onRemovePlantCommand(module, command, player, args)
 
             if object then
                 local modData = object:getModData()
-                if modData and modData["ApocVeg_Cleanable"] then
-                    local cleanableType = modData["ApocVeg_Cleanable"]
+                if modData and modData["WDecay_Cleanable"] then
+                    local cleanableType = modData["WDecay_Cleanable"]
                     if command == "canBeRemoved" and cleanableType == "grass" then
                         sq:transmitRemoveItemFromSquare(object)
                         break
@@ -144,7 +144,7 @@ local function onRemovePlantCommand(module, command, player, args)
                                     local neighbourObj = neighbourObjs:get(j)
                                     if neighbourObj then
                                         local neighbourModData = neighbourObj:getModData()
-                                        if neighbourModData and neighbourModData["ApocVeg_Cleanable"] == "vine" then
+                                        if neighbourModData and neighbourModData["WDecay_Cleanable"] == "vine" then
                                             neighbour:transmitRemoveItemFromSquare(neighbourObj)
                                             break
                                         end
@@ -240,14 +240,14 @@ local function onRemovePlantCommand(module, command, player, args)
                 end
 
                 if object:getClass() == IsoAnimal.class then
-                    if object:getModData()["ApocVeg_Animal"] then
+                    if object:getModData()["WDecay_Animal"] then
                         sq:transmitRemoveItemFromSquare(object)
                         break
                     end
                 end
 
                 if object:getClass() == IsoTree.class then
-                    if object:getModData()["ApocVeg_Tree"] then
+                    if object:getModData()["WDecay_Tree"] then
                         sq:transmitRemoveItemFromSquare(object)
                         break
                     end
@@ -261,8 +261,8 @@ local function onRemovePlantCommand(module, command, player, args)
 
             if object then
                 local modData = object:getModData()
-                if modData and modData["ApocVeg_Cleanable"] then
-                    local cleanableType = modData["ApocVeg_Cleanable"]
+                if modData and modData["WDecay_Cleanable"] then
+                    local cleanableType = modData["WDecay_Cleanable"]
                     if command == "canBeRemoved" and cleanableType == "grass" then
                         sq:transmitRemoveItemFromSquare(object)
                         break
@@ -279,7 +279,7 @@ local function onRemovePlantCommand(module, command, player, args)
                                     local neighbourObj = neighbourObjs:get(j)
                                     if neighbourObj then
                                         local neighbourModData = neighbourObj:getModData()
-                                        if neighbourModData and neighbourModData["ApocVeg_Cleanable"] == "vine" then
+                                        if neighbourModData and neighbourModData["WDecay_Cleanable"] == "vine" then
                                             neighbour:transmitRemoveItemFromSquare(neighbourObj)
                                             break
                                         end
@@ -374,14 +374,14 @@ local function onRemovePlantCommand(module, command, player, args)
                 end
 
                 if object:getClass() == IsoAnimal.class then
-                    if object:getModData()["ApocVeg_Animal"] then
+                    if object:getModData()["WDecay_Animal"] then
                         sq:transmitRemoveItemFromSquare(object)
                         break
                     end
                 end
 
                 if object:getClass() == IsoTree.class then
-                    if object:getModData()["ApocVeg_Tree"] then
+                    if object:getModData()["WDecay_Tree"] then
                         sq:transmitRemoveItemFromSquare(object)
                         break
                     end

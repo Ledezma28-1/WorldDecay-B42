@@ -1,5 +1,5 @@
-local ApocVeg_Grass = require('ApocVeg_ZZGrass/ApocVeg_Grass')
-local ApocVeg_CustomNames_Integration = require('ApocVeg_CustomNames/ApocVeg_CustomNames_Integration')
+local WDecay_Grass = require('WDecay_Grass/WDecay_Grass')
+local WDecay_CustomNames_Integration = require('WDecay_CustomNames/WDecay_CustomNames_Integration')
 
 local cachedGrassPercentage = nil
 local cachedGrassPercentageOnRoad = nil
@@ -8,35 +8,35 @@ local cachedCustomGrassPercentageOnRoad = nil
 local cachedIndoorGrassPercentage = nil
 local function getGrassPercentage()
     if cachedGrassPercentage == nil then
-        local opt = getSandboxOptions():getOptionByName('ApocVeg.grassPercentage')
+        local opt = getSandboxOptions():getOptionByName('WDecay.grassPercentage')
         cachedGrassPercentage = opt and opt:getValue() or 30
     end
     return cachedGrassPercentage
 end
 local function getGrassPercentageOnRoad()
     if cachedGrassPercentageOnRoad == nil then
-        local opt = getSandboxOptions():getOptionByName('ApocVeg.grassPercentageOnRoad')
+        local opt = getSandboxOptions():getOptionByName('WDecay.grassPercentageOnRoad')
         cachedGrassPercentageOnRoad = opt and opt:getValue() or 20
     end
     return cachedGrassPercentageOnRoad
 end
 local function getCustomGrassPercentage()
     if cachedCustomGrassPercentage == nil then
-        local opt = getSandboxOptions():getOptionByName('ApocVeg.customGrassPercentage')
+        local opt = getSandboxOptions():getOptionByName('WDecay.customGrassPercentage')
         cachedCustomGrassPercentage = opt and opt:getValue() or 10
     end
     return cachedCustomGrassPercentage
 end
 local function getCustomGrassPercentageOnRoad()
     if cachedCustomGrassPercentageOnRoad == nil then
-        local opt = getSandboxOptions():getOptionByName('ApocVeg.customGrassPercentageOnRoad')
+        local opt = getSandboxOptions():getOptionByName('WDecay.customGrassPercentageOnRoad')
         cachedCustomGrassPercentageOnRoad = opt and opt:getValue() or 10
     end
     return cachedCustomGrassPercentageOnRoad
 end
 local function getIndoorGrassPercentage()
     if cachedIndoorGrassPercentage == nil then
-        local opt = getSandboxOptions():getOptionByName('ApocVeg.indoorGrassPercentage')
+        local opt = getSandboxOptions():getOptionByName('WDecay.indoorGrassPercentage')
         cachedIndoorGrassPercentage = opt and opt:getValue() or 0
     end
     return cachedIndoorGrassPercentage
@@ -57,14 +57,14 @@ local function LoadGridsquare(square, checkResult)
                     if floor then
                         local floorSprite = floor:getSprite()
                         if floorSprite then
-                            local randomGrass = ApocVeg_Grass.getRandomVanillaGrass()
+                            local randomGrass = WDecay_Grass.getRandomVanillaGrass()
                             if randomGrass then
                                 local obj = IsoObject.new(getCell(), square, randomGrass)
                                 square:AddSpecialObject(obj)
-                                ApocVeg_CustomNames_Integration.applyCustomNameToObject(obj)
+                                WDecay_CustomNames_Integration.applyCustomNameToObject(obj)
                                 local objModData = obj:getModData()
                                 if objModData then
-                                    objModData["ApocVeg_Cleanable"] = "grass"
+                                    objModData["WDecay_Cleanable"] = "grass"
                                 end
 obj:transmitCompleteItemToClients()
                                 return true
@@ -86,14 +86,14 @@ obj:transmitCompleteItemToClients()
             if floorSprite then
                 local currentFloorTile = floorSprite:getName()
                 if currentFloorTile ~= nil then
-                    local randomGrass = ApocVeg_Grass.getRandomVanillaGrass()
+                    local randomGrass = WDecay_Grass.getRandomVanillaGrass()
                     if randomGrass then
                         local obj = IsoObject.new(getCell(), square, randomGrass)
                         square:AddSpecialObject(obj)
-                        ApocVeg_CustomNames_Integration.applyCustomNameToObject(obj)
+                        WDecay_CustomNames_Integration.applyCustomNameToObject(obj)
                         local objModData = obj:getModData()
                         if objModData then
-                            objModData["ApocVeg_Cleanable"] = "grass"
+                            objModData["WDecay_Cleanable"] = "grass"
                         end
                         obj:transmitCompleteItemToClients()
                     end
@@ -110,14 +110,14 @@ obj:transmitCompleteItemToClients()
             if floorSprite then
                 local currentFloorTile = floorSprite:getName()
                 if currentFloorTile ~= nil then
-                    local randomGrass = ApocVeg_Grass.getRandomCustomGrass()
+                    local randomGrass = WDecay_Grass.getRandomCustomGrass()
                     if randomGrass then
                         local obj = IsoObject.new(getCell(), square, randomGrass)
                         square:AddSpecialObject(obj)
-                        ApocVeg_CustomNames_Integration.applyCustomNameToObject(obj)
+                        WDecay_CustomNames_Integration.applyCustomNameToObject(obj)
                         local objModData = obj:getModData()
                         if objModData then
-                            objModData["ApocVeg_Cleanable"] = "grass"
+                            objModData["WDecay_Cleanable"] = "grass"
                         end
                         obj:transmitCompleteItemToClients()
                     end
@@ -127,7 +127,7 @@ obj:transmitCompleteItemToClients()
     end
 end
 
-if not ApocVeg_PlacementGenerators then ApocVeg_PlacementGenerators = {} end
-table.insert(ApocVeg_PlacementGenerators, LoadGridsquare)
+if not WDecay_PlacementGenerators then WDecay_PlacementGenerators = {} end
+table.insert(WDecay_PlacementGenerators, LoadGridsquare)
 
-return ApocVeg_Grass
+return WDecay_Grass

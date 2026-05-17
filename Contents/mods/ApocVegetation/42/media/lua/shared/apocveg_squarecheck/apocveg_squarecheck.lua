@@ -1,4 +1,4 @@
-local ApocVeg_SquareCheck = {}
+local WDecay_SquareCheck = {}
 
 local roadTiles = {
     "blends_street_01_0",
@@ -51,17 +51,17 @@ local naturalTiles = {
 local naturalTilesSet = {}
 for _, v in ipairs(naturalTiles) do naturalTilesSet[v] = true end
 
-function ApocVeg_SquareCheck.isWater(square)
+function WDecay_SquareCheck.isWater(square)
     if not square then return false end
     return square:getProperties():has(IsoFlagType.water)
 end
 
-function ApocVeg_SquareCheck.checkWater(square)
+function WDecay_SquareCheck.checkWater(square)
     if not square then return false end
-    return not ApocVeg_SquareCheck.isWater(square)
+    return not WDecay_SquareCheck.isWater(square)
 end
 
-function ApocVeg_SquareCheck.hasRoadTiles(square)
+function WDecay_SquareCheck.hasRoadTiles(square)
     if not square then return false end
     local objects = square:getObjects()
     if objects then
@@ -77,11 +77,11 @@ function ApocVeg_SquareCheck.hasRoadTiles(square)
     return false
 end
 
-function ApocVeg_SquareCheck.checkRoad(square)
-    return ApocVeg_SquareCheck.hasRoadTiles(square)
+function WDecay_SquareCheck.checkRoad(square)
+    return WDecay_SquareCheck.hasRoadTiles(square)
 end
 
-function ApocVeg_SquareCheck.hasNaturalTiles(square)
+function WDecay_SquareCheck.hasNaturalTiles(square)
     if not square then return false end
     local objects = square:getObjects()
     if objects then
@@ -97,11 +97,11 @@ function ApocVeg_SquareCheck.hasNaturalTiles(square)
     return false
 end
 
-function ApocVeg_SquareCheck.checkNatural(square)
-    return ApocVeg_SquareCheck.hasNaturalTiles(square)
+function WDecay_SquareCheck.checkNatural(square)
+    return WDecay_SquareCheck.hasNaturalTiles(square)
 end
 
-function ApocVeg_SquareCheck.hasLadderOrRope(square)
+function WDecay_SquareCheck.hasLadderOrRope(square)
     if not square then return false end
     local props = square:getProperties()
     if not props then return false end
@@ -115,9 +115,9 @@ function ApocVeg_SquareCheck.hasLadderOrRope(square)
            props:has(IsoFlagType.climbSheetS)
 end
 
-function ApocVeg_SquareCheck.checkSquare(square)
+function WDecay_SquareCheck.checkSquare(square)
     if not square then return false end
-    if ApocVeg_SquareCheck.isWater(square) then return false end
+    if WDecay_SquareCheck.isWater(square) then return false end
     if square:getRoom() then return false end
     if square:HasStairs() then return false end
     if not square:hasFloor(true) then return false end
@@ -135,7 +135,7 @@ function ApocVeg_SquareCheck.checkSquare(square)
             end
         end
     end
-    if ApocVeg_SquareCheck.hasLadderOrRope(square) then return false end
+    if WDecay_SquareCheck.hasLadderOrRope(square) then return false end
     if square:isSolid() or square:isSolidTrans() then return false end
     local cell = square:getCell()
     local x, y, z = square:getX(), square:getY(), square:getZ()
@@ -150,9 +150,9 @@ function ApocVeg_SquareCheck.checkSquare(square)
     return true
 end
 
-function ApocVeg_SquareCheck.checkSquareForTrees(square)
+function WDecay_SquareCheck.checkSquareForTrees(square)
     if not square then return false end
-    if ApocVeg_SquareCheck.isWater(square) then return false end
+    if WDecay_SquareCheck.isWater(square) then return false end
     if square:getRoom() then return false end
     if square:HasStairs() then return false end
     if not square:hasFloor(true) then return false end
@@ -170,7 +170,7 @@ function ApocVeg_SquareCheck.checkSquareForTrees(square)
             end
         end
     end
-    if ApocVeg_SquareCheck.hasLadderOrRope(square) then return false end
+    if WDecay_SquareCheck.hasLadderOrRope(square) then return false end
     if square:isSolid() or square:isSolidTrans() then return false end
     local cell = square:getCell()
     local x, y, z = square:getX(), square:getY(), square:getZ()
@@ -186,30 +186,30 @@ function ApocVeg_SquareCheck.checkSquareForTrees(square)
     return true
 end
 
-function ApocVeg_SquareCheck.checkSquareForVehicles(square)
+function WDecay_SquareCheck.checkSquareForVehicles(square)
     if not square then return false end
-    if ApocVeg_SquareCheck.isWater(square) then return false end
-    if not ApocVeg_SquareCheck.hasRoadTiles(square) then return false end
+    if WDecay_SquareCheck.isWater(square) then return false end
+    if not WDecay_SquareCheck.hasRoadTiles(square) then return false end
     return true
 end
 
-function ApocVeg_SquareCheck.checkSquareForStories(square)
+function WDecay_SquareCheck.checkSquareForStories(square)
     if not square then return false end
-    if ApocVeg_SquareCheck.isWater(square) then return false end
+    if WDecay_SquareCheck.isWater(square) then return false end
     if not square:isSolidFloor() then return false end
-    if not ApocVeg_SquareCheck.hasNaturalTiles(square) then return false end
-    if ApocVeg_SquareCheck.hasRoadTiles(square) then return false end
+    if not WDecay_SquareCheck.hasNaturalTiles(square) then return false end
+    if WDecay_SquareCheck.hasRoadTiles(square) then return false end
     return true
 end
 
-function ApocVeg_SquareCheck.checkSquareForBarricades(square)
+function WDecay_SquareCheck.checkSquareForBarricades(square)
     if not square then return false end
-    if ApocVeg_SquareCheck.isWater(square) then return false end
+    if WDecay_SquareCheck.isWater(square) then return false end
     if not square:hasFloor(true) then return false end
     return true
 end
 
-function ApocVeg_SquareCheck.hasRoadTilesFast(square, objects)
+function WDecay_SquareCheck.hasRoadTilesFast(square, objects)
     if not square then return false end
     if not objects then objects = square:getObjects() end
     if objects then
@@ -225,7 +225,7 @@ function ApocVeg_SquareCheck.hasRoadTilesFast(square, objects)
     return false
 end
 
-function ApocVeg_SquareCheck.hasNaturalTilesFast(square, objects)
+function WDecay_SquareCheck.hasNaturalTilesFast(square, objects)
     if not square then return false end
     if not objects then objects = square:getObjects() end
     if objects then
@@ -241,7 +241,7 @@ function ApocVeg_SquareCheck.hasNaturalTilesFast(square, objects)
     return false
 end
 
-function ApocVeg_SquareCheck.isPhysicsSaturated(square)
+function WDecay_SquareCheck.isPhysicsSaturated(square)
     if not square then return true end
     local props = square:getProperties()
     if not props then return true end
@@ -256,7 +256,7 @@ function ApocVeg_SquareCheck.isPhysicsSaturated(square)
     return count >= 4
 end
 
-function ApocVeg_SquareCheck.checkBasic(square)
+function WDecay_SquareCheck.checkBasic(square)
     if not square then return nil end
     local r = {
         water = false,
@@ -277,7 +277,7 @@ function ApocVeg_SquareCheck.checkBasic(square)
     return r
 end
 
-function ApocVeg_SquareCheck.checkPlacement(square)
+function WDecay_SquareCheck.checkPlacement(square)
     if not square then return nil end
     local r = {
         water = false,
@@ -360,7 +360,7 @@ function ApocVeg_SquareCheck.checkPlacement(square)
         end
     end
     if r.hasTable then return r end
-    r.hasLadder = ApocVeg_SquareCheck.hasLadderOrRope(square)
+    r.hasLadder = WDecay_SquareCheck.hasLadderOrRope(square)
     if r.hasLadder then return r end
     r.isSolid = square:isSolid() or square:isSolidTrans()
     if r.isSolid then return r end
@@ -382,9 +382,9 @@ function ApocVeg_SquareCheck.checkPlacement(square)
     end
     if r.hasDoorFrame then return r end
     r.isSolidFloor = square:isSolidFloor()
-    r.isRoad = ApocVeg_SquareCheck.hasRoadTilesFast(square, r.objects)
-    r.isNatural = ApocVeg_SquareCheck.hasNaturalTilesFast(square, r.objects)
-    r.tooManyPhysicsShapes = ApocVeg_SquareCheck.isPhysicsSaturated(square)
+    r.isRoad = WDecay_SquareCheck.hasRoadTilesFast(square, r.objects)
+    r.isNatural = WDecay_SquareCheck.hasNaturalTilesFast(square, r.objects)
+    r.tooManyPhysicsShapes = WDecay_SquareCheck.isPhysicsSaturated(square)
     if r.tooManyPhysicsShapes then return r end
     if r.isRoad then
         r.isUrban = true
@@ -466,8 +466,8 @@ function ApocVeg_SquareCheck.checkPlacement(square)
     return r
 end
 
-function ApocVeg_SquareCheck.checkAll(square)
-    return ApocVeg_SquareCheck.checkPlacement(square)
+function WDecay_SquareCheck.checkAll(square)
+    return WDecay_SquareCheck.checkPlacement(square)
 end
 
-return ApocVeg_SquareCheck
+return WDecay_SquareCheck

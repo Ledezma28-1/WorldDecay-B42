@@ -1,10 +1,10 @@
-local ApocVeg_Barricades = require('ApocVeg_Barricades/ApocVeg_Barricades')
-local ApocVeg_SquareCheck = require('apocveg_squarecheck/apocveg_squarecheck')
+local WDecay_Barricades = require('WDecay_Barricades/WDecay_Barricades')
+local WDecay_SquareCheck = require('wdecay_squarecheck/wdecay_squarecheck')
 
 local cachedBarricadePercentage = nil
 local function getBarricadePercentage()
     if cachedBarricadePercentage == nil then
-        local opt = getSandboxOptions():getOptionByName('ApocVeg.barricadePercentage')
+        local opt = getSandboxOptions():getOptionByName('WDecay.barricadePercentage')
         cachedBarricadePercentage = opt and opt:getValue() or 30
     end
     return cachedBarricadePercentage
@@ -30,21 +30,21 @@ local function LoadGridsquare(square, checkResult)
             local isBarricadableObject = false
             local isExterior = false
             
-            if ApocVeg_Barricades.isWindow(obj) then
+            if WDecay_Barricades.isWindow(obj) then
                 isBarricadableObject = true
                 isExterior = true
-            elseif ApocVeg_Barricades.isDoor(obj) then
-                if ApocVeg_Barricades.isExteriorDoor(obj) and ApocVeg_Barricades.canBarricadeDoor(obj) then
+            elseif WDecay_Barricades.isDoor(obj) then
+                if WDecay_Barricades.isExteriorDoor(obj) and WDecay_Barricades.canBarricadeDoor(obj) then
                     isBarricadableObject = true
                     isExterior = true
                 end
             end
             
             if isBarricadableObject and isExterior then
-                if not ApocVeg_Barricades.hasBarricade(obj) then
+                if not WDecay_Barricades.hasBarricade(obj) then
                     if getBarricadePercentage() >= ZombRand(1, 101) then
-                        local barricadeType = ApocVeg_Barricades.getRandomBarricadeType()
-                        local healthLevel = ApocVeg_Barricades.getRandomHealthLevel()
+                        local barricadeType = WDecay_Barricades.getRandomBarricadeType()
+                        local healthLevel = WDecay_Barricades.getRandomHealthLevel()
 
                         if barricadeType and healthLevel then
                             local success = false
@@ -64,8 +64,8 @@ local function LoadGridsquare(square, checkResult)
 
                                 local barricadeModData = barricade:getModData()
                                 if barricadeModData then
-                                    barricadeModData["ApocVeg_Barricade"] = true
-                                    barricadeModData["ApocVeg_Cleanable"] = "barricade"
+                                    barricadeModData["WDecay_Barricade"] = true
+                                    barricadeModData["WDecay_Cleanable"] = "barricade"
                                 end
 
                                 barricade:setHealth(healthLevel)
@@ -81,7 +81,7 @@ local function LoadGridsquare(square, checkResult)
     end
 end
 
-if not ApocVeg_ModifierGenerators then ApocVeg_ModifierGenerators = {} end
-table.insert(ApocVeg_ModifierGenerators, LoadGridsquare)
+if not WDecay_ModifierGenerators then WDecay_ModifierGenerators = {} end
+table.insert(WDecay_ModifierGenerators, LoadGridsquare)
 
-return ApocVeg_Barricades
+return WDecay_Barricades

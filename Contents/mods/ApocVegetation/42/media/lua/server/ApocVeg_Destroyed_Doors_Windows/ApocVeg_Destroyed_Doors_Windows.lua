@@ -1,18 +1,18 @@
-local ApocVeg_Destroyed_Doors_Windows = {}
+local WDecay_Destroyed_Doors_Windows = {}
 
-ApocVeg_Destroyed_Doors_Windows.destroyTypes = {
+WDecay_Destroyed_Doors_Windows.destroyTypes = {
     "DoorWallW",
     "DoorWallN",
     "WindowN",
     "WindowW"
 }
 
-function ApocVeg_Destroyed_Doors_Windows.isDoor(object)
+function WDecay_Destroyed_Doors_Windows.isDoor(object)
     if not object then return false end
     return object:getClass() == IsoDoor.class
 end
 
-function ApocVeg_Destroyed_Doors_Windows.isWindow(object)
+function WDecay_Destroyed_Doors_Windows.isWindow(object)
     if not object then return false end
     local sprite = object:getSprite()
     if not sprite then return false end
@@ -24,7 +24,7 @@ function ApocVeg_Destroyed_Doors_Windows.isWindow(object)
     return propertyStr:contains("WindowN") or propertyStr:contains("WindowW")
 end
 
-function ApocVeg_Destroyed_Doors_Windows.isDestroyed(object)
+function WDecay_Destroyed_Doors_Windows.isDestroyed(object)
     if not object then return false end
     
     if object.isDestroyed then
@@ -49,7 +49,7 @@ function ApocVeg_Destroyed_Doors_Windows.isDestroyed(object)
     return false
 end
 
-function ApocVeg_Destroyed_Doors_Windows.destroyDoor(door)
+function WDecay_Destroyed_Doors_Windows.destroyDoor(door)
     if not door then return false end
     if door:getClass() ~= IsoDoor.class then return false end
     
@@ -64,7 +64,7 @@ function ApocVeg_Destroyed_Doors_Windows.destroyDoor(door)
     return success
 end
 
-function ApocVeg_Destroyed_Doors_Windows.destroyWindow(window)
+function WDecay_Destroyed_Doors_Windows.destroyWindow(window)
     if not window then return false end
     
     if not window.smashWindow then
@@ -95,4 +95,4 @@ function ApocVeg_Destroyed_Doors_Windows.destroyWindow(window)
     return success
 end
 
-return ApocVeg_Destroyed_Doors_Windows
+return WDecay_Destroyed_Doors_Windows
