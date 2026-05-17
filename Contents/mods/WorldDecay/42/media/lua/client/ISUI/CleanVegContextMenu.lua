@@ -20,6 +20,19 @@ local function addCleanVegMenu(player, context, worldobjects)
     local function isCleanableObject(object)
         if not object then return false end
 
+        local attached = object:getAttachedAnimSprite()
+        if attached then
+            for n=1,attached:size() do
+                local sprite = attached:get(n-1)
+                if sprite and sprite:getParentSprite() and sprite:getParentSprite():getName() then
+                    local name = sprite:getParentSprite():getName()
+                    if luautils.stringStarts(name, "blends_streetoverlays_01_") or luautils.stringStarts(name, "blends_dirtoverlays_01_") then
+                        return false
+                    end
+                end
+            end
+        end
+
         local modData = object:getModData()
         if modData and modData["WDecay_Cleanable"] then
             return true
@@ -68,9 +81,7 @@ local function addCleanVegMenu(player, context, worldobjects)
                         luautils.stringStarts(sprite:getParentSprite():getName(), "e_newgrass") or
                         luautils.stringStarts(sprite:getParentSprite():getName(), "vegetation_farm") or
                         luautils.stringStarts(sprite:getParentSprite():getName(), "f_bushes_") or
-                        luautils.stringStarts(sprite:getParentSprite():getName(), "d_generic_") or
-                        luautils.stringStarts(sprite:getParentSprite():getName(), "blends_streetoverlays_01_") or
-                        luautils.stringStarts(sprite:getParentSprite():getName(), "blends_dirtoverlays_01_")
+                        luautils.stringStarts(sprite:getParentSprite():getName(), "d_generic_")
                     ) then
                         return true
                     elseif sprite and luautils.stringStarts(sprite:getParentSprite():getName(), "f_wallvines") then
