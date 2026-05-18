@@ -1,5 +1,20 @@
 require('luautils');
 
+local cachedDebugMode = nil
+local function isCleanDebug()
+    if cachedDebugMode == nil then
+        local opt = getSandboxOptions():getOptionByName('WDecay.debugMode')
+        cachedDebugMode = opt and opt:getValue() or false
+    end
+    return cachedDebugMode
+end
+
+local function cleanLog(msg)
+    if isCleanDebug() then
+        print("[WDecay-Clean] " .. msg)
+    end
+end
+
 local function onCleanVegCommand(module, command, player, args)
     if module == 'CleanVeg' then
         if command == 'CleanVegCommand' then
@@ -7,13 +22,19 @@ local function onCleanVegCommand(module, command, player, args)
 
             if not sq then return end
 
+            cleanLog("onCleanVegCommand at " .. args.x .. "," .. args.y .. "," .. args.z .. " areaSize=" .. tostring(args.areaSize))
+
             local function tryCleanObject(sq, object)
                 if not object then return false end
 
                 local modData = object:getModData()
                 if modData and modData["WDecay_Cleanable"] then
-                    sq:transmitRemoveItemFromSquare(object)
-                    return true
+                    local cleanableType = modData["WDecay_Cleanable"]
+                    if cleanableType == "grass" or cleanableType == "bush" or cleanableType == "trash" or cleanableType == "vine" then
+                        cleanLog("onCleanVegCommand REMOVED " .. tostring(object:getSprite():getName()) .. " type=" .. tostring(cleanableType))
+                        sq:transmitRemoveItemFromSquare(object)
+                        return true
+                    end
                 end
 
                 local attached = object:getAttachedAnimSprite()
@@ -25,7 +46,14 @@ local function onCleanVegCommand(module, command, player, args)
                         if parentSprite then
                             local props = parentSprite:getProperties()
                             local parentName = parentSprite:getName()
-                            if props and parentName and (not luautils.stringStarts(parentName, "f_wallvines_")) then
+                            if props and parentName and (
+                                luautils.stringStarts(parentName, "blends_grassoverlays") or
+                                luautils.stringStarts(parentName, "e_newgrass_") or
+                                luautils.stringStarts(parentName, "f_bushes_") or
+                                luautils.stringStarts(parentName, "d_generic_") or
+                                luautils.stringStarts(parentName, "trash_01_")
+                            ) then
+                                cleanLog("onCleanVegCommand REMOVED attached anim " .. tostring(parentSprite:getName()) .. " from " .. tostring(object:getSprite():getName()))
                                 object:RemoveAttachedAnim(n)
                                 object:transmitUpdatedSpriteToClients()
                                 return true
@@ -36,6 +64,7 @@ local function onCleanVegCommand(module, command, player, args)
 
                 if object:getSprite() and object:getSprite():getName()
                         and luautils.stringStarts(object:getSprite():getName(), "f_bushes_") then
+                    cleanLog("onCleanVegCommand REMOVED " .. tostring(object:getSprite():getName()) .. " type=bush")
                     sq:transmitRemoveItemFromSquare(object)
                     return true
                 end
@@ -43,12 +72,14 @@ local function onCleanVegCommand(module, command, player, args)
                 if object:getSprite() and object:getSprite():getName()
                         and (luautils.stringStarts(object:getSprite():getName(), "d_generic_")
                         or luautils.stringStarts(object:getSprite():getName(), "e_newgrass_")) then
+                    cleanLog("onCleanVegCommand REMOVED " .. tostring(object:getSprite():getName()) .. " type=grass")
                     sq:transmitRemoveItemFromSquare(object)
                     return true
                 end
 
                 if object:getSprite() and object:getSprite():getName()
                         and luautils.stringStarts(object:getSprite():getName(), "f_wallvines_") then
+                    cleanLog("onCleanVegCommand REMOVED " .. tostring(object:getSprite():getName()) .. " type=vine")
                     sq:transmitRemoveItemFromSquare(object)
 
                     local neighbour = getCell():getGridSquare(sq:getX(), sq:getY(), sq:getZ() + 1)
@@ -70,49 +101,9 @@ local function onCleanVegCommand(module, command, player, args)
 
                 if object:getSprite() and object:getSprite():getName()
                         and luautils.stringStarts(object:getSprite():getName(), "trash_01_") then
+                    cleanLog("onCleanVegCommand REMOVED " .. tostring(object:getSprite():getName()) .. " type=trash")
                     sq:transmitRemoveItemFromSquare(object)
                     return true
-                end
-
-                if object:getSprite() and object:getSprite():getName()
-                        and (luautils.stringStarts(object:getSprite():getName(), "roofs_burnt_") or
-                        luautils.stringStarts(object:getSprite():getName(), "roofs_03_") or
-                        luautils.stringStarts(object:getSprite():getName(), "roofs_04_") or
-                        luautils.stringStarts(object:getSprite():getName(), "carpentry_02_58")) then
-                    sq:transmitRemoveItemFromSquare(object)
-                    return true
-                end
-
-                if object:getSprite() and object:getSprite():getName()
-                        and (luautils.stringStarts(object:getSprite():getName(), "walls_burnt_") or
-                        luautils.stringStarts(object:getSprite():getName(), "walls_exterior_wooden_01_68") or
-                        luautils.stringStarts(object:getSprite():getName(), "walls_exterior_wooden_01_69") or
-                        luautils.stringStarts(object:getSprite():getName(), "walls_exterior_wooden_01_70") or
-                        luautils.stringStarts(object:getSprite():getName(), "walls_exterior_wooden_01_75") or
-                        luautils.stringStarts(object:getSprite():getName(), "walls_exterior_wooden_01_76") or
-                        luautils.stringStarts(object:getSprite():getName(), "walls_exterior_wooden_01_77") or
-                        luautils.stringStarts(object:getSprite():getName(), "walls_exterior_wooden_01_78")) then
-                    sq:transmitRemoveItemFromSquare(object)
-                    return true
-                end
-
-                if object:getClass() == BaseVehicle.class then
-                    sq:transmitRemoveItemFromSquare(object)
-                    return true
-                end
-
-                if object:getClass() == IsoTree.class then
-                    if object:getModData()["WDecay_Tree"] then
-                        sq:transmitRemoveItemFromSquare(object)
-                        return true
-                    end
-                end
-
-                if object:getClass() == IsoBarricade.class then
-                    if object:getModData()["WDecay_Barricade"] then
-                        sq:transmitRemoveItemFromSquare(object)
-                        return true
-                    end
                 end
 
                 if object:getAttachedAnimSprite() then
@@ -120,9 +111,12 @@ local function onCleanVegCommand(module, command, player, args)
                         local sprite = object:getAttachedAnimSprite():get(n)
                         if sprite and sprite:getParentSprite() and sprite:getParentSprite():getName() then
                             local parentName = sprite:getParentSprite():getName()
-                            if luautils.stringStarts(parentName, "blends_streetoverlays_01_") or
-                               luautils.stringStarts(parentName, "blends_dirtoverlays_01_") then
-                            else
+                            if luautils.stringStarts(parentName, "blends_grassoverlays") or
+                               luautils.stringStarts(parentName, "e_newgrass_") or
+                               luautils.stringStarts(parentName, "f_bushes_") or
+                               luautils.stringStarts(parentName, "d_generic_") or
+                               luautils.stringStarts(parentName, "trash_01_") then
+                                cleanLog("onCleanVegCommand REMOVED attached anim " .. tostring(sprite:getParentSprite():getName()) .. " from " .. tostring(object:getSprite():getName()))
                                 object:RemoveAttachedAnim(n)
                                 object:transmitUpdatedSpriteToClients()
                                 return true
@@ -131,34 +125,39 @@ local function onCleanVegCommand(module, command, player, args)
                     end
                 end
 
-                if object:getSprite() and object:getSprite():getName()
-                        and luautils.stringStarts(object:getSprite():getName(), "fencing_damaged_") then
-                    sq:transmitRemoveItemFromSquare(object)
-                    return true
-                end
-
-                if object:getSprite() and object:getSprite():getName()
-                        and (luautils.stringStarts(object:getSprite():getName(), "carpentry_02_58") or
-                             luautils.stringStarts(object:getSprite():getName(), "carpentry_02_57") or
-                             luautils.stringStarts(object:getSprite():getName(), "carpentry_02_56")) then
-                    sq:transmitRemoveItemFromSquare(object)
-                    return true
-                end
-
                 return false
             end
 
             local objects = sq:getObjects()
-            for i=0,objects:size()-1 do
-                if tryCleanObject(sq, objects:get(i)) then
-                    break
-                end
+            for i=objects:size()-1,0,-1 do
+                tryCleanObject(sq, objects:get(i))
             end
 
             local specialObjects = sq:getSpecialObjects()
-            for i=0,specialObjects:size()-1 do
-                if tryCleanObject(sq, specialObjects:get(i)) then
-                    break
+            for i=specialObjects:size()-1,0,-1 do
+                tryCleanObject(sq, specialObjects:get(i))
+            end
+
+            local floor = sq:getFloor()
+            if floor then
+                tryCleanObject(sq, floor)
+                local floorAttached = floor:getAttachedAnimSprite()
+                if floorAttached then
+                    for n = floorAttached:size()-1, 0, -1 do
+                        local sprite = floorAttached:get(n)
+                        if sprite and sprite:getParentSprite() and sprite:getParentSprite():getName() then
+                            local pn = sprite:getParentSprite():getName()
+                            if luautils.stringStarts(pn, "blends_grassoverlays") or
+                               luautils.stringStarts(pn, "e_newgrass_") or
+                               luautils.stringStarts(pn, "f_bushes_") or
+                               luautils.stringStarts(pn, "d_generic_") or
+                               luautils.stringStarts(pn, "trash_01_") then
+                                floor:RemoveAttachedAnim(n)
+                                floor:transmitUpdatedSpriteToClients()
+                                cleanLog("onCleanVegCommand REMOVED floor attached anim " .. tostring(pn))
+                            end
+                        end
+                    end
                 end
             end
         end

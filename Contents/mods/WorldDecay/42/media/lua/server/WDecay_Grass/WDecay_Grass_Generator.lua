@@ -58,17 +58,17 @@ local function LoadGridsquare(square, checkResult)
                         local floorSprite = floor:getSprite()
                         if floorSprite then
                             local randomGrass = WDecay_Grass.getRandomVanillaGrass()
-                            if randomGrass then
-                                local obj = IsoObject.new(getCell(), square, randomGrass)
-                                square:AddSpecialObject(obj)
-                                WDecay_CustomNames_Integration.applyCustomNameToObject(obj)
-                                local objModData = obj:getModData()
-                                if objModData then
-                                    objModData["WDecay_Cleanable"] = "grass"
-                                end
-obj:transmitCompleteItemToClients()
-                                return true
-                            end
+                    if randomGrass then
+                        local obj = IsoObject.new(getCell(), square, randomGrass)
+                        square:AddSpecialObject(obj)
+                        WDecay_CustomNames_Integration.applyCustomNameToObject(obj)
+                        local objModData = obj:getModData()
+                        if objModData then
+                            objModData["WDecay_Cleanable"] = "grass"
+                        end
+                        obj:transmitCompleteItemToClients()
+                        return true
+                    end
                         end
                     end
                 end
@@ -96,6 +96,7 @@ obj:transmitCompleteItemToClients()
                             objModData["WDecay_Cleanable"] = "grass"
                         end
                         obj:transmitCompleteItemToClients()
+                        return true
                     end
                 end
             end
@@ -120,6 +121,7 @@ obj:transmitCompleteItemToClients()
                             objModData["WDecay_Cleanable"] = "grass"
                         end
                         obj:transmitCompleteItemToClients()
+                        return true
                     end
                 end
             end

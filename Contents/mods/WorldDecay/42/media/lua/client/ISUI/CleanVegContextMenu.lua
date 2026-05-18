@@ -1,6 +1,22 @@
 require('luautils');
 
+local cachedDebugMode = nil
+local function isCleanDebug()
+    if cachedDebugMode == nil then
+        local opt = getSandboxOptions():getOptionByName('WDecay.debugMode')
+        cachedDebugMode = opt and opt:getValue() or false
+    end
+    return cachedDebugMode
+end
+
+local function cleanLog(msg)
+    if isCleanDebug() then
+        print("[WDecay-Clean] " .. msg)
+    end
+end
+
 local function onCleanVegMenu(worldobjects, square, player, areaSize)
+    cleanLog("CleanVegContextMenu area clean selected areaSize=" .. tostring(areaSize) .. " at " .. square:getX() .. "," .. square:getY())
     local bo = CleanVegCursor:new("", "", player, areaSize)
     getCell():setDrag(bo, player:getPlayerNum())
 end
@@ -35,37 +51,25 @@ local function addCleanVegMenu(player, context, worldobjects)
 
         local modData = object:getModData()
         if modData and modData["WDecay_Cleanable"] then
-            return true
+            local cleanableType = modData["WDecay_Cleanable"]
+            if cleanableType == "grass" or cleanableType == "bush" or cleanableType == "trash" or cleanableType == "vine" then
+                cleanLog("CleanVegContextMenu isCleanableObject MATCH sprite=" .. tostring(object:getSprite():getName()) .. " modData=" .. tostring(object:getModData()["WDecay_Cleanable"]))
+                return true
+            end
         end
 
         if object:getTextureName() and luautils.stringStarts(object:getTextureName(), "blends_grassoverlays") then
+            cleanLog("CleanVegContextMenu isCleanableObject MATCH sprite=" .. tostring(object:getSprite():getName()) .. " modData=" .. tostring(object:getModData()["WDecay_Cleanable"]))
             return true
         elseif object:getSprite() and object:getSprite():getName() and (
             luautils.stringStarts(object:getSprite():getName(), "f_bushes_") or
             luautils.stringStarts(object:getSprite():getName(), "d_generic_") or
             luautils.stringStarts(object:getSprite():getName(), "e_newgrass_") or
             luautils.stringStarts(object:getSprite():getName(), "f_wallvines_") or
-            luautils.stringStarts(object:getSprite():getName(), "trash_01_") or
-            luautils.stringStarts(object:getSprite():getName(), "roofs_burnt_") or
-            luautils.stringStarts(object:getSprite():getName(), "roofs_03_") or
-            luautils.stringStarts(object:getSprite():getName(), "roofs_04_") or
-            luautils.stringStarts(object:getSprite():getName(), "carpentry_02_58") or
-            luautils.stringStarts(object:getSprite():getName(), "walls_burnt_") or
-            luautils.stringStarts(object:getSprite():getName(), "walls_exterior_wooden_01_68") or
-            luautils.stringStarts(object:getSprite():getName(), "walls_exterior_wooden_01_69") or
-            luautils.stringStarts(object:getSprite():getName(), "walls_exterior_wooden_01_70") or
-            luautils.stringStarts(object:getSprite():getName(), "walls_exterior_wooden_01_75") or
-            luautils.stringStarts(object:getSprite():getName(), "walls_exterior_wooden_01_76") or
-            luautils.stringStarts(object:getSprite():getName(), "walls_exterior_wooden_01_77") or
-            luautils.stringStarts(object:getSprite():getName(), "walls_exterior_wooden_01_78")
+            luautils.stringStarts(object:getSprite():getName(), "trash_01_")
         ) then
+            cleanLog("CleanVegContextMenu isCleanableObject MATCH sprite=" .. tostring(object:getSprite():getName()) .. " modData=" .. tostring(object:getModData()["WDecay_Cleanable"]))
             return true
-        elseif object:getClass() == BaseVehicle.class then
-            return true
-        elseif object:getClass() == IsoBarricade.class then
-            if object:getModData() and object:getModData()["WDecay_Barricade"] then
-                return true
-            end
         else
             local attached = object:getAttachedAnimSprite()
             if attached then
@@ -74,17 +78,12 @@ local function addCleanVegMenu(player, context, worldobjects)
 
                     if sprite and sprite:getParentSprite() and sprite:getParentSprite():getName() and (
                         luautils.stringStarts(sprite:getParentSprite():getName(), "blends_grassoverlays") or
-                        luautils.stringStarts(sprite:getParentSprite():getName(), "d_plants") or
                         luautils.stringStarts(sprite:getParentSprite():getName(), "d_generic") or
-                        luautils.stringStarts(sprite:getParentSprite():getName(), "f_wallvines") or
-                        luautils.stringStarts(sprite:getParentSprite():getName(), "blends_natural") or
                         luautils.stringStarts(sprite:getParentSprite():getName(), "e_newgrass") or
-                        luautils.stringStarts(sprite:getParentSprite():getName(), "vegetation_farm") or
+                        luautils.stringStarts(sprite:getParentSprite():getName(), "f_wallvines") or
                         luautils.stringStarts(sprite:getParentSprite():getName(), "f_bushes_") or
                         luautils.stringStarts(sprite:getParentSprite():getName(), "d_generic_")
                     ) then
-                        return true
-                    elseif sprite and luautils.stringStarts(sprite:getParentSprite():getName(), "f_wallvines") then
                         return true
                     end
                 end
