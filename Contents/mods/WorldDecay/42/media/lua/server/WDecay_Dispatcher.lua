@@ -66,31 +66,7 @@ local function dispatchGenerators(square, checkResult)
     if checkResult and checkResult.tooManyPhysicsShapes then
         return
     end
-    local function hasVegetation(objectsList)
-        if not objectsList then return false end
-        for i = 0, objectsList:size() - 1 do
-            local obj = objectsList:get(i)
-            if obj then
-                local md = obj:getModData()
-                if md and md["WDecay_Cleanable"] then
-                    return true
-                end
-                if obj:getSprite() and obj:getSprite():getName() then
-                    local name = obj:getSprite():getName()
-                    if luautils.stringStarts(name, "e_newgrass_") or
-                       luautils.stringStarts(name, "f_bushes_") or
-                       luautils.stringStarts(name, "d_generic_") or
-                       luautils.stringStarts(name, "trash_01_") then
-                        return true
-                    end
-                end
-            end
-        end
-        return false
-    end
-    if hasVegetation(square:getSpecialObjects()) or hasVegetation(square:getObjects()) then
-        return
-    end
+
     if WDecay_PlacementGenerators then
         for i = 1, #WDecay_PlacementGenerators do
             local fn = WDecay_PlacementGenerators[i]
