@@ -6,6 +6,7 @@ local function isCleanDebug()
         local opt = getSandboxOptions():getOptionByName('WDecay.debugMode')
         cachedDebugMode = opt and opt:getValue() or false
     end
+
     return cachedDebugMode
 end
 
@@ -24,9 +25,10 @@ function ISRemovePlantCursor:getRemovableObject(square)
 
     local function findRemovableInList(objects)
         if not objects then return nil end
+
         cleanLog("getRemovableObject scanning " .. objects:size() .. " objects, removeType=" .. tostring(self.removeType))
-        for i=1,objects:size() do
-            local object = objects:get(i-1)
+        for i = 1, objects:size() do
+            local object = objects:get(i - 1)
 
             local modData = object:getModData()
             if modData and modData["WDecay_Cleanable"] then
@@ -45,12 +47,12 @@ function ISRemovePlantCursor:getRemovableObject(square)
 
             local attached = object:getAttachedAnimSprite()
             if attached then
-                for n=0,attached:size()-1 do
+                for n = 0, attached:size() - 1 do
                     local sprite = attached:get(n)
                     local parentSprite = sprite:getParentSprite()
 
                     if self.removeType == "bush" and parentSprite and parentSprite:getProperties()
-                            and parentSprite:getProperties():has(IsoFlagType.canBeCut) then
+                        and parentSprite:getProperties():has(IsoFlagType.canBeCut) then
                         cleanLog("getRemovableObject MATCH bush attached anim, parent=" .. tostring(parentSprite:getName()) .. " at " .. square:getX() .. "," .. square:getY() .. "," .. square:getZ())
                         return object
                     end
@@ -61,6 +63,7 @@ function ISRemovePlantCursor:getRemovableObject(square)
                         if props and IsoFlagType.canBeRemoved then
                             hasFlag = props:has(IsoFlagType.canBeRemoved)
                         end
+
                         if hasFlag and (not luautils.stringStarts(parentSprite:getName(), "f_wallvines_")) then
                             cleanLog("getRemovableObject MATCH grass attached anim, parent=" .. tostring(parentSprite:getName()) .. " at " .. square:getX() .. "," .. square:getY() .. "," .. square:getZ())
                             return object
@@ -70,20 +73,20 @@ function ISRemovePlantCursor:getRemovableObject(square)
             end
 
             if self.removeType == "grass" and object:getSprite() and object:getSprite():getName()
-                    and (luautils.stringStarts(object:getSprite():getName(), "d_generic_")
+                and (luautils.stringStarts(object:getSprite():getName(), "d_generic_")
                     or luautils.stringStarts(object:getSprite():getName(), "e_newgrass_")) then
                 cleanLog("getRemovableObject MATCH grass sprite, sprite=" .. tostring(object:getSprite():getName()) .. " at " .. square:getX() .. "," .. square:getY() .. "," .. square:getZ())
                 return object
             end
 
             if self.removeType == "wallVine" and object:getSprite() and object:getSprite():getName()
-                    and luautils.stringStarts(object:getSprite():getName(), "f_wallvines_") then
+                and luautils.stringStarts(object:getSprite():getName(), "f_wallvines_") then
                 cleanLog("getRemovableObject MATCH wallVine sprite, sprite=" .. tostring(object:getSprite():getName()) .. " at " .. square:getX() .. "," .. square:getY() .. "," .. square:getZ())
                 return object
             end
 
             if self.removeType == "bush" and object:getSprite() and object:getSprite():getName()
-                    and luautils.stringStarts(object:getSprite():getName(), "trash_01_") then
+                and luautils.stringStarts(object:getSprite():getName(), "trash_01_") then
                 cleanLog("getRemovableObject MATCH trash sprite, sprite=" .. tostring(object:getSprite():getName()) .. " at " .. square:getX() .. "," .. square:getY() .. "," .. square:getZ())
                 return object
             end
@@ -91,18 +94,18 @@ function ISRemovePlantCursor:getRemovableObject(square)
 
 
             if self.removeType == "bush" and object:getSprite() and object:getSprite():getName()
-                    and luautils.stringStarts(object:getSprite():getName(), "f_bushes_") then
+                and luautils.stringStarts(object:getSprite():getName(), "f_bushes_") then
                 cleanLog("getRemovableObject MATCH bush sprite, sprite=" .. tostring(object:getSprite():getName()) .. " at " .. square:getX() .. "," .. square:getY() .. "," .. square:getZ())
                 return object
             end
         end
+
         cleanLog("getRemovableObject NO MATCH in " .. objects:size() .. " objects, removeType=" .. tostring(self.removeType))
         return nil
     end
 
     return findRemovableInList(square:getObjects()) or findRemovableInList(square:getSpecialObjects())
 end
-
 
 local function onRemovePlantCommand(module, command, player, args)
     if module == "onRemovePlant" then
@@ -114,7 +117,7 @@ local function onRemovePlantCommand(module, command, player, args)
 
         cleanLog("onRemovePlantCommand command=" .. tostring(command) .. " at " .. args.x .. "," .. args.y .. "," .. args.z)
 
-        for i=0,sq:getObjects():size()-1 do
+        for i = 0, sq:getObjects():size() - 1 do
             local object = sq:getObjects():get(i)
 
             if object then
@@ -148,19 +151,20 @@ local function onRemovePlantCommand(module, command, player, args)
                                 end
                             end
                         end
+
                         break
                     end
                 end
 
                 local attached = object:getAttachedAnimSprite()
                 if attached then
-                    for n = attached:size()-1, 0, -1 do
+                    for n = attached:size() - 1, 0, -1 do
                         local sprite = attached:get(n)
                         local parentSprite = sprite:getParentSprite()
 
                         if parentSprite and parentSprite:getProperties()
-                                and parentSprite:getProperties():has(IsoFlagType[command])
-                                and (not luautils.stringStarts(parentSprite:getName(), "f_wallvines_")) then
+                            and parentSprite:getProperties():has(IsoFlagType[command])
+                            and (not luautils.stringStarts(parentSprite:getName(), "f_wallvines_")) then
                             cleanLog("onRemovePlantCommand REMOVED attached anim " .. tostring(parentSprite:getName()) .. " from " .. tostring(object:getSprite():getName()))
                             object:RemoveAttachedAnim(n)
                             object:transmitUpdatedSpriteToClients()
@@ -170,14 +174,14 @@ local function onRemovePlantCommand(module, command, player, args)
                 end
 
                 if object:getSprite() and object:getSprite():getName()
-                        and luautils.stringStarts(object:getSprite():getName(), "f_bushes_") then
+                    and luautils.stringStarts(object:getSprite():getName(), "f_bushes_") then
                     cleanLog("onRemovePlantCommand REMOVED " .. tostring(object:getSprite():getName()) .. " type=bush at " .. args.x .. "," .. args.y .. "," .. args.z)
                     sq:transmitRemoveItemFromSquare(object)
                     break
                 end
 
                 if object:getSprite() and object:getSprite():getName()
-                        and (luautils.stringStarts(object:getSprite():getName(), "d_generic_")
+                    and (luautils.stringStarts(object:getSprite():getName(), "d_generic_")
                         or luautils.stringStarts(object:getSprite():getName(), "e_newgrass_")) then
                     cleanLog("onRemovePlantCommand REMOVED " .. tostring(object:getSprite():getName()) .. " type=grass at " .. args.x .. "," .. args.y .. "," .. args.z)
                     sq:transmitRemoveItemFromSquare(object)
@@ -185,10 +189,10 @@ local function onRemovePlantCommand(module, command, player, args)
                 end
 
                 if object:getSprite() and object:getSprite():getName()
-                        and luautils.stringStarts(object:getSprite():getName(), "f_wallvines_") then
+                    and luautils.stringStarts(object:getSprite():getName(), "f_wallvines_") then
                     cleanLog("onRemovePlantCommand REMOVED " .. tostring(object:getSprite():getName()) .. " type=wallVine at " .. args.x .. "," .. args.y .. "," .. args.z)
                     sq:transmitRemoveItemFromSquare(object)
-                    
+
                     local neighbour = getCell():getGridSquare(sq:getX(), sq:getY(), sq:getZ() + 1)
                     if neighbour then
                         local neighbourObjs = neighbour:getObjects()
@@ -196,18 +200,19 @@ local function onRemovePlantCommand(module, command, player, args)
                             for j = neighbourObjs:size() - 1, 0, -1 do
                                 local neighbourObj = neighbourObjs:get(j)
                                 if neighbourObj and neighbourObj:getSprite() and neighbourObj:getSprite():getName()
-                                        and luautils.stringStarts(neighbourObj:getSprite():getName(), "f_wallvines_") then
+                                    and luautils.stringStarts(neighbourObj:getSprite():getName(), "f_wallvines_") then
                                     neighbour:transmitRemoveItemFromSquare(neighbourObj)
                                     break
                                 end
                             end
                         end
                     end
+
                     break
                 end
 
                 if object:getSprite() and object:getSprite():getName()
-                        and luautils.stringStarts(object:getSprite():getName(), "trash_01_") then
+                    and luautils.stringStarts(object:getSprite():getName(), "trash_01_") then
                     cleanLog("onRemovePlantCommand REMOVED " .. tostring(object:getSprite():getName()) .. " type=trash at " .. args.x .. "," .. args.y .. "," .. args.z)
                     sq:transmitRemoveItemFromSquare(object)
                     break
@@ -216,7 +221,7 @@ local function onRemovePlantCommand(module, command, player, args)
             end
         end
 
-        for i=0,sq:getSpecialObjects():size()-1 do
+        for i = 0, sq:getSpecialObjects():size() - 1 do
             local object = sq:getSpecialObjects():get(i)
 
             if object then
@@ -250,19 +255,20 @@ local function onRemovePlantCommand(module, command, player, args)
                                 end
                             end
                         end
+
                         break
                     end
                 end
 
                 local attached = object:getAttachedAnimSprite()
                 if attached then
-                    for n = attached:size()-1, 0, -1 do
+                    for n = attached:size() - 1, 0, -1 do
                         local sprite = attached:get(n)
                         local parentSprite = sprite:getParentSprite()
 
                         if parentSprite and parentSprite:getProperties()
-                                and parentSprite:getProperties():has(IsoFlagType[command])
-                                and (not luautils.stringStarts(parentSprite:getName(), "f_wallvines_")) then
+                            and parentSprite:getProperties():has(IsoFlagType[command])
+                            and (not luautils.stringStarts(parentSprite:getName(), "f_wallvines_")) then
                             cleanLog("onRemovePlantCommand REMOVED attached anim " .. tostring(parentSprite:getName()) .. " from " .. tostring(object:getSprite():getName()))
                             object:RemoveAttachedAnim(n)
                             object:transmitUpdatedSpriteToClients()
@@ -272,14 +278,14 @@ local function onRemovePlantCommand(module, command, player, args)
                 end
 
                 if object:getSprite() and object:getSprite():getName()
-                        and luautils.stringStarts(object:getSprite():getName(), "f_bushes_") then
+                    and luautils.stringStarts(object:getSprite():getName(), "f_bushes_") then
                     cleanLog("onRemovePlantCommand REMOVED " .. tostring(object:getSprite():getName()) .. " type=bush at " .. args.x .. "," .. args.y .. "," .. args.z)
                     sq:transmitRemoveItemFromSquare(object)
                     break
                 end
 
                 if object:getSprite() and object:getSprite():getName()
-                        and (luautils.stringStarts(object:getSprite():getName(), "d_generic_")
+                    and (luautils.stringStarts(object:getSprite():getName(), "d_generic_")
                         or luautils.stringStarts(object:getSprite():getName(), "e_newgrass_")) then
                     cleanLog("onRemovePlantCommand REMOVED " .. tostring(object:getSprite():getName()) .. " type=grass at " .. args.x .. "," .. args.y .. "," .. args.z)
                     sq:transmitRemoveItemFromSquare(object)
@@ -287,7 +293,7 @@ local function onRemovePlantCommand(module, command, player, args)
                 end
 
                 if object:getSprite() and object:getSprite():getName()
-                        and luautils.stringStarts(object:getSprite():getName(), "f_wallvines_") then
+                    and luautils.stringStarts(object:getSprite():getName(), "f_wallvines_") then
                     cleanLog("onRemovePlantCommand REMOVED " .. tostring(object:getSprite():getName()) .. " type=wallVine at " .. args.x .. "," .. args.y .. "," .. args.z)
                     sq:transmitRemoveItemFromSquare(object)
                     local neighbour = getCell():getGridSquare(sq:getX(), sq:getY(), sq:getZ() + 1)
@@ -297,18 +303,19 @@ local function onRemovePlantCommand(module, command, player, args)
                             for j = neighbourObjs:size() - 1, 0, -1 do
                                 local neighbourObj = neighbourObjs:get(j)
                                 if neighbourObj and neighbourObj:getSprite() and neighbourObj:getSprite():getName()
-                                        and luautils.stringStarts(neighbourObj:getSprite():getName(), "f_wallvines_") then
+                                    and luautils.stringStarts(neighbourObj:getSprite():getName(), "f_wallvines_") then
                                     neighbour:transmitRemoveItemFromSquare(neighbourObj)
                                     break
                                 end
                             end
                         end
                     end
+
                     break
                 end
 
                 if object:getSprite() and object:getSprite():getName()
-                        and luautils.stringStarts(object:getSprite():getName(), "trash_01_") then
+                    and luautils.stringStarts(object:getSprite():getName(), "trash_01_") then
                     cleanLog("onRemovePlantCommand REMOVED " .. tostring(object:getSprite():getName()) .. " type=trash at " .. args.x .. "," .. args.y .. "," .. args.z)
                     sq:transmitRemoveItemFromSquare(object)
                     break
@@ -320,4 +327,5 @@ local function onRemovePlantCommand(module, command, player, args)
         cleanLog("onRemovePlantCommand DONE at " .. args.x .. "," .. args.y .. "," .. args.z)
     end
 end
+
 Events.OnClientCommand.Add(onRemovePlantCommand)

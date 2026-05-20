@@ -1,3 +1,6 @@
+local randomizer = newrandom()
+randomizer:seed(ZombRand(1, 2147483647))
+
 local WDecay_Walls = {}
 
 WDecay_Walls.wallProperties = {
@@ -23,10 +26,10 @@ WDecay_Walls.burnedTextures = {
 
 function WDecay_Walls.hasWallProperty(sprite, propertyName)
     if not sprite or not sprite:getProperties() then return false end
-    
+
     local properties = sprite:getProperties():getPropertyNames()
     if not properties then return false end
-    
+
     local propertyStr = tostring(properties)
     return propertyStr:contains(propertyName)
 end
@@ -40,30 +43,34 @@ function WDecay_Walls.getRandomBurnedTexture(wallType)
     if not textures or #textures == 0 then
         return nil
     end
-    return textures[ZombRand(1, #textures + 1)]
+
+    return textures[randomizer:random(1, #textures + 1)]
 end
 
 function WDecay_Walls.isBurnedWall(spriteName)
     if not spriteName then return false end
+
     return luautils.stringStarts(spriteName, "walls_burnt_") or
-           (luautils.stringStarts(spriteName, "walls_exterior_wooden_01_") and
+        (luautils.stringStarts(spriteName, "walls_exterior_wooden_01_") and
             (spriteName == "walls_exterior_wooden_01_68" or
-             spriteName == "walls_exterior_wooden_01_69" or
-             spriteName == "walls_exterior_wooden_01_70" or
-             spriteName == "walls_exterior_wooden_01_75" or
-             spriteName == "walls_exterior_wooden_01_76" or
-             spriteName == "walls_exterior_wooden_01_77" or
-             spriteName == "walls_exterior_wooden_01_78"))
+                spriteName == "walls_exterior_wooden_01_69" or
+                spriteName == "walls_exterior_wooden_01_70" or
+                spriteName == "walls_exterior_wooden_01_75" or
+                spriteName == "walls_exterior_wooden_01_76" or
+                spriteName == "walls_exterior_wooden_01_77" or
+                spriteName == "walls_exterior_wooden_01_78"))
 end
 
 function WDecay_Walls.isExteriorWall(textureName)
     if not textureName then return false end
+
     return luautils.stringStarts(textureName, "walls_exterior_") and
-           not luautils.stringStarts(textureName, "walls_exterior_roofs_")
+        not luautils.stringStarts(textureName, "walls_exterior_roofs_")
 end
 
 function WDecay_Walls.isInteriorWall(textureName)
     if not textureName then return false end
+
     return luautils.stringStarts(textureName, "walls_interior_")
 end
 

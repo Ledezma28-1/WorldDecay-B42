@@ -1,3 +1,6 @@
+local randomizer = newrandom()
+randomizer:seed(ZombRand(1, 2147483647))
+
 local WDecay_Cracks = {}
 
 WDecay_Cracks.roadTiles = {
@@ -119,16 +122,19 @@ WDecay_Cracks.dirtCrackOverlays = {
 
 local roadTilesSet = {}
 for _, v in ipairs(WDecay_Cracks.roadTiles) do roadTilesSet[v] = true end
+
 local naturalTilesSet = {}
 for _, v in ipairs(WDecay_Cracks.naturalTiles) do naturalTilesSet[v] = true end
 
 function WDecay_Cracks.isTileInArray(tileName, tileArray)
     if not tileName or not tileArray then return false end
+
     for i = 1, #tileArray do
         if tileArray[i] == tileName then
             return true
         end
     end
+
     return false
 end
 
@@ -136,20 +142,23 @@ function WDecay_Cracks.getRandomRoadCrackOverlay()
     if #WDecay_Cracks.roadCrackOverlays == 0 then
         return nil
     end
-    return WDecay_Cracks.roadCrackOverlays[ZombRand(1, #WDecay_Cracks.roadCrackOverlays + 1)]
+
+    return WDecay_Cracks.roadCrackOverlays[randomizer:random(1, #WDecay_Cracks.roadCrackOverlays + 1)]
 end
 
 function WDecay_Cracks.getRandomDirtCrackOverlay()
     if #WDecay_Cracks.dirtCrackOverlays == 0 then
         return nil
     end
-    return WDecay_Cracks.dirtCrackOverlays[ZombRand(1, #WDecay_Cracks.dirtCrackOverlays + 1)]
+
+    return WDecay_Cracks.dirtCrackOverlays[randomizer:random(1, #WDecay_Cracks.dirtCrackOverlays + 1)]
 end
 
 function WDecay_Cracks.isCrackOverlay(spriteName)
     if not spriteName then return false end
+
     return luautils.stringStarts(spriteName, "blends_streetoverlays_01_") or
-           luautils.stringStarts(spriteName, "blends_dirtoverlays_01_")
+        luautils.stringStarts(spriteName, "blends_dirtoverlays_01_")
 end
 
 function WDecay_Cracks.isRoadTile(tileName)

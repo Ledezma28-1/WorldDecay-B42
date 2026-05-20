@@ -1,3 +1,5 @@
+local randomizer = newrandom()
+randomizer:seed(ZombRand(1, 2147483647))
 local WDecay_Bushes = {}
 
 WDecay_Bushes.bushes = {
@@ -146,7 +148,7 @@ function WDecay_Bushes.getRandomBush()
     if #WDecay_Bushes.bushes == 0 then
         return nil
     end
-    return WDecay_Bushes.bushes[ZombRand(1, #WDecay_Bushes.bushes + 1)]
+    return WDecay_Bushes.bushes[randomizer:random(1, #WDecay_Bushes.bushes + 1)]
 end
 
 function WDecay_Bushes.getCustomName(spriteName)

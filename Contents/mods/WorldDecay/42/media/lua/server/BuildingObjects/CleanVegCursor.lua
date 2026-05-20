@@ -35,6 +35,7 @@ local function areaClean(player, centerSquare, areaSize)
     local function nextTile()
         idx = idx + 1
         if idx > #squares then return end
+
         local sq = squares[idx]
         local walk = ISWalkToTimedAction:new(player, sq)
         walk:setOnComplete(function()
@@ -43,6 +44,7 @@ local function areaClean(player, centerSquare, areaSize)
         end)
         ISTimedActionQueue.add(walk)
     end
+
     nextTile()
 end
 
@@ -68,33 +70,33 @@ function CleanVegCursor.hasCleanable(square)
             return true
         elseif object:getSprite() and object:getSprite():getName() and (
             luautils.stringStarts(object:getSprite():getName(), "f_bushes_") or
-            luautils.stringStarts(object:getSprite():getName(), "d_generic_") or
-            luautils.stringStarts(object:getSprite():getName(), "e_newgrass_") or
-            luautils.stringStarts(object:getSprite():getName(), "f_wallvines_") or
-            luautils.stringStarts(object:getSprite():getName(), "trash_01_") or
-            luautils.stringStarts(object:getSprite():getName(), "roofs_burnt_") or
-            luautils.stringStarts(object:getSprite():getName(), "roofs_03_") or
-            luautils.stringStarts(object:getSprite():getName(), "roofs_04_") or
-            luautils.stringStarts(object:getSprite():getName(), "carpentry_02_58") or
-            luautils.stringStarts(object:getSprite():getName(), "walls_burnt_") or
-            luautils.stringStarts(object:getSprite():getName(), "walls_exterior_wooden_01_68") or
-            luautils.stringStarts(object:getSprite():getName(), "walls_exterior_wooden_01_69") or
-            luautils.stringStarts(object:getSprite():getName(), "walls_exterior_wooden_01_70") or
-            luautils.stringStarts(object:getSprite():getName(), "walls_exterior_wooden_01_75") or
-            luautils.stringStarts(object:getSprite():getName(), "walls_exterior_wooden_01_76") or
-            luautils.stringStarts(object:getSprite():getName(), "walls_exterior_wooden_01_77") or
-            luautils.stringStarts(object:getSprite():getName(), "walls_exterior_wooden_01_78")
-        ) then
+                luautils.stringStarts(object:getSprite():getName(), "d_generic_") or
+                luautils.stringStarts(object:getSprite():getName(), "e_newgrass_") or
+                luautils.stringStarts(object:getSprite():getName(), "f_wallvines_") or
+                luautils.stringStarts(object:getSprite():getName(), "trash_01_") or
+                luautils.stringStarts(object:getSprite():getName(), "roofs_burnt_") or
+                luautils.stringStarts(object:getSprite():getName(), "roofs_03_") or
+                luautils.stringStarts(object:getSprite():getName(), "roofs_04_") or
+                luautils.stringStarts(object:getSprite():getName(), "carpentry_02_58") or
+                luautils.stringStarts(object:getSprite():getName(), "walls_burnt_") or
+                luautils.stringStarts(object:getSprite():getName(), "walls_exterior_wooden_01_68") or
+                luautils.stringStarts(object:getSprite():getName(), "walls_exterior_wooden_01_69") or
+                luautils.stringStarts(object:getSprite():getName(), "walls_exterior_wooden_01_70") or
+                luautils.stringStarts(object:getSprite():getName(), "walls_exterior_wooden_01_75") or
+                luautils.stringStarts(object:getSprite():getName(), "walls_exterior_wooden_01_76") or
+                luautils.stringStarts(object:getSprite():getName(), "walls_exterior_wooden_01_77") or
+                luautils.stringStarts(object:getSprite():getName(), "walls_exterior_wooden_01_78")
+            ) then
             return true
         elseif object:getClass() == BaseVehicle.class then
             return true
         else
             local attached = object:getAttachedAnimSprite()
             if attached then
-                for n=1,attached:size() do
-                    local sprite = attached:get(n-1)
+                for n = 1, attached:size() do
+                    local sprite = attached:get(n - 1)
                     if sprite and sprite:getParentSprite() and sprite:getParentSprite():getName() and
-                            (luautils.stringStarts(sprite:getParentSprite():getName(), "blends_grassoverlays")
+                        (luautils.stringStarts(sprite:getParentSprite():getName(), "blends_grassoverlays")
                             or luautils.stringStarts(sprite:getParentSprite():getName(), "d_plants")
                             or luautils.stringStarts(sprite:getParentSprite():getName(), "f_wallvines")
                             or luautils.stringStarts(sprite:getParentSprite():getName(), "d_generic")
@@ -108,16 +110,19 @@ function CleanVegCursor.hasCleanable(square)
                 end
             end
         end
+
         return false
     end
 
     local function hasCleanableInList(objects)
         if not objects then return false end
-        for i=0,objects:size()-1 do
+
+        for i = 0, objects:size() - 1 do
             if isCleanableObject(objects:get(i)) then
                 return true
             end
         end
+
         return false
     end
 
@@ -144,19 +149,21 @@ function CleanVegCursor:render(x, y, z, square)
             for dy = -half, half do
                 local sq = cell:getGridSquare(sx + dx, sy + dy, z)
                 if sq then
-                    local r,g,b,a = 0.0, 1.0, 0.0, 0.6
+                    local r, g, b, a = 0.0, 1.0, 0.0, 0.6
                     if not CleanVegCursor.hasCleanable(sq) then
                         r, g, a = 1.0, 0.0, 0.3
                     end
+
                     CleanVegCursor.floorSprite:RenderGhostTileColor(sx + dx, sy + dy, z, r, g, b, a)
                 end
             end
         end
     else
-        local r,g,b,a = 0.0, 1.0, 0.0, 0.8
+        local r, g, b, a = 0.0, 1.0, 0.0, 0.8
         if not CleanVegCursor.hasCleanable(square) then
             r, g = 1.0, 0.0
         end
+
         CleanVegCursor.floorSprite:RenderGhostTileColor(x, y, z, r, g, b, a)
     end
 end

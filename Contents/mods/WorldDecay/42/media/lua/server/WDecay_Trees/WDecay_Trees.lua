@@ -1,3 +1,6 @@
+local randomizer = newrandom()
+randomizer:seed(ZombRand(1, 2147483647))
+
 local WDecay_Trees = {}
 
 WDecay_Trees.treeSprites = {
@@ -47,7 +50,7 @@ WDecay_Trees.treeSprites = {
     "e_virginiapineJUMBO_1_1"
 }
 
-WDecay_Trees.foliageIndices = {4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}
+WDecay_Trees.foliageIndices = { 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 }
 
 WDecay_Trees._foliageLookup = {}
 for _, treeSprite in ipairs(WDecay_Trees.treeSprites) do
@@ -67,14 +70,16 @@ function WDecay_Trees.getRandomTreeSprite()
     if #WDecay_Trees.treeSprites == 0 then
         return nil
     end
-    return WDecay_Trees.treeSprites[ZombRand(1, #WDecay_Trees.treeSprites + 1)]
+
+    return WDecay_Trees.treeSprites[randomizer:random(1, #WDecay_Trees.treeSprites + 1)]
 end
 
 function WDecay_Trees.getRandomFoliageIndex()
     if #WDecay_Trees.foliageIndices == 0 then
         return nil
     end
-    return WDecay_Trees.foliageIndices[ZombRand(1, #WDecay_Trees.foliageIndices + 1)]
+
+    return WDecay_Trees.foliageIndices[randomizer:random(1, #WDecay_Trees.foliageIndices + 1)]
 end
 
 local DEFAULT_SPRITE_ID = 20000000
@@ -83,20 +88,24 @@ function WDecay_Trees.getFoliageSpriteName(treeSpriteName, foliageIndex)
     if not treeSpriteName or not foliageIndex then
         return nil
     end
+
     if foliageIndex == 4 or foliageIndex == 5 or foliageIndex == 6 or foliageIndex == 7 then
         return nil
     end
+
     local lookup = WDecay_Trees._foliageLookup[treeSpriteName]
     if lookup then
         return lookup[foliageIndex]
     end
+
     return nil
 end
 
 function WDecay_Trees.isTreeSprite(spriteName)
     if not spriteName then return false end
-    return luautils.stringStarts(spriteName, "e_") and 
-           (luautils.stringStarts(spriteName, "e_dogwood_") or
+
+    return luautils.stringStarts(spriteName, "e_") and
+        (luautils.stringStarts(spriteName, "e_dogwood_") or
             luautils.stringStarts(spriteName, "e_riverbirch_") or
             luautils.stringStarts(spriteName, "e_easternredbud_") or
             luautils.stringStarts(spriteName, "e_redmaple_") or

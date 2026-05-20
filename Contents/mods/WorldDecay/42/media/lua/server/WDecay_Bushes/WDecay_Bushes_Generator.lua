@@ -1,3 +1,6 @@
+local randomizer = newrandom()
+randomizer:seed(ZombRand(1, 2147483647))
+
 local WDecay_Bushes = require('WDecay_Bushes/WDecay_Bushes')
 local WDecay_CustomNames_Integration = require('WDecay_CustomNames/WDecay_CustomNames_Integration')
 
@@ -26,11 +29,11 @@ local function getIndoorBushesPercentage()
     return cachedIndoorBushesPercentage
 end
 
-local function LoadGridsquare(square, checkResult)
+local function LoadGridsquare(square, checkResult, level)
     if not square then return end
     if not checkResult then return end
     if not checkResult.objects then return end
-    if square:getZ() ~= 0 then return end
+    if level ~= 0 then return end
 
     local isIndoor = checkResult.room ~= nil
     local isRoad = checkResult.isRoad
@@ -46,7 +49,7 @@ local function LoadGridsquare(square, checkResult)
     
     if percentage <= 0 then return end
     
-    if percentage >= ZombRand(1, 101) then
+    if percentage >= randomizer:random(1, 101) then
         local sqModData = square:getModData()
         if sqModData and sqModData["WDecay_HasTree"] then return end
         local floor = square:getFloor()

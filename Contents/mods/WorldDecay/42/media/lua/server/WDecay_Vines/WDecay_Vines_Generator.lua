@@ -1,3 +1,6 @@
+local randomizer = newrandom()
+randomizer:seed(ZombRand(1, 2147483647))
+
 local WDecay_Vines = require('WDecay_Vines/WDecay_Vines')
 
 local cachedVinePercentage = nil
@@ -6,6 +9,7 @@ local function getVinePercentage()
         local opt = getSandboxOptions():getOptionByName('WDecay.vinePercentage')
         cachedVinePercentage = opt and opt:getValue() or 15
     end
+
     return cachedVinePercentage
 end
 
@@ -15,6 +19,7 @@ local function getMultiFloorVines()
         local opt = getSandboxOptions():getOptionByName('WDecay.multiFloorVines')
         cachedMultiFloorVines = opt and opt:getValue() or false
     end
+
     return cachedMultiFloorVines
 end
 
@@ -25,73 +30,82 @@ local function isVinesExteriorOnly()
         cachedVinesExteriorOnly = opt and opt:getValue()
         if cachedVinesExteriorOnly == nil then cachedVinesExteriorOnly = true end
     end
+
     return cachedVinesExteriorOnly
 end
 
 local function isWallTile(textureName)
     if not textureName then return false end
+
     return luautils.stringStarts(textureName, "walls_") or
-           luautils.stringStarts(textureName, "fixtures_") or
-           luautils.stringStarts(textureName, "fencing_") or
-           luautils.stringStarts(textureName, "location_")
+        luautils.stringStarts(textureName, "fixtures_") or
+        luautils.stringStarts(textureName, "fencing_") or
+        luautils.stringStarts(textureName, "location_")
 end
 
 local function isExteriorWall(textureName)
     if not textureName then return false end
+
     return luautils.stringStarts(textureName, "walls_exterior_") and
-           not luautils.stringStarts(textureName, "walls_exterior_roofs_")
+        not luautils.stringStarts(textureName, "walls_exterior_roofs_")
 end
 
 local function isInteriorWall(textureName)
     if not textureName then return false end
+
     return luautils.stringStarts(textureName, "walls_interior_")
 end
 
 local function isFenceTile(textureName)
     if not textureName then return false end
+
     return luautils.stringStarts(textureName, "fencing_") or
-           luautils.stringStarts(textureName, "fixtures_railings")
+        luautils.stringStarts(textureName, "fixtures_railings")
 end
 
 local function hasWallProperty(sprite, propertyName)
     if not sprite then return false end
+
     local properties = sprite:getProperties()
     if not properties then return false end
+
     return properties:has(propertyName)
 end
 
 local function isLowFence(sprite)
     if not sprite or not sprite:getProperties() then return false end
+
     return sprite:getProperties():has('FenceTypeLow')
 end
 
-local function LoadGridsquare(square, checkResult)
+local function LoadGridsquare(square, checkResult, level)
     if not square then return end
-    
+
     local modData = square:getModData()
     if not modData then return end
+
     if modData["WDecay_Vines"] then return end
-    
+
     modData["WDecay_Vines"] = true
-    
-    if not getMultiFloorVines() and square:getZ() ~= 0 then return end
-    
+
+    if not getMultiFloorVines() and level ~= 0 then return end
+
     if isVinesExteriorOnly() and square:getRoom() then return end
-    
-    if getVinePercentage() < ZombRand(1, 101) then
+
+    if getVinePercentage() < randomizer:random(1, 101) then
         return
     end
-    
+
     local objects = square:getObjects()
-    if not objects or objects:size() == 0 then return end
-    
-    for i = 0, objects:size() - 1 do
+    local objectCount = objects:size()
+
+    if not objects or objectCount == 0 then return end
+
+    for i = 0, objectCount - 1 do
         local obj = objects:get(i)
-        if not obj then
-        else
+        if obj then
             local sprite = obj:getSprite()
-            if not sprite then
-            else
+            if sprite then
                 local textureName = obj:getTextureName()
 
                 if textureName and isWallTile(textureName) then
@@ -116,7 +130,7 @@ local function LoadGridsquare(square, checkResult)
                                     obj2ModData["WDecay_Cleanable"] = "vine"
 
                                     if false then
-                                        local neighbour = getCell():getGridSquare(square:getX(), square:getY(), square:getZ() + 1)
+                                        local neighbour = getCell():getGridSquare(square:getX(), square:getY(), level + 1)
                                         if neighbour then
                                             local neighbourObjs = neighbour:getObjects()
                                             if neighbourObjs then
@@ -127,10 +141,10 @@ local function LoadGridsquare(square, checkResult)
                                                         if neighbourSprite then
                                                             local neighbourSpriteName = neighbourSprite:getName()
                                                             if neighbourSpriteName and
-                                                               luautils.stringStarts(tostring(neighbourSpriteName), "walls_") and
-                                                               not luautils.stringStarts(tostring(neighbourSpriteName), "walls_detailling") and
-                                                               not luautils.stringStarts(tostring(neighbourSpriteName), "walls_exterior_roofs") and
-                                                               not luautils.stringStarts(tostring(neighbourSpriteName), "walls_interior") then
+                                                                luautils.stringStarts(tostring(neighbourSpriteName), "walls_") and
+                                                                not luautils.stringStarts(tostring(neighbourSpriteName), "walls_detailling") and
+                                                                not luautils.stringStarts(tostring(neighbourSpriteName), "walls_exterior_roofs") and
+                                                                not luautils.stringStarts(tostring(neighbourSpriteName), "walls_interior") then
 
                                                                 local randomOverlay2 = WDecay_Vines.getRandomWallNWTop()
                                                                 if randomOverlay2 then
@@ -140,6 +154,7 @@ local function LoadGridsquare(square, checkResult)
                                                                     local obj3ModData = obj3:getModData()
                                                                     obj3ModData["WDecay_Cleanable"] = "vine"
                                                                 end
+
                                                                 break
                                                             end
                                                         end
@@ -152,8 +167,8 @@ local function LoadGridsquare(square, checkResult)
                             end
 
                             if hasWallProperty(sprite, "WallW") or hasWallProperty(sprite, "WindowW") or
-                               hasWallProperty(sprite, "doorW") or hasWallProperty(sprite, "DoorWallW") or
-                               hasWallProperty(sprite, "attachedW") or hasWallProperty(sprite, "WallWTrans") then
+                                hasWallProperty(sprite, "doorW") or hasWallProperty(sprite, "DoorWallW") or
+                                hasWallProperty(sprite, "attachedW") or hasWallProperty(sprite, "WallWTrans") then
 
                                 local randomOverlay = WDecay_Vines.getRandomWallW()
 
@@ -169,7 +184,7 @@ local function LoadGridsquare(square, checkResult)
                                     obj2ModData["WDecay_Cleanable"] = "vine"
 
                                     if false then
-                                        local neighbour = getCell():getGridSquare(square:getX(), square:getY(), square:getZ() + 1)
+                                        local neighbour = getCell():getGridSquare(square:getX(), square:getY(), level + 1)
                                         if neighbour then
                                             local neighbourObjs = neighbour:getObjects()
                                             if neighbourObjs then
@@ -180,10 +195,10 @@ local function LoadGridsquare(square, checkResult)
                                                         if neighbourSprite then
                                                             local neighbourSpriteName = neighbourSprite:getName()
                                                             if neighbourSpriteName and
-                                                               luautils.stringStarts(tostring(neighbourSpriteName), "walls_") and
-                                                               not luautils.stringStarts(tostring(neighbourSpriteName), "walls_detailling") and
-                                                               not luautils.stringStarts(tostring(neighbourSpriteName), "walls_exterior_roofs") and
-                                                               not luautils.stringStarts(tostring(neighbourSpriteName), "walls_interior") then
+                                                                luautils.stringStarts(tostring(neighbourSpriteName), "walls_") and
+                                                                not luautils.stringStarts(tostring(neighbourSpriteName), "walls_detailling") and
+                                                                not luautils.stringStarts(tostring(neighbourSpriteName), "walls_exterior_roofs") and
+                                                                not luautils.stringStarts(tostring(neighbourSpriteName), "walls_interior") then
 
                                                                 local randomOverlay2 = WDecay_Vines.getRandomWallWTop()
                                                                 if randomOverlay2 then
@@ -193,6 +208,7 @@ local function LoadGridsquare(square, checkResult)
                                                                     local obj3ModData = obj3:getModData()
                                                                     obj3ModData["WDecay_Cleanable"] = "vine"
                                                                 end
+
                                                                 break
                                                             end
                                                         end
@@ -219,7 +235,7 @@ local function LoadGridsquare(square, checkResult)
                                     obj2ModData["WDecay_Cleanable"] = "vine"
 
                                     if false then
-                                        local neighbour = getCell():getGridSquare(square:getX(), square:getY(), square:getZ() + 1)
+                                        local neighbour = getCell():getGridSquare(square:getX(), square:getY(), level + 1)
                                         if neighbour then
                                             local neighbourObjs = neighbour:getObjects()
                                             if neighbourObjs then
@@ -230,10 +246,10 @@ local function LoadGridsquare(square, checkResult)
                                                         if neighbourSprite then
                                                             local neighbourSpriteName = neighbourSprite:getName()
                                                             if neighbourSpriteName and
-                                                               luautils.stringStarts(tostring(neighbourSpriteName), "walls_") and
-                                                               not luautils.stringStarts(tostring(neighbourSpriteName), "walls_detailling") and
-                                                               not luautils.stringStarts(tostring(neighbourSpriteName), "walls_exterior_roofs") and
-                                                               not luautils.stringStarts(tostring(neighbourSpriteName), "walls_interior") then
+                                                                luautils.stringStarts(tostring(neighbourSpriteName), "walls_") and
+                                                                not luautils.stringStarts(tostring(neighbourSpriteName), "walls_detailling") and
+                                                                not luautils.stringStarts(tostring(neighbourSpriteName), "walls_exterior_roofs") and
+                                                                not luautils.stringStarts(tostring(neighbourSpriteName), "walls_interior") then
 
                                                                 local randomOverlay2 = WDecay_Vines.getRandomWallNTop()
                                                                 if randomOverlay2 then
@@ -243,7 +259,9 @@ local function LoadGridsquare(square, checkResult)
                                                                     local obj3ModData = obj3:getModData()
                                                                     obj3ModData["WDecay_Cleanable"] = "vine"
                                                                 end
+
                                                                 break
+                                                            end
                                                         end
                                                     end
                                                 end
@@ -259,9 +277,9 @@ local function LoadGridsquare(square, checkResult)
         end
     end
 end
-end
 
 if not WDecay_ModifierGenerators then WDecay_ModifierGenerators = {} end
+
 table.insert(WDecay_ModifierGenerators, LoadGridsquare)
 
 return WDecay_Vines

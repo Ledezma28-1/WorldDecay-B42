@@ -1,3 +1,6 @@
+local randomizer = newrandom()
+randomizer:seed(ZombRand(1, 2147483647))
+
 local WDecay_Barricades = {}
 
 WDecay_Barricades.barricadeTypes = {
@@ -16,14 +19,14 @@ function WDecay_Barricades.getRandomBarricadeType()
     if #WDecay_Barricades.barricadeTypes == 0 then
         return nil
     end
-    return WDecay_Barricades.barricadeTypes[ZombRand(1, #WDecay_Barricades.barricadeTypes + 1)]
+    return WDecay_Barricades.barricadeTypes[randomizer:random(1, #WDecay_Barricades.barricadeTypes + 1)]
 end
 
 function WDecay_Barricades.getRandomHealthLevel()
     if #WDecay_Barricades.healthLevels == 0 then
         return 100
     end
-    return WDecay_Barricades.healthLevels[ZombRand(1, #WDecay_Barricades.healthLevels + 1)]
+    return WDecay_Barricades.healthLevels[randomizer:random(1, #WDecay_Barricades.healthLevels + 1)]
 end
 
 function WDecay_Barricades.isWindow(object)

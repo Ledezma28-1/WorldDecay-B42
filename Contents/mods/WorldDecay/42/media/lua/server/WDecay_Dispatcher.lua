@@ -32,22 +32,24 @@ local MAX_SPAWN_ATTEMPTS = 10
 
 local dispatcherConfigLoaded = false
 local function loadDispatcherConfig()
-    if dispatcherConfigLoaded then return end
-    dispatcherConfigLoaded = true
     local function getInt(name, default)
         local opt = getSandboxOptions():getOptionByName('WDecay.' .. name)
         return opt and opt:getValue() or default
     end
+
     local function getBool(name, default)
         local opt = getSandboxOptions():getOptionByName('WDecay.' .. name)
         if opt then return opt:getValue() end
+
         return default
     end
+
     TIME_BUDGET_MS = getInt('timeBudgetMs', 200)
     SCAN_INTERVAL = getInt('scanInterval', 100)
     SCAN_RADIUS = getInt('scanRadius', 15)
     PRIORITY_RADIUS = getInt('priorityRadius', 5)
     DEBUG_MODE = getBool('debugMode', false)
+    dispatcherConfigLoaded = true
 end
 
 local perfTickCounter = 0
@@ -62,7 +64,7 @@ local function sqDist(px, py, wx, wy)
     return dx * dx + dy * dy
 end
 
-local function dispatchGenerators(square, checkResult)
+local function dispatchGenerators(square, checkResult, level)
     if checkResult and checkResult.tooManyPhysicsShapes then
         return
     end
@@ -70,59 +72,77 @@ local function dispatchGenerators(square, checkResult)
     if WDecay_PlacementGenerators then
         for i = 1, #WDecay_PlacementGenerators do
             local fn = WDecay_PlacementGenerators[i]
-            if fn and fn(square, checkResult) then
+            if fn and fn(square, checkResult, level) then
                 if WDecay_DebugCountPlacement then
                     WDecay_DebugCountPlacement(i)
                 end
+
                 break
             end
         end
     end
+
     if not checkResult or (not checkResult.hasWalls and not checkResult.hasWindows
-       and not checkResult.isRoad and not checkResult.room
-       and not checkResult.hasFences and not checkResult.hasRoof) then
+        and not checkResult.isRoad and not checkResult.room
+        and not checkResult.hasFences and not checkResult.hasRoof) then
         return
     end
+
     if WDecay_ModifierGenerators then
         local mg = WDecay_ModifierGenerators
         if checkResult.hasWalls or checkResult.hasWindows or checkResult.hasFences or checkResult.room then
             local fn = mg[1]
-            if fn then fn(square, checkResult) end
+            if fn then fn(square, checkResult, level) end
+
             if WDecay_DebugCountModifier then WDecay_DebugCountModifier(1) end
         end
+
         if checkResult.isRoad then
             local fn = mg[2]
-            if fn then fn(square, checkResult) end
+            if fn then fn(square, checkResult, level) end
+
             if WDecay_DebugCountModifier then WDecay_DebugCountModifier(2) end
         end
+
         if checkResult.room then
             local fn = mg[3]
-            if fn then fn(square, checkResult) end
+            if fn then fn(square, checkResult, level) end
+
             if WDecay_DebugCountModifier then WDecay_DebugCountModifier(3) end
         end
+
         if checkResult.hasFences then
             local fn = mg[4]
-            if fn then fn(square, checkResult) end
+            if fn then fn(square, checkResult, level) end
+
             if WDecay_DebugCountModifier then WDecay_DebugCountModifier(4) end
         end
+
         if checkResult.room then
             local fn = mg[5]
-            if fn then fn(square, checkResult) end
+            if fn then fn(square, checkResult, level) end
+
             if WDecay_DebugCountModifier then WDecay_DebugCountModifier(5) end
         end
+
         if checkResult.hasWalls or checkResult.hasFences then
             local fn = mg[6]
-            if fn then fn(square, checkResult) end
+            if fn then fn(square, checkResult, level) end
+
             if WDecay_DebugCountModifier then WDecay_DebugCountModifier(6) end
         end
+
         if checkResult.room then
             local fn = mg[7]
-            if fn then fn(square, checkResult) end
+            if fn then fn(square, checkResult, level) end
+
             if WDecay_DebugCountModifier then WDecay_DebugCountModifier(7) end
         end
+
         if checkResult.hasRoof then
             local fn = mg[8]
-            if fn then fn(square, checkResult) end
+            if fn then fn(square, checkResult, level) end
+
             if WDecay_DebugCountModifier then WDecay_DebugCountModifier(8) end
         end
     end
@@ -131,14 +151,19 @@ end
 local WDecay_SquareCheck = require('wdecay_squarecheck/wdecay_squarecheck')
 
 local function processChunkSquares(chunk)
+    local cachedMinLevel = chunk:getMinLevel()
+    local cachedMaxLevel = chunk:getMaxLevel()
+
     local testSquare = nil
-    local testZ = chunk:getMinLevel()
-    while testZ <= chunk:getMaxLevel() do
+    local testZ = cachedMinLevel
+    while testZ <= cachedMaxLevel do
         testSquare = chunk:getGridSquare(0, 0, testZ)
         if testSquare and testSquare:getChunk() then break end
+
         testSquare = nil
         testZ = testZ + 1
     end
+
     if not testSquare then
         return false
     end
@@ -149,46 +174,49 @@ local function processChunkSquares(chunk)
     end
 
     local sqErrors = 0
-    for z = chunk:getMinLevel(), chunk:getMaxLevel() do
+    for z = cachedMinLevel, cachedMaxLevel do
         for x = 0, 7 do
             for y = 0, 7 do
                 local square = chunk:getGridSquare(x, y, z)
-                if square and square:getChunk() then
-                    local sqModData = square:getModData()
-                    if sqModData and sqModData["WDecay_Processed"] then
+                if square then
+                    local checkResult = WDecay_SquareCheck.checkAll(square)
+                    local ok, err = pcall(dispatchGenerators, square, checkResult, z)
+
+                    if not ok then
+                        sqErrors = sqErrors + 1
+                        
+                        if sqErrors == 1 then
+                            print("[WDecay] Square dispatch error: " .. tostring(err):sub(1, 120))
+                        end
                     else
-                        local checkResult = WDecay_SquareCheck.checkAll(square)
-                        local ok, err = pcall(dispatchGenerators, square, checkResult)
-                        if not ok then
-                            sqErrors = sqErrors + 1
-                            if sqErrors == 1 then
-                                print("[WDecay] Square dispatch error: " .. tostring(err):sub(1, 120))
-                            end
-                        else
-                            if sqModData then
-                                sqModData["WDecay_Processed"] = true
-                            end
+                        if sqModData then
+                            sqModData["WDecay_Processed"] = true
                         end
                     end
                 end
             end
         end
     end
+
     if sqErrors > 0 then
         print("[WDecay] Chunk completed with " .. sqErrors .. " square errors")
     end
+
     if WDecay_Debug and WDecay_Debug.totalChunksProcessed then
         WDecay_Debug.totalChunksProcessed = WDecay_Debug.totalChunksProcessed + 1
     end
+
     if DEBUG_MODE and WDecay_Debug and WDecay_Debug.totalChunkTimeMs then
         local elapsed = getTimestampMs() - chunkStartMs
         WDecay_Debug.totalChunkTimeMs = WDecay_Debug.totalChunkTimeMs + elapsed
     end
+
     return true
 end
 
 local function ScanChunksAroundPos(worldX, worldY, radius)
     if not modDataTable then return end
+
     local cx0 = math.floor((worldX - radius * 8) / 8)
     local cx1 = math.floor((worldX + radius * 8) / 8)
     local cy0 = math.floor((worldY - radius * 8) / 8)
@@ -216,12 +244,14 @@ local function ScanChunksAroundPos(worldX, worldY, radius)
                             chunkQueueLowChunks[chunkQueueTailLow] = chunk
                             chunkQueueLowKeys[chunkQueueTailLow] = key
                         end
+
                         queued = queued + 1
                     end
                 end
             end
         end
     end
+
     if DEBUG_MODE and queued > 0 then
         print("[WDecay] Scan queued " .. queued .. " chunks around " .. worldX .. "," .. worldY)
     end
@@ -239,6 +269,7 @@ local function queueChunk(chunk)
             return
         end
     end
+
     local key = GenerateKey(wx, wy)
     if not seenChunks[key] and not pendingChunks[key] then
         pendingChunks[key] = true
@@ -249,6 +280,7 @@ local function queueChunk(chunk)
             local dy = cy - spawnY
             targetDist = dx * dx + dy * dy
         end
+
         if targetDist <= PRIORITY_RADIUS * PRIORITY_RADIUS * 64 then
             chunkQueueTailHigh = chunkQueueTailHigh + 1
             chunkQueueHighChunks[chunkQueueTailHigh] = chunk
@@ -263,7 +295,9 @@ end
 
 local function OnTick()
 
-    loadDispatcherConfig()
+    if not dispatcherConfigLoaded then
+        loadDispatcherConfig()
+    end
 
     if not modDataTable then
         modDataTable = ModData.getOrCreate("WDecay_ChunkCache")
@@ -273,9 +307,11 @@ local function OnTick()
                 for k in pairs(modDataTable) do
                     keysToClear[#keysToClear + 1] = k
                 end
+
                 for i = 1, #keysToClear do
                     modDataTable[keysToClear[i]] = nil
                 end
+
                 modDataTable._version = CACHE_VERSION
                 seenChunks = {}
                 if DEBUG_MODE then
@@ -287,12 +323,15 @@ local function OnTick()
                         seenChunks[k] = true
                     end
                 end
+
                 local count = 0
                 for _ in pairs(seenChunks) do count = count + 1 end
+
                 if DEBUG_MODE then
                     print("[WDecay] Chunk cache loaded: " .. count .. " seen chunks")
                 end
             end
+
             scanTimer = scanInterval
         end
     end
@@ -302,6 +341,7 @@ local function OnTick()
         if isMultiplayer() then
             scanInterval = SCAN_INTERVAL * 2
         end
+
         scanIntervalSet = true
     end
 
@@ -318,6 +358,7 @@ local function OnTick()
                         spawnX = px
                         spawnY = py
                     end
+
                     local ok, err = pcall(ScanChunksAroundPos, px, py, SCAN_RADIUS)
                     if not ok then
                         print("[WDecay] Scan error: " .. tostring(err):sub(1, 120))
@@ -338,21 +379,24 @@ local function OnTick()
                                         spawnX = px
                                         spawnY = py
                                     end
+
                                     local ok, err = pcall(ScanChunksAroundPos, px, py, SCAN_RADIUS)
                                     if not ok then
                                         print("[WDecay] Scan error: " .. tostring(err):sub(1, 120))
-        end
-    end
-end
+                                    end
+                                end
+                            end
                         end
                     end
                 end
             end
+
             if spawnX and spawnX ~= 0 and spawnAttempts < MAX_SPAWN_ATTEMPTS then
                 local radius = SCAN_RADIUS
                 if spawnAttempts < 5 then
                     radius = SCAN_RADIUS * 2
                 end
+
                 spawnAttempts = spawnAttempts + 1
                 local ok, err = pcall(ScanChunksAroundPos, spawnX, spawnY, radius)
                 if not ok then
@@ -390,6 +434,7 @@ end
             checkCounter = 0
             if getTimestampMs() >= deadline then return end
         end
+
         local chunk = chunkQueueHighChunks[chunkQueueHeadHigh]
         local key = chunkQueueHighKeys[chunkQueueHeadHigh]
         chunkQueueHighChunks[chunkQueueHeadHigh] = nil
@@ -399,12 +444,14 @@ end
             if DEBUG_MODE and WDecay_Debug then
                 WDecay_Debug.chunksHigh = WDecay_Debug.chunksHigh + 1
             end
+
             if pendingChunks[key] then
                 pendingChunks[key] = nil
                 local ok, result = pcall(processChunkSquares, chunk)
                 if WDecay_DebugCountChunk then
                     WDecay_DebugCountChunk(ok and result)
                 end
+
                 if not ok then
                     print("[WDecay] Chunk " .. key .. " error: " .. tostring(result):sub(1, 120))
                 elseif result then
@@ -423,6 +470,7 @@ end
             checkCounter = 0
             if getTimestampMs() >= deadline then return end
         end
+
         local chunk = chunkQueueLowChunks[chunkQueueHeadLow]
         local key = chunkQueueLowKeys[chunkQueueHeadLow]
         chunkQueueLowChunks[chunkQueueHeadLow] = nil
@@ -432,12 +480,14 @@ end
             if DEBUG_MODE and WDecay_Debug then
                 WDecay_Debug.chunksLow = WDecay_Debug.chunksLow + 1
             end
+
             if pendingChunks[key] then
                 pendingChunks[key] = nil
                 local ok, result = pcall(processChunkSquares, chunk)
                 if WDecay_DebugCountChunk then
                     WDecay_DebugCountChunk(ok and result)
                 end
+
                 if not ok then
                     print("[WDecay] Chunk " .. key .. " error: " .. tostring(result):sub(1, 120))
                 elseif result then
@@ -456,6 +506,7 @@ end
         chunkQueueHeadLow = 1
         chunkQueueTailLow = 0
     end
+
     if DEBUG_MODE then
         perfTickCounter = perfTickCounter + 1
         if perfTickCounter >= 100 then
@@ -476,6 +527,7 @@ end)
 
 Events.OnInitGlobalModData.Add(function(isNewGame)
     if not isServer() then return end
+
     modDataTable = ModData.getOrCreate("WDecay_ChunkCache")
     scanTimer = scanInterval
 
@@ -484,9 +536,11 @@ Events.OnInitGlobalModData.Add(function(isNewGame)
         for k in pairs(modDataTable) do
             keysToClear[#keysToClear + 1] = k
         end
+
         for i = 1, #keysToClear do
             modDataTable[keysToClear[i]] = nil
         end
+
         modDataTable._version = CACHE_VERSION
         seenChunks = {}
         if DEBUG_MODE then
@@ -498,8 +552,10 @@ Events.OnInitGlobalModData.Add(function(isNewGame)
                 seenChunks[k] = true
             end
         end
+
         local count = 0
         for _ in pairs(seenChunks) do count = count + 1 end
+
         if DEBUG_MODE then
             print("[WDecay] Chunk cache loaded: " .. count .. " seen chunks")
         end

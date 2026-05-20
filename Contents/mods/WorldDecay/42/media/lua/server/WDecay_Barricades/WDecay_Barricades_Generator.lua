@@ -1,26 +1,35 @@
 local WDecay_Barricades = require('WDecay_Barricades/WDecay_Barricades')
 local WDecay_SquareCheck = require('wdecay_squarecheck/wdecay_squarecheck')
 
+local randomizer = newrandom()
+randomizer:seed(ZombRand(1, 2147483647))
+
 local cachedBarricadePercentage = nil
 local function getBarricadePercentage()
     if cachedBarricadePercentage == nil then
         local opt = getSandboxOptions():getOptionByName('WDecay.barricadePercentage')
         cachedBarricadePercentage = opt and opt:getValue() or 30
     end
+
     return cachedBarricadePercentage
 end
 
-local function LoadGridsquare(square, checkResult)
+local function LoadGridsquare(square, checkResult, level)
     if not square then return end
+
     if not checkResult then return end
+
     if checkResult.water then return end
+
     if not checkResult.hasFloor then return end
+
     if not checkResult.hasWalls and not checkResult.hasWindows then return end
-    
-    if square:getZ() ~= 0 then return end
+
+    if level ~= 0 then return end
 
     local objects = checkResult.objects
     if not objects then return end
+
     if not objects or objects:size() == 0 then return end
 
     for i = 0, objects:size() - 1 do
@@ -29,7 +38,7 @@ local function LoadGridsquare(square, checkResult)
         else
             local isBarricadableObject = false
             local isExterior = false
-            
+
             if WDecay_Barricades.isWindow(obj) then
                 isBarricadableObject = true
                 isExterior = true
@@ -39,10 +48,10 @@ local function LoadGridsquare(square, checkResult)
                     isExterior = true
                 end
             end
-            
+
             if isBarricadableObject and isExterior then
                 if not WDecay_Barricades.hasBarricade(obj) then
-                    if getBarricadePercentage() >= ZombRand(1, 101) then
+                    if getBarricadePercentage() >= randomizer:random(1, 101) then
                         local barricadeType = WDecay_Barricades.getRandomBarricadeType()
                         local healthLevel = WDecay_Barricades.getRandomHealthLevel()
 
@@ -52,7 +61,7 @@ local function LoadGridsquare(square, checkResult)
 
                             if barricade then
                                 if barricadeType == "wood" then
-                                    local numPlanks = ZombRand(1, 5)
+                                    local numPlanks = randomizer:random(1, 5)
                                     for i = 1, numPlanks do
                                         if barricade:canAddPlank() then
                                             barricade:addPlank(nil, nil)
@@ -82,6 +91,7 @@ local function LoadGridsquare(square, checkResult)
 end
 
 if not WDecay_ModifierGenerators then WDecay_ModifierGenerators = {} end
+
 table.insert(WDecay_ModifierGenerators, LoadGridsquare)
 
 return WDecay_Barricades
