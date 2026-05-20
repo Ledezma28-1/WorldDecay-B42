@@ -1,3 +1,6 @@
+local randomizer = newrandom()
+randomizer:seed(ZombRand(1, 2147483647))
+
 local WDecay_Fences = require('WDecay_Fences/WDecay_Fences')
 
 local cachedFencePercentage = nil
@@ -57,7 +60,7 @@ local function LoadGridsquare(square, checkResult)
             if not WDecay_Fences.isAlreadyDamaged(obj) then
                 if WDecay_Fences.isBreakableFence(obj) then
                     local chance = getFenceBreakChance()
-                    if chance > 0 and chance >= ZombRand(1, 101) then
+                    if chance > 0 and chance >= randomizer:random(1, 101) then
                         WDecay_Fences.applyBreakableFenceDamage(obj, getFenceDestroyWeight())
                         local objModData = obj:getModData()
                         if objModData and not objModData["WDecay_Cleanable"] then
@@ -66,7 +69,7 @@ local function LoadGridsquare(square, checkResult)
                     end
                 elseif WDecay_Fences.isBendableFence(obj) then
                     local chance = getFenceBendChance()
-                    if chance > 0 and chance >= ZombRand(1, 101) then
+                    if chance > 0 and chance >= randomizer:random(1, 101) then
                         WDecay_Fences.applyBendableFenceDamage(obj, getFenceBendSeverity())
                         local objModData = obj:getModData()
                         if objModData and not objModData["WDecay_Cleanable"] then

@@ -1,3 +1,6 @@
+local randomizer = newrandom()
+randomizer:seed(ZombRand(1, 2147483647))
+
 local WDecay_Trees = {}
 
 WDecay_Trees.treeSprites = {
@@ -67,14 +70,14 @@ function WDecay_Trees.getRandomTreeSprite()
     if #WDecay_Trees.treeSprites == 0 then
         return nil
     end
-    return WDecay_Trees.treeSprites[ZombRand(1, #WDecay_Trees.treeSprites + 1)]
+    return WDecay_Trees.treeSprites[randomizer:random(1, #WDecay_Trees.treeSprites + 1)]
 end
 
 function WDecay_Trees.getRandomFoliageIndex()
     if #WDecay_Trees.foliageIndices == 0 then
         return nil
     end
-    return WDecay_Trees.foliageIndices[ZombRand(1, #WDecay_Trees.foliageIndices + 1)]
+    return WDecay_Trees.foliageIndices[randomizer:random(1, #WDecay_Trees.foliageIndices + 1)]
 end
 
 local DEFAULT_SPRITE_ID = 20000000

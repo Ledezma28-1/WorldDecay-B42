@@ -1,3 +1,6 @@
+local randomizer = newrandom()
+randomizer:seed(ZombRand(1, 2147483647))
+
 local WDecay_Grass = {}
 
 WDecay_Grass.custom_grass = {
@@ -189,14 +192,14 @@ function WDecay_Grass.getRandomCustomGrass()
     if #WDecay_Grass.custom_grass == 0 then
         return nil
     end
-    return WDecay_Grass.custom_grass[ZombRand(1, #WDecay_Grass.custom_grass + 1)]
+    return WDecay_Grass.custom_grass[randomizer:random(1, #WDecay_Grass.custom_grass + 1)]
 end
 
 function WDecay_Grass.getRandomVanillaGrass()
     if #WDecay_Grass.vanilla_grass == 0 then
         return nil
     end
-    return WDecay_Grass.vanilla_grass[ZombRand(1, #WDecay_Grass.vanilla_grass + 1)]
+    return WDecay_Grass.vanilla_grass[randomizer:random(1, #WDecay_Grass.vanilla_grass + 1)]
 end
 
 function WDecay_Grass.getCustomName(spriteName)

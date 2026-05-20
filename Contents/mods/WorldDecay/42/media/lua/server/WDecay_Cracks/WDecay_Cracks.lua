@@ -1,3 +1,6 @@
+local randomizer = newrandom()
+randomizer:seed(ZombRand(1, 2147483647))
+
 local WDecay_Cracks = {}
 
 WDecay_Cracks.roadTiles = {
@@ -136,14 +139,14 @@ function WDecay_Cracks.getRandomRoadCrackOverlay()
     if #WDecay_Cracks.roadCrackOverlays == 0 then
         return nil
     end
-    return WDecay_Cracks.roadCrackOverlays[ZombRand(1, #WDecay_Cracks.roadCrackOverlays + 1)]
+    return WDecay_Cracks.roadCrackOverlays[randomizer:random(1, #WDecay_Cracks.roadCrackOverlays + 1)]
 end
 
 function WDecay_Cracks.getRandomDirtCrackOverlay()
     if #WDecay_Cracks.dirtCrackOverlays == 0 then
         return nil
     end
-    return WDecay_Cracks.dirtCrackOverlays[ZombRand(1, #WDecay_Cracks.dirtCrackOverlays + 1)]
+    return WDecay_Cracks.dirtCrackOverlays[randomizer:random(1, #WDecay_Cracks.dirtCrackOverlays + 1)]
 end
 
 function WDecay_Cracks.isCrackOverlay(spriteName)

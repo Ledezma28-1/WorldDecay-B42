@@ -1,3 +1,6 @@
+local randomizer = newrandom()
+randomizer:seed(ZombRand(1, 2147483647))
+
 local WDecay_Trash = require('WDecay_Trash/WDecay_Trash')
 local WDecay_CustomNames_Integration = require('WDecay_CustomNames/WDecay_CustomNames_Integration')
 
@@ -38,7 +41,7 @@ local function LoadGridsquare(square, checkResult)
         percentage = getTrashPercentage() * 0.1
     end
     
-    if percentage >= ZombRand(1, 101) then
+    if percentage >= randomizer:random(1, 101) then
         local currentFloorTile = square:getFloor() and square:getFloor():getSprite():getName()
         
         if currentFloorTile ~= nil then

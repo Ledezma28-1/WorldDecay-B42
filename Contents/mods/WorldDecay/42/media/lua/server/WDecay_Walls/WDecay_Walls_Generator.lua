@@ -1,3 +1,6 @@
+local randomizer = newrandom()
+randomizer:seed(ZombRand(1, 2147483647))
+
 local WDecay_Walls = require('WDecay_Walls/WDecay_Walls')
 
 local cachedWallPercentage = nil
@@ -31,7 +34,7 @@ local function LoadGridsquare(square, checkResult)
 
                 if textureName and WDecay_Walls.isExteriorWall(textureName) then
                     diagWalls = diagWalls + 1
-                    if getWallPercentage() >= ZombRand(1, 101) then
+                    if getWallPercentage() >= randomizer:random(1, 101) then
                         local spriteName = sprite:getName()
                         if spriteName then
                             local properties = sprite:getProperties()
@@ -43,7 +46,7 @@ local function LoadGridsquare(square, checkResult)
                                         if properties:has(prop) then
                                             local burnedTextures = WDecay_Walls.getBurnedTextures(prop)
                                             if burnedTextures and #burnedTextures > 0 then
-                                                local randomTexture = burnedTextures[ZombRand(1, #burnedTextures + 1)]
+                                                local randomTexture = burnedTextures[randomizer:random(1, #burnedTextures + 1)]
 
                                                 obj:setSpriteFromName(randomTexture)
 
@@ -77,7 +80,7 @@ local function LoadGridsquare(square, checkResult)
                 local textureName = obj:getTextureName()
 
                 if textureName and WDecay_Walls.isInteriorWall(textureName) then
-                    if getWallPercentage() >= ZombRand(1, 101) then
+                    if getWallPercentage() >= randomizer:random(1, 101) then
                         local spriteName = sprite:getName()
                         if spriteName then
                             local properties = sprite:getProperties()
@@ -89,7 +92,7 @@ local function LoadGridsquare(square, checkResult)
                                         if properties:has(prop) then
                                             local burnedTextures = WDecay_Walls.getBurnedTextures(prop)
                                             if burnedTextures and #burnedTextures > 0 then
-                                                local randomTexture = burnedTextures[ZombRand(1, #burnedTextures + 1)]
+                                                local randomTexture = burnedTextures[randomizer:random(1, #burnedTextures + 1)]
 
                                                 obj:setSpriteFromName(randomTexture)
 

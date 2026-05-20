@@ -1,3 +1,6 @@
+local randomizer = newrandom()
+randomizer:seed(ZombRand(1, 2147483647))
+
 local WDecay_Trash = {}
 
 WDecay_Trash.trashSprites = {
@@ -114,7 +117,7 @@ function WDecay_Trash.getRandomTrash()
     if #WDecay_Trash.trashSprites == 0 then
         return nil
     end
-    return WDecay_Trash.trashSprites[ZombRand(1, #WDecay_Trash.trashSprites + 1)]
+    return WDecay_Trash.trashSprites[randomizer:random(1, #WDecay_Trash.trashSprites + 1)]
 end
 
 function WDecay_Trash.getCustomName(spriteName)

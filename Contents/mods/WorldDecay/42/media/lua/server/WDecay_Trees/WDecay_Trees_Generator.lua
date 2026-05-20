@@ -1,3 +1,6 @@
+local randomizer = newrandom()
+randomizer:seed(ZombRand(1, 2147483647))
+
 local WDecay_Trees = require('WDecay_Trees/WDecay_Trees')
 
 local cachedTreePercentage = nil
@@ -45,7 +48,7 @@ local function LoadGridsquare(square, checkResult)
     
     local percentage = isRoad and getTreePercentageOnRoad() or getTreePercentage()
     
-    if percentage >= ZombRand(1, 101) then
+    if percentage >= randomizer:random(1, 101) then
         local randomTreeSprite = WDecay_Trees.getRandomTreeSprite()
         
         if randomTreeSprite then

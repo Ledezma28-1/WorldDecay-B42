@@ -1,3 +1,6 @@
+local randomizer = newrandom()
+randomizer:seed(ZombRand(1, 2147483647))
+
 local WDecay_Fences = {}
 
 function WDecay_Fences.isBreakableFence(obj)
@@ -32,13 +35,13 @@ function WDecay_Fences.determineDirection(obj)
     if not properties then return nil end
 
     if properties:has(IsoFlagType.collideN) then
-        if ZombRand(0, 2) == 0 then
+        if randomizer:random(0, 2) == 0 then
             return IsoDirections.N
         else
             return IsoDirections.S
         end
     elseif properties:has(IsoFlagType.collideW) then
-        if ZombRand(0, 2) == 0 then
+        if randomizer:random(0, 2) == 0 then
             return IsoDirections.W
         else
             return IsoDirections.E
@@ -57,7 +60,7 @@ function WDecay_Fences.getRandomStage(severity)
     elseif severity == 3 then
         return 3
     else
-        local roll = ZombRand(0, 100)
+        local roll = randomizer:random(0, 100)
         if roll < 33 then
             return 1
         elseif roll < 66 then
@@ -75,7 +78,7 @@ function WDecay_Fences.applyBreakableFenceDamage(obj, destroyWeight)
     if not dir then return false end
 
     destroyWeight = destroyWeight or 20
-    local roll = ZombRand(0, 100)
+    local roll = randomizer:random(0, 100)
     if roll < destroyWeight then
         BrokenFences.getInstance():destroyFence(obj, dir)
         local function tagFenceDebris(sq)
@@ -106,7 +109,7 @@ function WDecay_Fences.applyBreakableFenceDamage(obj, destroyWeight)
         tagFenceDebris(cell:getGridSquare(sx, sy+1, sz))
         tagFenceDebris(cell:getGridSquare(sx, sy-1, sz))
     else
-        local damageRoll = ZombRand(0, 100)
+        local damageRoll = randomizer:random(0, 100)
         if damageRoll < 50 then
             BrokenFences.getInstance():updateSprite(obj, true, false)
         else

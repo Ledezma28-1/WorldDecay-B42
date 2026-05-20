@@ -1,6 +1,9 @@
 local WDecay_Barricades = require('WDecay_Barricades/WDecay_Barricades')
 local WDecay_SquareCheck = require('wdecay_squarecheck/wdecay_squarecheck')
 
+local randomizer = newrandom()
+randomizer:seed(ZombRand(1, 2147483647) )
+
 local cachedBarricadePercentage = nil
 local function getBarricadePercentage()
     if cachedBarricadePercentage == nil then
@@ -42,7 +45,7 @@ local function LoadGridsquare(square, checkResult)
             
             if isBarricadableObject and isExterior then
                 if not WDecay_Barricades.hasBarricade(obj) then
-                    if getBarricadePercentage() >= ZombRand(1, 101) then
+                    if getBarricadePercentage() >= randomizer:random(1, 101) then
                         local barricadeType = WDecay_Barricades.getRandomBarricadeType()
                         local healthLevel = WDecay_Barricades.getRandomHealthLevel()
 
@@ -52,7 +55,7 @@ local function LoadGridsquare(square, checkResult)
 
                             if barricade then
                                 if barricadeType == "wood" then
-                                    local numPlanks = ZombRand(1, 5)
+                                    local numPlanks = randomizer:random(1, 5)
                                     for i = 1, numPlanks do
                                         if barricade:canAddPlank() then
                                             barricade:addPlank(nil, nil)

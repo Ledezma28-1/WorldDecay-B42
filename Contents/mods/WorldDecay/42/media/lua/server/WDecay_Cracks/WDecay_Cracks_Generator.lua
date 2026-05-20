@@ -1,3 +1,6 @@
+local randomizer = newrandom()
+randomizer:seed(ZombRand(1, 2147483647))
+
 local WDecay_Cracks = require('WDecay_Cracks/WDecay_Cracks')
 
 local cachedRoadCrackOverlayPercentage = nil
@@ -39,13 +42,13 @@ local function LoadGridsquare(square, checkResult)
                 local objModData = obj:getModData()
                 if objModData and objModData["WDecay_Crack"] == "placed" then
                 elseif WDecay_Cracks.isRoadTile(spriteName) then
-                    if getRoadCrackOverlayPercentage() >= ZombRand(1, 101) then
+                    if getRoadCrackOverlayPercentage() >= randomizer:random(1, 101) then
                         local blendsType = "street"
-                        if ZombRand(1, 10) == 1 then
+                        if randomizer:random(1, 10) == 1 then
                             blendsType = "dirt"
                         end
 
-                        local overlayId = tostring(ZombRand(0, 32))
+                        local overlayId = tostring(randomizer:random(0, 32))
                         local overlayName = "blends_" .. blendsType .. "overlays_01_" .. overlayId
 
                         local overlaySprite = getSprite(overlayName)
@@ -77,8 +80,8 @@ local function LoadGridsquare(square, checkResult)
                         end
                     end
                 elseif WDecay_Cracks.isNaturalTile(spriteName) then
-                    if getDirtCrackOverlayPercentage() >= ZombRand(1, 101) then
-                        local overlayId = tostring(ZombRand(0, 32))
+                    if getDirtCrackOverlayPercentage() >= randomizer:random(1, 101) then
+                        local overlayId = tostring(randomizer:random(0, 32))
                         local overlayName = "blends_dirtoverlays_01_" .. overlayId
 
                         local overlaySprite = getSprite(overlayName)

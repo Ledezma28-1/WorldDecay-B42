@@ -1,3 +1,6 @@
+local randomizer = newrandom()
+randomizer:seed(ZombRand(1, 2147483647))
+
 local WDecay_Walls = {}
 
 WDecay_Walls.wallProperties = {
@@ -40,7 +43,7 @@ function WDecay_Walls.getRandomBurnedTexture(wallType)
     if not textures or #textures == 0 then
         return nil
     end
-    return textures[ZombRand(1, #textures + 1)]
+    return textures[randomizer:random(1, #textures + 1)]
 end
 
 function WDecay_Walls.isBurnedWall(spriteName)

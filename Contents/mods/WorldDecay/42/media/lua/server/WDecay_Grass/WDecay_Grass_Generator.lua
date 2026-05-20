@@ -1,3 +1,6 @@
+local randomizer = newrandom()
+randomizer:seed(ZombRand(1, 2147483647))
+
 local WDecay_Grass = require('WDecay_Grass/WDecay_Grass')
 local WDecay_CustomNames_Integration = require('WDecay_CustomNames/WDecay_CustomNames_Integration')
 
@@ -52,7 +55,7 @@ local function LoadGridsquare(square, checkResult)
         if getIndoorGrassPercentage() > 0 and checkResult.room and not checkResult.water
                 and not checkResult.isSolid and not checkResult.hasStairs
                 and not checkResult.hasDoor then
-                if getIndoorGrassPercentage() >= ZombRand(1, 101) then
+                if getIndoorGrassPercentage() >= randomizer:random(1, 101) then
                     local floor = square:getFloor()
                     if floor then
                         local floorSprite = floor:getSprite()
@@ -79,7 +82,7 @@ local function LoadGridsquare(square, checkResult)
     local isRoad = checkResult.isRoad
     
     local vanillaPct = isRoad and getGrassPercentageOnRoad() or getGrassPercentage()
-    if vanillaPct > 0 and vanillaPct >= ZombRand(1, 101) then
+    if vanillaPct > 0 and vanillaPct >= randomizer:random(1, 101) then
         local floor = square:getFloor()
         if floor then
             local floorSprite = floor:getSprite()
@@ -104,7 +107,7 @@ local function LoadGridsquare(square, checkResult)
     end
 
     local customPct = isRoad and getCustomGrassPercentageOnRoad() or getCustomGrassPercentage()
-    if customPct > 0 and customPct >= ZombRand(1, 101) then
+    if customPct > 0 and customPct >= randomizer:random(1, 101) then
         local floor = square:getFloor()
         if floor then
             local floorSprite = floor:getSprite()

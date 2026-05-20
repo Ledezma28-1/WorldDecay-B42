@@ -1,3 +1,6 @@
+local randomizer = newrandom()
+randomizer:seed(ZombRand(1, 2147483647))
+
 local WDecay_Vines = require('WDecay_Vines/WDecay_Vines')
 
 local cachedVinePercentage = nil
@@ -78,7 +81,7 @@ local function LoadGridsquare(square, checkResult)
     
     if isVinesExteriorOnly() and square:getRoom() then return end
     
-    if getVinePercentage() < ZombRand(1, 101) then
+    if getVinePercentage() < randomizer:random(1, 101) then
         return
     end
     

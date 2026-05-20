@@ -1,3 +1,6 @@
+local randomizer = newrandom()
+randomizer:seed(ZombRand(1, 2147483647))
+
 local WDecay_Vines = {}
 
 WDecay_Vines.wallW = {
@@ -89,63 +92,63 @@ function WDecay_Vines.getRandomWallW()
     if #WDecay_Vines.wallW == 0 then
         return nil
     end
-    return WDecay_Vines.wallW[ZombRand(1, #WDecay_Vines.wallW + 1)]
+    return WDecay_Vines.wallW[randomizer:random(1, #WDecay_Vines.wallW + 1)]
 end
 
 function WDecay_Vines.getRandomWallWTop()
     if #WDecay_Vines.wallW_top == 0 then
         return nil
     end
-    return WDecay_Vines.wallW_top[ZombRand(1, #WDecay_Vines.wallW_top + 1)]
+    return WDecay_Vines.wallW_top[randomizer:random(1, #WDecay_Vines.wallW_top + 1)]
 end
 
 function WDecay_Vines.getRandomWallWLow()
     if #WDecay_Vines.wallW_low == 0 then
         return nil
     end
-    return WDecay_Vines.wallW_low[ZombRand(1, #WDecay_Vines.wallW_low + 1)]
+    return WDecay_Vines.wallW_low[randomizer:random(1, #WDecay_Vines.wallW_low + 1)]
 end
 
 function WDecay_Vines.getRandomWallN()
     if #WDecay_Vines.wallN == 0 then
         return nil
     end
-    return WDecay_Vines.wallN[ZombRand(1, #WDecay_Vines.wallN + 1)]
+    return WDecay_Vines.wallN[randomizer:random(1, #WDecay_Vines.wallN + 1)]
 end
 
 function WDecay_Vines.getRandomWallNTop()
     if #WDecay_Vines.wallN_top == 0 then
         return nil
     end
-    return WDecay_Vines.wallN_top[ZombRand(1, #WDecay_Vines.wallN_top + 1)]
+    return WDecay_Vines.wallN_top[randomizer:random(1, #WDecay_Vines.wallN_top + 1)]
 end
 
 function WDecay_Vines.getRandomWallNLow()
     if #WDecay_Vines.wallN_low == 0 then
         return nil
     end
-    return WDecay_Vines.wallN_low[ZombRand(1, #WDecay_Vines.wallN_low + 1)]
+    return WDecay_Vines.wallN_low[randomizer:random(1, #WDecay_Vines.wallN_low + 1)]
 end
 
 function WDecay_Vines.getRandomWallNW()
     if #WDecay_Vines.wallNW == 0 then
         return nil
     end
-    return WDecay_Vines.wallNW[ZombRand(1, #WDecay_Vines.wallNW + 1)]
+    return WDecay_Vines.wallNW[randomizer:random(1, #WDecay_Vines.wallNW + 1)]
 end
 
 function WDecay_Vines.getRandomWallNWTop()
     if #WDecay_Vines.wallNW_top == 0 then
         return nil
     end
-    return WDecay_Vines.wallNW_top[ZombRand(1, #WDecay_Vines.wallNW_top + 1)]
+    return WDecay_Vines.wallNW_top[randomizer:random(1, #WDecay_Vines.wallNW_top + 1)]
 end
 
 function WDecay_Vines.getRandomWallNWLow()
     if #WDecay_Vines.wallNW_low == 0 then
         return nil
     end
-    return WDecay_Vines.wallNW_low[ZombRand(1, #WDecay_Vines.wallNW_low + 1)]
+    return WDecay_Vines.wallNW_low[randomizer:random(1, #WDecay_Vines.wallNW_low + 1)]
 end
 
 function WDecay_Vines.isVine(spriteName)
