@@ -92,6 +92,7 @@ function WDecay_Vines.getRandomWallW()
     if #WDecay_Vines.wallW == 0 then
         return nil
     end
+
     return WDecay_Vines.wallW[randomizer:random(1, #WDecay_Vines.wallW + 1)]
 end
 
@@ -99,6 +100,7 @@ function WDecay_Vines.getRandomWallWTop()
     if #WDecay_Vines.wallW_top == 0 then
         return nil
     end
+
     return WDecay_Vines.wallW_top[randomizer:random(1, #WDecay_Vines.wallW_top + 1)]
 end
 
@@ -106,6 +108,7 @@ function WDecay_Vines.getRandomWallWLow()
     if #WDecay_Vines.wallW_low == 0 then
         return nil
     end
+
     return WDecay_Vines.wallW_low[randomizer:random(1, #WDecay_Vines.wallW_low + 1)]
 end
 
@@ -113,6 +116,7 @@ function WDecay_Vines.getRandomWallN()
     if #WDecay_Vines.wallN == 0 then
         return nil
     end
+
     return WDecay_Vines.wallN[randomizer:random(1, #WDecay_Vines.wallN + 1)]
 end
 
@@ -120,6 +124,7 @@ function WDecay_Vines.getRandomWallNTop()
     if #WDecay_Vines.wallN_top == 0 then
         return nil
     end
+
     return WDecay_Vines.wallN_top[randomizer:random(1, #WDecay_Vines.wallN_top + 1)]
 end
 
@@ -127,6 +132,7 @@ function WDecay_Vines.getRandomWallNLow()
     if #WDecay_Vines.wallN_low == 0 then
         return nil
     end
+
     return WDecay_Vines.wallN_low[randomizer:random(1, #WDecay_Vines.wallN_low + 1)]
 end
 
@@ -134,6 +140,7 @@ function WDecay_Vines.getRandomWallNW()
     if #WDecay_Vines.wallNW == 0 then
         return nil
     end
+
     return WDecay_Vines.wallNW[randomizer:random(1, #WDecay_Vines.wallNW + 1)]
 end
 
@@ -141,6 +148,7 @@ function WDecay_Vines.getRandomWallNWTop()
     if #WDecay_Vines.wallNW_top == 0 then
         return nil
     end
+
     return WDecay_Vines.wallNW_top[randomizer:random(1, #WDecay_Vines.wallNW_top + 1)]
 end
 
@@ -148,19 +156,22 @@ function WDecay_Vines.getRandomWallNWLow()
     if #WDecay_Vines.wallNW_low == 0 then
         return nil
     end
+
     return WDecay_Vines.wallNW_low[randomizer:random(1, #WDecay_Vines.wallNW_low + 1)]
 end
 
 function WDecay_Vines.isVine(spriteName)
     if not spriteName then return false end
+
     return luautils.stringStarts(spriteName, "f_wallvines_")
 end
 
 function WDecay_Vines.isTallVine(spriteName)
     if not spriteName then return false end
+
     return spriteName == "f_wallvines_1_47" or spriteName == "f_wallvines_1_46" or
-           spriteName == "f_wallvines_1_43" or spriteName == "f_wallvines_1_42" or
-           spriteName == "f_wallvines_1_44" or spriteName == "f_wallvines_1_45"
+        spriteName == "f_wallvines_1_43" or spriteName == "f_wallvines_1_42" or
+        spriteName == "f_wallvines_1_44" or spriteName == "f_wallvines_1_45"
 end
 
 return WDecay_Vines

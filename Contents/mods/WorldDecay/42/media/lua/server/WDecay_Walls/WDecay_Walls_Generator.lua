@@ -9,23 +9,29 @@ local function getWallPercentage()
         local opt = getSandboxOptions():getOptionByName('WDecay.wallPercentage')
         cachedWallPercentage = opt and opt:getValue() or 10
     end
+
     return cachedWallPercentage
 end
 
-local function LoadGridsquare(square, checkResult)
+local function LoadGridsquare(square, checkResult, level)
     if not square then return end
+
     if not checkResult then return end
+
     if not checkResult.room then return end
-    if square:getZ() ~= 0 then return end
-    
+
+    if level ~= 0 then return end
+
     local objects = checkResult.objects
     if not objects then return end
-    if objects:size() == 0 then return end
+
+    local objectCount = objects:size()
+    if objectCount == 0 then return end
 
     local diagWalls = 0
     local diagBurned = 0
-    
-    for i = 0, objects:size() - 1 do
+
+    for i = 0, objectCount - 1 do
         local obj = objects:get(i)
         if obj then
             local sprite = obj:getSprite()
@@ -40,7 +46,7 @@ local function LoadGridsquare(square, checkResult)
                             local properties = sprite:getProperties()
                             if properties then
                                 if not (properties:has("DoorWallN") or properties:has("DoorWallW") or
-                                        properties:has("WindowN") or properties:has("WindowW")) then
+                                    properties:has("WindowN") or properties:has("WindowW")) then
 
                                     for _, prop in ipairs(WDecay_Walls.wallProperties) do
                                         if properties:has(prop) then
@@ -72,7 +78,8 @@ local function LoadGridsquare(square, checkResult)
         end
     end
 
-    for i = 0, objects:size() - 1 do
+    --ToDo: Big performance issue! Two for loops not nessencary.
+    for i = 0, objectCount - 1 do
         local obj = objects:get(i)
         if obj then
             local sprite = obj:getSprite()
@@ -86,7 +93,7 @@ local function LoadGridsquare(square, checkResult)
                             local properties = sprite:getProperties()
                             if properties then
                                 if not (properties:has("DoorWallN") or properties:has("DoorWallW") or
-                                        properties:has("WindowN") or properties:has("WindowW")) then
+                                    properties:has("WindowN") or properties:has("WindowW")) then
 
                                     for _, prop in ipairs(WDecay_Walls.wallProperties) do
                                         if properties:has(prop) then
@@ -118,6 +125,7 @@ local function LoadGridsquare(square, checkResult)
 end
 
 if not WDecay_ModifierGenerators then WDecay_ModifierGenerators = {} end
+
 table.insert(WDecay_ModifierGenerators, LoadGridsquare)
 
 return WDecay_Walls

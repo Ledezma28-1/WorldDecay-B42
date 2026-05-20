@@ -125,11 +125,13 @@ WDecay_CustomNames.names['f_bushes_2_19'] = "Ornamental Bush"
 
 function WDecay_CustomNames.getCustomName(spriteName)
     if not spriteName then return nil end
+
     return WDecay_CustomNames.names[spriteName]
 end
 
 function WDecay_CustomNames.hasCustomName(spriteName)
     if not spriteName then return false end
+
     return WDecay_CustomNames.names[spriteName] ~= nil
 end
 

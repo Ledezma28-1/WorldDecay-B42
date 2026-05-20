@@ -189,9 +189,11 @@ function WDecay_Grass.getRandomCustomGrass()
         local sample = WDecay_Grass.custom_grass[1]
         print("[WDecay-GRASS] first custom sprite: " .. tostring(sample))
     end
+
     if #WDecay_Grass.custom_grass == 0 then
         return nil
     end
+
     return WDecay_Grass.custom_grass[randomizer:random(1, #WDecay_Grass.custom_grass + 1)]
 end
 
@@ -199,6 +201,7 @@ function WDecay_Grass.getRandomVanillaGrass()
     if #WDecay_Grass.vanilla_grass == 0 then
         return nil
     end
+
     return WDecay_Grass.vanilla_grass[randomizer:random(1, #WDecay_Grass.vanilla_grass + 1)]
 end
 
@@ -208,11 +211,13 @@ end
 
 function WDecay_Grass.isCustomGrass(spriteName)
     if not spriteName then return false end
+
     return luautils.stringStarts(spriteName, "d_generic_")
 end
 
 function WDecay_Grass.isVanillaGrass(spriteName)
     if not spriteName then return false end
+
     return luautils.stringStarts(spriteName, "e_newgrass_")
 end
 

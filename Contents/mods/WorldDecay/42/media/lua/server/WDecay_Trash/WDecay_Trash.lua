@@ -117,6 +117,7 @@ function WDecay_Trash.getRandomTrash()
     if #WDecay_Trash.trashSprites == 0 then
         return nil
     end
+
     return WDecay_Trash.trashSprites[randomizer:random(1, #WDecay_Trash.trashSprites + 1)]
 end
 
@@ -126,6 +127,7 @@ end
 
 function WDecay_Trash.isTrash(spriteName)
     if not spriteName then return false end
+
     return luautils.stringStarts(spriteName, "trash_01_")
 end
 

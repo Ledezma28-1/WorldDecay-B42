@@ -13,45 +13,58 @@ local function getFencePercentage()
         local opt = getSandboxOptions():getOptionByName('WDecay.fencePercentage')
         cachedFencePercentage = opt and opt:getValue() or 20
     end
+
     return cachedFencePercentage
 end
+
 local function getFenceBreakChance()
     if cachedFenceBreakChance == nil then
         local opt = getSandboxOptions():getOptionByName('WDecay.fenceBreakChance')
         cachedFenceBreakChance = opt and opt:getValue() or 0
     end
+
     return cachedFenceBreakChance
 end
+
 local function getFenceBendChance()
     if cachedFenceBendChance == nil then
         local opt = getSandboxOptions():getOptionByName('WDecay.fenceBendChance')
         cachedFenceBendChance = opt and opt:getValue() or 0
     end
+
     return cachedFenceBendChance
 end
+
 local function getFenceDestroyWeight()
     if cachedFenceDestroyWeight == nil then
         local opt = getSandboxOptions():getOptionByName('WDecay.fenceDestroyWeight')
         cachedFenceDestroyWeight = opt and opt:getValue() or 20
     end
+
     return cachedFenceDestroyWeight
 end
+
 local function getFenceBendSeverity()
     if cachedFenceBendSeverity == nil then
         local opt = getSandboxOptions():getOptionByName('WDecay.fenceBendSeverity')
         cachedFenceBendSeverity = opt and opt:getValue() or 4
     end
+
     return cachedFenceBendSeverity
 end
 
-local function LoadGridsquare(square, checkResult)
+local function LoadGridsquare(square, checkResult, level)
     if not square then return end
+
     if not checkResult then return end
+
     if not checkResult.hasFences then return end
-    if square:getZ() ~= 0 then return end
+
+    if level ~= 0 then return end
 
     local objects = checkResult.objects
     if not objects then return end
+
     if not objects or objects:size() == 0 then return end
 
     for i = 0, objects:size() - 1 do
@@ -83,6 +96,7 @@ local function LoadGridsquare(square, checkResult)
 end
 
 if not WDecay_ModifierGenerators then WDecay_ModifierGenerators = {} end
+
 table.insert(WDecay_ModifierGenerators, LoadGridsquare)
 
 return WDecay_Fences

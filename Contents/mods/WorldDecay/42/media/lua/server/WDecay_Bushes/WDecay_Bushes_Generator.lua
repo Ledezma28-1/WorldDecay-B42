@@ -29,11 +29,11 @@ local function getIndoorBushesPercentage()
     return cachedIndoorBushesPercentage
 end
 
-local function LoadGridsquare(square, checkResult)
+local function LoadGridsquare(square, checkResult, level)
     if not square then return end
     if not checkResult then return end
     if not checkResult.objects then return end
-    if square:getZ() ~= 0 then return end
+    if level ~= 0 then return end
 
     local isIndoor = checkResult.room ~= nil
     local isRoad = checkResult.isRoad

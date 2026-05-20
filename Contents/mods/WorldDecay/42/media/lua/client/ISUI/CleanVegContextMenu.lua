@@ -6,6 +6,7 @@ local function isCleanDebug()
         local opt = getSandboxOptions():getOptionByName('WDecay.debugMode')
         cachedDebugMode = opt and opt:getValue() or false
     end
+
     return cachedDebugMode
 end
 
@@ -27,7 +28,7 @@ local function addCleanVegMenu(player, context, worldobjects)
 
     if player:getVehicle() then return end
 
-    for i,v in ipairs(worldobjects) do
+    for i, v in ipairs(worldobjects) do
         square = v:getSquare();
     end
 
@@ -38,8 +39,8 @@ local function addCleanVegMenu(player, context, worldobjects)
 
         local attached = object:getAttachedAnimSprite()
         if attached then
-            for n=1,attached:size() do
-                local sprite = attached:get(n-1)
+            for n = 1, attached:size() do
+                local sprite = attached:get(n - 1)
                 if sprite and sprite:getParentSprite() and sprite:getParentSprite():getName() then
                     local name = sprite:getParentSprite():getName()
                     if luautils.stringStarts(name, "blends_streetoverlays_01_") or luautils.stringStarts(name, "blends_dirtoverlays_01_") then
@@ -63,42 +64,45 @@ local function addCleanVegMenu(player, context, worldobjects)
             return true
         elseif object:getSprite() and object:getSprite():getName() and (
             luautils.stringStarts(object:getSprite():getName(), "f_bushes_") or
-            luautils.stringStarts(object:getSprite():getName(), "d_generic_") or
-            luautils.stringStarts(object:getSprite():getName(), "e_newgrass_") or
-            luautils.stringStarts(object:getSprite():getName(), "f_wallvines_") or
-            luautils.stringStarts(object:getSprite():getName(), "trash_01_")
-        ) then
+                luautils.stringStarts(object:getSprite():getName(), "d_generic_") or
+                luautils.stringStarts(object:getSprite():getName(), "e_newgrass_") or
+                luautils.stringStarts(object:getSprite():getName(), "f_wallvines_") or
+                luautils.stringStarts(object:getSprite():getName(), "trash_01_")
+            ) then
             cleanLog("CleanVegContextMenu isCleanableObject MATCH sprite=" .. tostring(object:getSprite():getName()) .. " modData=" .. tostring(object:getModData()["WDecay_Cleanable"]))
             return true
         else
             local attached = object:getAttachedAnimSprite()
             if attached then
-                for n=1,attached:size() do
-                    local sprite = attached:get(n-1)
+                for n = 1, attached:size() do
+                    local sprite = attached:get(n - 1)
 
                     if sprite and sprite:getParentSprite() and sprite:getParentSprite():getName() and (
                         luautils.stringStarts(sprite:getParentSprite():getName(), "blends_grassoverlays") or
-                        luautils.stringStarts(sprite:getParentSprite():getName(), "d_generic") or
-                        luautils.stringStarts(sprite:getParentSprite():getName(), "e_newgrass") or
-                        luautils.stringStarts(sprite:getParentSprite():getName(), "f_wallvines") or
-                        luautils.stringStarts(sprite:getParentSprite():getName(), "f_bushes_") or
-                        luautils.stringStarts(sprite:getParentSprite():getName(), "d_generic_")
-                    ) then
+                            luautils.stringStarts(sprite:getParentSprite():getName(), "d_generic") or
+                            luautils.stringStarts(sprite:getParentSprite():getName(), "e_newgrass") or
+                            luautils.stringStarts(sprite:getParentSprite():getName(), "f_wallvines") or
+                            luautils.stringStarts(sprite:getParentSprite():getName(), "f_bushes_") or
+                            luautils.stringStarts(sprite:getParentSprite():getName(), "d_generic_")
+                        ) then
                         return true
                     end
                 end
             end
         end
+
         return false
     end
 
     local function hasCleanableInList(objects)
         if not objects then return false end
-        for i=0,objects:size()-1 do
+
+        for i = 0, objects:size() - 1 do
             if isCleanableObject(objects:get(i)) then
                 return true
             end
         end
+
         return false
     end
 
