@@ -562,10 +562,6 @@ Events.OnInitGlobalModData.Add(function(isNewGame)
     end
 end)
 
-Events.LoadChunk.Add(function(chunk)
-    queueChunk(chunk)
-end)
-
 function WDecay_Dispatcher_IsQueueIdle()
     return chunkQueueHeadHigh > chunkQueueTailHigh and chunkQueueHeadLow > chunkQueueTailLow
 end
