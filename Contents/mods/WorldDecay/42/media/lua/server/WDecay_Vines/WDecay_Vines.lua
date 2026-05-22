@@ -1,3 +1,5 @@
+local WDecay_Object_Buffer = require("WDecay_Object_Buffer")
+
 local randomizer = newrandom()
 randomizer:seed(ZombRand(1, 2147483647))
 
@@ -87,6 +89,16 @@ WDecay_Vines.wallProperties = {
     "DoorWallW",
     "DoorWallN"
 }
+
+WDecay_Object_Buffer.register(WDecay_Vines.wallW)
+WDecay_Object_Buffer.register(WDecay_Vines.wallW_top)
+WDecay_Object_Buffer.register(WDecay_Vines.wallW_low)
+WDecay_Object_Buffer.register(WDecay_Vines.wallN)
+WDecay_Object_Buffer.register(WDecay_Vines.wallN_top)
+WDecay_Object_Buffer.register(WDecay_Vines.wallN_low)
+WDecay_Object_Buffer.register(WDecay_Vines.wallNW)
+WDecay_Object_Buffer.register(WDecay_Vines.wallNW_top)
+WDecay_Object_Buffer.register(WDecay_Vines.wallNW_low)
 
 function WDecay_Vines.getRandomWallW()
     if #WDecay_Vines.wallW == 0 then

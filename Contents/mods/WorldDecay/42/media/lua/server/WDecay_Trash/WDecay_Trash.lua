@@ -1,3 +1,5 @@
+local WDecay_Object_Buffer = require("WDecay_Object_Buffer")
+
 local randomizer = newrandom()
 randomizer:seed(ZombRand(1, 2147483647))
 
@@ -57,6 +59,8 @@ WDecay_Trash.trashSprites = {
     "trash_01_50",
     "trash_01_51"
 }
+
+WDecay_Object_Buffer.register(WDecay_Trash.trashSprites)
 
 WDecay_Trash.customName = {
     ["trash_01_0"] = "Trash",

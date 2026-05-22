@@ -1,3 +1,5 @@
+local WDecay_Object_Buffer = require("WDecay_Object_Buffer")
+
 local randomizer = newrandom()
 randomizer:seed(ZombRand(1, 2147483647))
 
@@ -114,6 +116,9 @@ WDecay_Grass.vanilla_grass = {
     "e_newgrass_1_88",
     "e_newgrass_1_89"
 }
+
+WDecay_Object_Buffer.register(WDecay_Grass.custom_grass)
+WDecay_Object_Buffer.register(WDecay_Grass.vanilla_grass)
 
 WDecay_Grass.customName = {
     ["d_floorleaves_1_0"] = "Leaves",

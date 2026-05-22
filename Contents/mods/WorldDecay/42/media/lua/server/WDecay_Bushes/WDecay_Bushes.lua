@@ -1,5 +1,8 @@
+local WDecay_Object_Buffer = require('WDecay_Object_Buffer')
+
 local randomizer = newrandom()
 randomizer:seed(ZombRand(1, 2147483647))
+
 local WDecay_Bushes = {}
 
 WDecay_Bushes.bushes = {
@@ -15,32 +18,6 @@ WDecay_Bushes.bushes = {
     "f_bushes_1_67",
     "f_bushes_1_103",
     "f_bushes_1_71",
-    "f_bushes_1_77",
-    "f_bushes_1_78",
-    "f_bushes_1_110",
-    "f_bushes_1_109",
-    "f_bushes_1_99",
-    "f_bushes_1_67",
-    "f_bushes_1_103",
-    "f_bushes_1_71",
-    "f_bushes_1_77",
-    "f_bushes_1_78",
-    "f_bushes_1_110",
-    "f_bushes_1_109",
-    "f_bushes_1_99",
-    "f_bushes_1_67",
-    "f_bushes_1_103",
-    "f_bushes_1_71",
-    "f_bushes_1_77",
-    "f_bushes_1_78",
-    "f_bushes_1_110",
-    "f_bushes_1_109",
-    "f_bushes_1_99",
-    "f_bushes_1_67",
-    "f_bushes_1_103",
-    "f_bushes_1_71",
-    "f_bushes_1_71",
-    "f_bushes_1_67",
     "f_bushes_1_69",
     "f_bushes_1_70",
     "f_bushes_1_72",
@@ -48,7 +25,6 @@ WDecay_Bushes.bushes = {
     "f_bushes_1_75",
     "f_bushes_1_76",
     "f_bushes_1_79",
-    "f_bushes_1_99",
     "f_bushes_1_101",
     "f_bushes_1_102",
     "f_bushes_1_104",
@@ -61,103 +37,17 @@ WDecay_Bushes.bushes = {
     "f_bushes_1_100",
     "f_bushes_1_68",
     "f_bushes_1_106",
-    "f_bushes_1_99",
-    "f_bushes_1_67",
-    "f_bushes_1_103",
-    "f_bushes_1_71",
-    "f_bushes_1_100",
-    "f_bushes_1_68",
-    "f_bushes_1_106",
-    "f_bushes_1_99",
-    "f_bushes_1_67",
-    "f_bushes_1_103",
-    "f_bushes_1_71",
-    "f_bushes_1_100",
-    "f_bushes_1_68",
-    "f_bushes_1_106",
-    "f_bushes_1_99",
-    "f_bushes_1_67",
-    "f_bushes_1_103",
-    "f_bushes_1_71",
-    "f_bushes_1_100",
-    "f_bushes_1_68",
-    "f_bushes_1_106",
-    "f_bushes_1_99",
-    "f_bushes_1_67",
-    "f_bushes_1_103",
-    "f_bushes_1_71",
     "f_bushes_1_74"
 }
 
-WDecay_Bushes.customName = {
-    ["f_bushes_1_8"] = "Hedge",
-    ["f_bushes_1_9"] = "Hedge",
-    ["f_bushes_1_10"] = "Hedge",
-    ["f_bushes_1_11"] = "Hedge",
-    ["f_bushes_1_12"] = "Hedge",
-    ["f_bushes_1_13"] = "Hedge",
-    ["f_bushes_1_14"] = "Hedge",
-    ["f_bushes_1_15"] = "Hedge",
-    ["f_bushes_1_24"] = "Hedge",
-    ["f_bushes_1_25"] = "Hedge",
-    ["f_bushes_1_26"] = "Hedge",
-    ["f_bushes_1_27"] = "Hedge",
-    ["f_bushes_1_28"] = "Hedge",
-    ["f_bushes_1_29"] = "Hedge",
-    ["f_bushes_1_30"] = "Hedge",
-    ["f_bushes_1_31"] = "Hedge",
-    ["f_bushes_1_96"] = "Hedge",
-    ["f_bushes_1_97"] = "Hedge",
-    ["f_bushes_1_98"] = "Hedge",
-    ["f_bushes_1_99"] = "Hedge",
-    ["f_bushes_1_100"] = "Hedge",
-    ["f_bushes_1_101"] = "Hedge",
-    ["f_bushes_1_102"] = "Hedge",
-    ["f_bushes_1_103"] = "Hedge",
-    ["f_bushes_1_104"] = "Hedge",
-    ["f_bushes_1_105"] = "Hedge",
-    ["f_bushes_1_106"] = "Hedge",
-    ["f_bushes_1_107"] = "Hedge",
-    ["f_bushes_1_108"] = "Hedge",
-    ["f_bushes_1_109"] = "Hedge",
-    ["f_bushes_1_110"] = "Hedge",
-    ["f_bushes_1_111"] = "Hedge",
-    ["f_bushes_2_0"] = "Hedge",
-    ["f_bushes_2_1"] = "Hedge",
-    ["f_bushes_2_2"] = "Hedge",
-    ["f_bushes_2_3"] = "Hedge",
-    ["f_bushes_2_4"] = "Hedge",
-    ["f_bushes_2_5"] = "Hedge",
-    ["f_bushes_2_6"] = "Hedge",
-    ["f_bushes_2_7"] = "Hedge",
-    ["f_bushes_2_8"] = "Ornamental Bush",
-    ["f_bushes_2_9"] = "Ornamental Bush",
-    ["f_bushes_2_10"] = "Hedge",
-    ["f_bushes_2_11"] = "Hedge",
-    ["f_bushes_2_12"] = "Hedge",
-    ["f_bushes_2_13"] = "Hedge",
-    ["f_bushes_2_14"] = "Hedge",
-    ["f_bushes_2_15"] = "Hedge",
-    ["f_bushes_2_16"] = "Hedge",
-    ["f_bushes_2_17"] = "Hedge",
-    ["f_bushes_2_18"] = "Ornamental Bush",
-    ["f_bushes_2_19"] = "Ornamental Bush"
-}
+WDecay_Object_Buffer.register(WDecay_Bushes.bushes)
 
 function WDecay_Bushes.getRandomBush()
     if #WDecay_Bushes.bushes == 0 then
         return nil
     end
+
     return WDecay_Bushes.bushes[randomizer:random(1, #WDecay_Bushes.bushes + 1)]
-end
-
-function WDecay_Bushes.getCustomName(spriteName)
-    return WDecay_Bushes.customName[spriteName] or nil
-end
-
-function WDecay_Bushes.isBush(spriteName)
-    if not spriteName then return false end
-    return luautils.stringStarts(spriteName, "f_bushes_")
 end
 
 return WDecay_Bushes
