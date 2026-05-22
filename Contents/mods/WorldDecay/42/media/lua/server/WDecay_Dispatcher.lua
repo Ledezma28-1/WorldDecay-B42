@@ -339,6 +339,9 @@ local function OnTick()
 
     if not scanIntervalSet and modDataTable then
         scanInterval = SCAN_INTERVAL
+        if isMultiplayer() then
+            scanInterval = SCAN_INTERVAL * 2
+        end
 
         scanIntervalSet = true
     end
