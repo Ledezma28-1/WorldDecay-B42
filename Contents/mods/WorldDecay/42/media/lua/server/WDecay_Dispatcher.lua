@@ -294,6 +294,7 @@ local function queueChunk(chunk)
 end
 
 local function OnTick()
+    if isClient() then return end
 
     if not dispatcherConfigLoaded then
         loadDispatcherConfig()
@@ -531,7 +532,7 @@ Events.OnInitGlobalModData.Add(function(isNewGame)
     modDataTable = ModData.getOrCreate("WDecay_ChunkCache")
     scanTimer = scanInterval
 
-    if isNewGame or not modDataTable._version or modDataTable._version ~= CACHE_VERSION then
+    if not modDataTable._version or modDataTable._version ~= CACHE_VERSION then
         local keysToClear = {}
         for k in pairs(modDataTable) do
             keysToClear[#keysToClear + 1] = k
@@ -563,6 +564,8 @@ Events.OnInitGlobalModData.Add(function(isNewGame)
 end)
 
 Events.LoadChunk.Add(function(chunk)
+    --We want to populate chunks on server as soon as they are loaded
+    if not isServer() then  return false end
     queueChunk(chunk)
 end)
 
