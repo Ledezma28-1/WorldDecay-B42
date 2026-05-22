@@ -339,9 +339,6 @@ local function OnTick()
 
     if not scanIntervalSet and modDataTable then
         scanInterval = SCAN_INTERVAL
-        if isMultiplayer() then
-            scanInterval = SCAN_INTERVAL * 2
-        end
 
         scanIntervalSet = true
     end
@@ -561,6 +558,12 @@ Events.OnInitGlobalModData.Add(function(isNewGame)
             print("[WDecay] Chunk cache loaded: " .. count .. " seen chunks")
         end
     end
+end)
+
+Events.LoadChunk.Add(function(chunk)
+    --We want to populate chunks on server as soon as they are loaded
+    if not isServer() then  return false end
+    queueChunk(chunk)
 end)
 
 function WDecay_Dispatcher_IsQueueIdle()
