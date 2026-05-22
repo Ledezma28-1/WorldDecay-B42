@@ -563,6 +563,12 @@ Events.OnInitGlobalModData.Add(function(isNewGame)
     end
 end)
 
+Events.LoadChunk.Add(function(chunk)
+    --We want to populate chunks on server as soon as they are loaded
+    if not isServer() then  return false end
+    queueChunk(chunk)
+end)
+
 function WDecay_Dispatcher_IsQueueIdle()
     return chunkQueueHeadHigh > chunkQueueTailHigh and chunkQueueHeadLow > chunkQueueTailLow
 end
