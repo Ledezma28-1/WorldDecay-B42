@@ -1,3 +1,5 @@
+local WDecay_Object_Buffer = require("WDecay_Object_Buffer")
+
 local randomizer = newrandom()
 randomizer:seed(ZombRand(1, 2147483647))
 
@@ -55,96 +57,57 @@ local function getIndoorGrassPercentage()
 end
 
 local function LoadGridsquare(square, checkResult, level)
-    if not square then return end
+    if not square then return false end
 
-    if not checkResult then return end
+    if not checkResult then return false end
 
-    if level ~= 0 then return end
+    if level ~= 0 then return false end
 
     local squareCheckOk = checkResult.passed
-    if not squareCheckOk and getIndoorGrassPercentage() <= 0 then return end
+    if not squareCheckOk and getIndoorGrassPercentage() <= 0 then return false end
 
     if not squareCheckOk then
         if getIndoorGrassPercentage() > 0 and checkResult.room and not checkResult.water
             and not checkResult.isSolid and not checkResult.hasStairs
             and not checkResult.hasDoor then
             if getIndoorGrassPercentage() >= randomizer:random(1, 101) then
-                local floor = square:getFloor()
-                if floor then
-                    local floorSprite = floor:getSprite()
-                    if floorSprite then
-                        local randomGrass = WDecay_Grass.getRandomVanillaGrass()
-                        if randomGrass then
-                            local obj = IsoObject.new(getCell(), square, randomGrass)
-                            square:AddSpecialObject(obj)
-                            WDecay_CustomNames_Integration.applyCustomNameToObject(obj)
-                            local objModData = obj:getModData()
-                            if objModData then
-                                objModData["WDecay_Cleanable"] = "grass"
-                            end
-
-                            obj:transmitCompleteItemToClients()
-                            return true
-                        end
-                    end
+                local randomGrass = WDecay_Grass.getRandomVanillaGrass()
+                if randomGrass then
+                    local obj = WDecay_Object_Buffer.getObject(randomGrass)
+                    obj:setSquare(square)
+                    square:AddSpecialObject(obj)
+                    obj:transmitCompleteItemToClients()
+                    return true
                 end
             end
         end
 
-        return
+        return false
     end
 
     local isRoad = checkResult.isRoad
 
     local vanillaPct = isRoad and getGrassPercentageOnRoad() or getGrassPercentage()
     if vanillaPct > 0 and vanillaPct >= randomizer:random(1, 101) then
-        local floor = square:getFloor()
-        if floor then
-            local floorSprite = floor:getSprite()
-            if floorSprite then
-                local currentFloorTile = floorSprite:getName()
-                if currentFloorTile ~= nil then
-                    local randomGrass = WDecay_Grass.getRandomVanillaGrass()
-                    if randomGrass then
-                        local obj = IsoObject.new(getCell(), square, randomGrass)
-                        square:AddSpecialObject(obj)
-                        WDecay_CustomNames_Integration.applyCustomNameToObject(obj)
-                        local objModData = obj:getModData()
-                        if objModData then
-                            objModData["WDecay_Cleanable"] = "grass"
-                        end
-
-                        obj:transmitCompleteItemToClients()
-                        return true
-                    end
-                end
-            end
+        local randomGrass = WDecay_Grass.getRandomVanillaGrass()
+        if randomGrass then
+            local obj = WDecay_Object_Buffer.getObject(randomGrass)
+            obj:setSquare(square)
+            square:AddSpecialObject(obj)
+            obj:transmitCompleteItemToClients()
+            return true
         end
     end
 
     local customPct = isRoad and getCustomGrassPercentageOnRoad() or getCustomGrassPercentage()
     if customPct > 0 and customPct >= randomizer:random(1, 101) then
-        local floor = square:getFloor()
-        if floor then
-            local floorSprite = floor:getSprite()
-            if floorSprite then
-                local currentFloorTile = floorSprite:getName()
-                if currentFloorTile ~= nil then
-                    local randomGrass = WDecay_Grass.getRandomCustomGrass()
-                    if randomGrass then
-                        local obj = IsoObject.new(getCell(), square, randomGrass)
-                        square:AddSpecialObject(obj)
-                        WDecay_CustomNames_Integration.applyCustomNameToObject(obj)
-                        local objModData = obj:getModData()
-                        if objModData then
-                            objModData["WDecay_Cleanable"] = "grass"
-                        end
-
-                        obj:transmitCompleteItemToClients()
-                        return true
-                    end
-                end
-            end
+        local randomGrass = WDecay_Grass.getRandomCustomGrass()
+        if randomGrass then
+            local obj = WDecay_Object_Buffer.getObject(randomGrass)
+            obj:setSquare(square)
+            square:AddSpecialObject(obj)
+            obj:transmitCompleteItemToClients()
+            return true
         end
     end
 end

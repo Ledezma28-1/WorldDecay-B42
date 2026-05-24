@@ -117,8 +117,8 @@ WDecay_Grass.vanilla_grass = {
     "e_newgrass_1_89"
 }
 
-WDecay_Object_Buffer.register(WDecay_Grass.custom_grass)
-WDecay_Object_Buffer.register(WDecay_Grass.vanilla_grass)
+WDecay_Object_Buffer.registerWithModData(WDecay_Grass.custom_grass, "WDecay_Cleanable", "grass")
+WDecay_Object_Buffer.registerWithModData(WDecay_Grass.vanilla_grass, "WDecay_Cleanable", "grass")
 
 WDecay_Grass.customName = {
     ["d_floorleaves_1_0"] = "Leaves",

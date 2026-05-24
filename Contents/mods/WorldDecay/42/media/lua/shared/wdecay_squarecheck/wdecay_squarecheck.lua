@@ -317,31 +317,6 @@ function WDecay_SquareCheck.isPhysicsSaturated(square)
     return count >= 4
 end
 
-function WDecay_SquareCheck.checkBasic(square)
-    if not square then return nil end
-
-    local r = {
-        water = false,
-        room = nil,
-        isSolid = false,
-        passed = false,
-        tooManyPhysicsShapes = false,
-        objects = nil
-    }
-    r.objects = square:getObjects()
-    r.water = square:getProperties():has(IsoFlagType.water)
-    if r.water then return r end
-
-    r.room = square:getRoom()
-    if r.room then return r end
-
-    r.isSolid = square:isSolid()
-    if r.isSolid then return r end
-
-    r.passed = true
-    return r
-end
-
 function WDecay_SquareCheck.checkPlacement(square)
     if not square then return nil end
 
