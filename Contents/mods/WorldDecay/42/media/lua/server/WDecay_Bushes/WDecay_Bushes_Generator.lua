@@ -1,3 +1,5 @@
+local WDecay_Object_Buffer = require('WDecay_Object_Buffer')
+
 local randomizer = newrandom()
 randomizer:seed(ZombRand(1, 2147483647))
 
@@ -58,24 +60,18 @@ local function LoadGridsquare(square, checkResult, level)
     if percentage <= 0 then return end
 
     if percentage >= randomizer:random(1, 101) then
-        local sqModData = square:getModData()
-        if sqModData and sqModData["WDecay_HasTree"] then return end
-
         local floor = square:getFloor()
-        local currentFloorTile = floor and floor:getSprite() and floor:getSprite():getName()
 
-        if currentFloorTile ~= nil then
+        if floor then
+            local sqModData = floor:getModData()
+            if sqModData and sqModData["WDecay_HasTree"] then return end
+            
             local randomBush = WDecay_Bushes.getRandomBush()
 
             if randomBush then
-                local obj = IsoObject.new(getCell(), square, randomBush)
+                local obj = WDecay_Object_Buffer.getObject(randomBush)
+                obj:setSquare(square)
                 square:AddSpecialObject(obj)
-                WDecay_CustomNames_Integration.applyCustomNameToObject(obj)
-                local objModData = obj:getModData()
-                if objModData then
-                    objModData["WDecay_Cleanable"] = "bush"
-                end
-
                 obj:transmitCompleteItemToClients()
                 return true
             end

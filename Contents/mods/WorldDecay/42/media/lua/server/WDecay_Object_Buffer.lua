@@ -1,9 +1,16 @@
 local WDecay_Object_Buffer = {}
 local isDebug = isDebugEnabled()
 
+--Buffered objectData
+local bufferedKey = ""
+local bufferedModDataKey = nil
+local bufferedModDataValue = nil
+
 --Buffer Vars
 local MAX_OBJECT_BUFFER_SIZE = 500000
 local defaultObjectAlloc = 16384
+local lastAllocSize = 2147483647
+--objectBufferLookup[lookUpKeys[i]] = { buffer = table.newarray(), calculatedPart = 0, partOfTotalBuffer = 0 }
 local objectBufferLookup = {}
 local objectCount = 0
 local lookUpKeys = table.newarray()
@@ -23,8 +30,11 @@ local MAX_TICKS_FOR_ACTION = 10
 local tickCounter = 0
 
 --Sprite Vars
-local spriteManager = IsoSpriteManager.instance
 local spriteLookup = {}
+
+--Moddata Vars
+--modDataLookup[keyName] = { key = modDataKey, value = modDataValue }
+local modDataLookup = {}
 
 --#################  Print Buffer  ################# 
 local writeBufferTimeCounterMs = 0
@@ -60,13 +70,48 @@ end
 
 --#################  Object Buffer  ################# 
 
-local function allocateNewIsoObjects(buffer, count, loadedSprite)
-    local object = nil
+local function createIsoObject(key)
+    writeLogDebug("Create new IsoObject with spriteName '" .. key .. "'.")
 
-    for j = 1, count do
-        if buffer then
+    if bufferedKey ~= key then
+        local modData = modDataLookup[key]
+        bufferedKey = key
+        bufferedModDataKey = modData.key
+        bufferedModDataValue = modData.value
+    end
+
+    local object = IsoObject.new()
+    object:setSprite(key)
+    object:getModData()[bufferedModDataKey] = bufferedModDataValue
+    return object
+end
+
+local function allocateNewIsoObjects(key)
+    local object = 0
+    local buffer = objectBufferLookup[key].buffer
+    local count = objectBufferLookup[key].calculatedPart
+    local modData = modDataLookup[key]
+    local modDataKey = nil
+    local modDataValue = nil
+    local hasModData = false
+
+    if modData then
+        modDataKey = modData.key
+        modDataValue = modData.value
+        hasModData = modDataKey and modDataValue
+    end
+    
+    local objModData = nil
+
+    if buffer then
+        for j = 1, count do
             object = IsoObject.new()
-            object:setSprite(loadedSprite)
+            object:setSprite(key)
+
+            if hasModData then
+                objModData = object:getModData()
+                objModData[modDataKey] = modDataValue
+            end
 
             buffer[#buffer + 1] = object
             objectCount = objectCount + 1
@@ -76,52 +121,35 @@ end
 
 local function calculatePartSize()
     local keyCount = #lookUpKeys
-    local availableRemainingElementCount = 0
+    local partPercantage = 0
+    local maxSizePerPart = MAX_OBJECT_BUFFER_SIZE / keyCount
+    local partPercantageSum = 0
+    local key = ""
 
-    if keyCount > 0 then
-        local part = 0
-        local max = 0
-        local balancedCounter = 0
-        local totalPartCount = 0
-        local firstPart = objectBufferLookup[lookUpKeys[1]].calculatedPart
+    --Balancing
+    for i = 1, keyCount do
+        key = lookUpKeys[i]
+        partPercantage = (#objectBufferLookup[key].buffer / maxSizePerPart - 1) * -1
+        partPercantageSum = partPercantageSum + partPercantage
+        objectBufferLookup[key].partOfTotalBuffer = partPercantage
+    end
 
-        for i = 1, keyCount do
-            part = objectBufferLookup[lookUpKeys[i]].calculatedPart
-            totalPartCount = totalPartCount + part
+    --Null division Guard
+    if partPercantageSum <= 0 then return end
 
-            if part > max then
-                max = part
-            end
+    local totalMissing = partPercantageSum * maxSizePerPart
+    local availableElements = totalMissing
 
-            if part == max then
-                balancedCounter = balancedCounter + 1
-            end
-        end
+    if availableElements > defaultObjectAlloc then
+        availableElements = defaultObjectAlloc
+    end
 
-        local totalMissingPartCount = totalPartCount - (max * keyCount)
+    local sum = 0
 
-        if totalMissingPartCount < 0 then
-            totalMissingPartCount = -1 * totalMissingPartCount
-        end
-
-        local totalMissing = totalMissingPartCount
-
-        if totalMissingPartCount >= defaultObjectAlloc then
-            totalMissingPartCount = defaultObjectAlloc
-        end
-
-        availableRemainingElementCount = defaultObjectAlloc - totalMissingPartCount
-
-        local isBalanced = balancedCounter == keyCount and firstPart == max
-
-        --Balancing
-        for i = 1, keyCount do
-            if (isBalanced) then
-                objectBufferLookup[lookUpKeys[i]].calculatedPart = math.floor((availableRemainingElementCount / keyCount))
-            else
-                objectBufferLookup[lookUpKeys[i]].calculatedPart = math.floor((max - objectBufferLookup[lookUpKeys[i]].calculatedPart) / totalMissing * totalMissingPartCount + (availableRemainingElementCount / keyCount))
-            end
-        end
+    for i = 1, keyCount do
+        key = lookUpKeys[i]
+        objectBufferLookup[key].calculatedPart = math.ceil((objectBufferLookup[key].partOfTotalBuffer / partPercantageSum) * availableElements)
+        sum = sum + objectBufferLookup[key].calculatedPart
     end
 end
 
@@ -132,11 +160,12 @@ local function fillBuffer()
         scheduleTimeCounterMs = 0
 
         if objectCount < MAX_OBJECT_BUFFER_SIZE then
-            writeLog("Start filling object buffer with '" .. tostring(defaultObjectAlloc) .. "' objects.")
+            writeLogDebug("Start filling object buffer with '" .. tostring(defaultObjectAlloc) .. "' objects.")
             local keyCount = #lookUpKeys
 
-            --Cut object allocation in half
+            --Cut object allocation in 0.75
             if previousBufferDelta > MAX_AVAILABLE_TIME_MS then
+                lastAllocSize = defaultObjectAlloc
                 defaultObjectAlloc = math.floor(defaultObjectAlloc * 0.75)
 
                 --Deactivate buffer, when the computer is too bad, to process the objects in a certain amount of time
@@ -145,39 +174,37 @@ local function fillBuffer()
 
             --Calibrate the buffer
             if previousBufferDelta < MIN_AVAILABLE_TIME_MS then
-                defaultObjectAlloc = math.floor(defaultObjectAlloc * 1.125)
+
+                local newAllocValue = math.floor(defaultObjectAlloc * 1.125)
+                if newAllocValue < lastAllocSize then
+                    defaultObjectAlloc = newAllocValue
+                end
             end
 
             previousBufferDelta = 0
-            local part = 0
-            local buffer = nil
+            local partSum = 0
             local keyName = ""
-            local object = nil
-            local loadedSprite = nil
 
             --Nessencary to balance the buffer parts
             calculatePartSize()
 
             for i = 1, keyCount do
                 keyName = lookUpKeys[i]
-                loadedSprite = spriteLookup[keyName]
-                buffer = objectBufferLookup[keyName].buffer
-                part = objectBufferLookup[keyName].calculatedPart
 
-                writeLog("Allocate " .. tostring(part) .. " objects for index " .. tostring(i) .. " '" .. keyName .. "'...", true)
+                partSum = partSum + objectBufferLookup[keyName].calculatedPart
 
-                if keyName and loadedSprite and buffer then
-                    allocateNewIsoObjects(buffer, part, loadedSprite)
+                if keyName then
+                    allocateNewIsoObjects(keyName)
                 else
-                    writeLogDebug("Cannot fill buffer: unknown key '" .. keyName .. "'.")
+                    writeLogDebug("Cannot fill buffer: unknown key '" .. tostring(keyName) .. "'.")
                 end
             end
 
             delta = getTimestampMs() - startTime
             previousBufferDelta = delta
-            writeLog("Time needed to fill the object buffer: " .. tostring(delta) .. "ms")
-            writeLog("Current object buffer size: '" .. tostring(objectCount) .. "'")
-            writeLog("Added '" .. tostring(part * keyCount) .. "' objects in the object buffer")
+            writeLogDebug("Time needed to fill the object buffer: " .. tostring(delta) .. "ms")
+            writeLogDebug("Current object buffer size: '" .. tostring(objectCount) .. "'")
+            writeLogDebug("Added '" .. tostring(partSum) .. "' objects in the object buffer")
         end
     end
 
@@ -189,7 +216,7 @@ local function initObjectBuffer()
     local startTime = getTimestampMs()
 
     for i = 1, #lookUpKeys do
-        objectBufferLookup[lookUpKeys[i]] = { buffer = table.newarray(10000000), calculatedPart = 0 }
+        objectBufferLookup[lookUpKeys[i]] = { buffer = table.newarray(), calculatedPart = 0, partOfTotalBuffer = 0 }
     end
 
     local initDelta = getTimestampMs() - startTime
@@ -198,6 +225,10 @@ local function initObjectBuffer()
 end
 
 function WDecay_Object_Buffer.register(spriteNames)
+    WDecay_Object_Buffer.registerWithModData(spriteNames, nil, nil)
+end
+
+function WDecay_Object_Buffer.registerWithModData(spriteNames, modDataKey, modDataValue)
     writeLog("Loading '" .. tostring(#spriteNames) .. "' sprites in the buffer.")
     local keyName = nil
     local startTime = getTimestampMs()
@@ -207,12 +238,19 @@ function WDecay_Object_Buffer.register(spriteNames)
     for i = 1, #spriteNames do
         keyName = spriteNames[i]
 
-        if not spriteLookup[keyName] then
-            lookUpKeys[beginPos + i] = keyName
-            spriteLookup[keyName] = spriteManager:getSprite(keyName)
-            validSpriteCount = validSpriteCount + 1
-        else
-            writeLogDebug("Duplicate error: Sprite name '" .. keyName .. "' is existing in the sprite lockup table!")
+        if keyName then
+            --Buffer moddata
+            if modDataKey and modDataValue and not modDataLookup[keyName] then
+                modDataLookup[keyName] = { key = modDataKey, value = modDataValue }
+            end
+
+            if not spriteLookup[keyName] then
+                lookUpKeys[beginPos + validSpriteCount + 1] = keyName
+                spriteLookup[keyName] = true
+                validSpriteCount = validSpriteCount + 1
+            else
+                writeLogDebug("Duplicate error: Sprite name '" .. keyName .. "' is existing in the sprite lockup table!")
+            end
         end
     end
 
@@ -222,12 +260,30 @@ function WDecay_Object_Buffer.register(spriteNames)
 end
 
 function WDecay_Object_Buffer.getObject(spriteName)
+    local element = objectBufferLookup[spriteName]
 
+    if element then
+        local buffer = element.buffer
+        local size = #buffer
+
+        if size > 0 then
+            local obj = buffer[size]
+
+            buffer[size] = nil
+            objectCount = objectCount - 1
+
+            return obj
+        else
+            return createIsoObject(spriteName)
+        end
+    else
+        writeLogDebug("Error: Element with spritename '" .. spriteName .. "' not found.")
+    end
 end
 
 --#################  Tick-Counter  ################# 
 local function OnTick()
-    if globalStartTimeMs == 0 then 
+    if globalStartTimeMs == 0 then
         globalStartTimeMs = getTimestampMs()
     end
 

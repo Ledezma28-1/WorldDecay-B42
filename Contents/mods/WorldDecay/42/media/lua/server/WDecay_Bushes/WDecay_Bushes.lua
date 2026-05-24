@@ -40,7 +40,7 @@ WDecay_Bushes.bushes = {
     "f_bushes_1_74"
 }
 
-WDecay_Object_Buffer.register(WDecay_Bushes.bushes)
+WDecay_Object_Buffer.registerWithModData(WDecay_Bushes.bushes, "WDecay_Cleanable", "bush")
 
 function WDecay_Bushes.getRandomBush()
     if #WDecay_Bushes.bushes == 0 then
