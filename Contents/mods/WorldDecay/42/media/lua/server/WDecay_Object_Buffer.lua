@@ -75,9 +75,13 @@ local function createIsoObject(key)
 
     if bufferedKey ~= key then
         local modData = modDataLookup[key]
-        bufferedKey = key
-        bufferedModDataKey = modData.key
-        bufferedModDataValue = modData.value
+        if modData then
+            bufferedKey = key
+            bufferedModDataKey = modData.key
+            bufferedModDataValue = modData.value
+        else
+            writeLogDebug("Moddata not found for key '" .. tostring(key) .. "'.")
+        end
     end
 
     local object = IsoObject.new()
@@ -100,7 +104,7 @@ local function allocateNewIsoObjects(key)
         modDataValue = modData.value
         hasModData = modDataKey and modDataValue
     end
-    
+
     local objModData = nil
 
     if buffer then

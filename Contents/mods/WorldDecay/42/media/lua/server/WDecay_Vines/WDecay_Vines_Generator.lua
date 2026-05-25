@@ -1,3 +1,5 @@
+local WDecay_Object_Buffer = require("WDecay_Object_Buffer")
+
 local randomizer = newrandom()
 randomizer:seed(ZombRand(1, 2147483647))
 
@@ -110,165 +112,55 @@ local function LoadGridsquare(square, checkResult, level)
 
                 if textureName and isWallTile(textureName) then
                     if not luautils.stringStarts(textureName, "walls_detailling") then
-                        local spriteName = sprite:getName()
-                        if spriteName then
-                            local isLowFenceObj = isLowFence(sprite)
+
+                        local isLowFenceObj = isLowFence(sprite)
 
 
-                            if hasWallProperty(sprite, "WallNW") then
-                                local randomOverlay = WDecay_Vines.getRandomWallNW()
+                        if hasWallProperty(sprite, "WallNW") then
+                            local randomOverlay = WDecay_Vines.getRandomWallNW()
 
-                                if isLowFenceObj then
-                                    randomOverlay = WDecay_Vines.getRandomWallNWLow()
-                                end
-
-                                if randomOverlay then
-                                    local obj2 = IsoObject.new(getCell(), square, randomOverlay)
-                                    square:AddTileObject(obj2)
-                                    obj2:transmitCompleteItemToClients()
-                                    local obj2ModData = obj2:getModData()
-                                    obj2ModData["WDecay_Cleanable"] = "vine"
-
-                                    if false then
-                                        local neighbour = getCell():getGridSquare(square:getX(), square:getY(), level + 1)
-                                        if neighbour then
-                                            local neighbourObjs = neighbour:getObjects()
-                                            if neighbourObjs then
-                                                for j = 0, neighbourObjs:size() - 1 do
-                                                    local neighbourObj = neighbourObjs:get(j)
-                                                    if neighbourObj then
-                                                        local neighbourSprite = neighbourObj:getSprite()
-                                                        if neighbourSprite then
-                                                            local neighbourSpriteName = neighbourSprite:getName()
-                                                            if neighbourSpriteName and
-                                                                luautils.stringStarts(tostring(neighbourSpriteName), "walls_") and
-                                                                not luautils.stringStarts(tostring(neighbourSpriteName), "walls_detailling") and
-                                                                not luautils.stringStarts(tostring(neighbourSpriteName), "walls_exterior_roofs") and
-                                                                not luautils.stringStarts(tostring(neighbourSpriteName), "walls_interior") then
-
-                                                                local randomOverlay2 = WDecay_Vines.getRandomWallNWTop()
-                                                                if randomOverlay2 then
-                                                                    local obj3 = IsoObject.new(getCell(), neighbour, randomOverlay2)
-                                                                    neighbour:AddSpecialObject(obj3)
-                                                                    obj3:transmitCompleteItemToClients()
-                                                                    local obj3ModData = obj3:getModData()
-                                                                    obj3ModData["WDecay_Cleanable"] = "vine"
-                                                                end
-
-                                                                break
-                                                            end
-                                                        end
-                                                    end
-                                                end
-                                            end
-                                        end
-                                    end
-                                end
+                            if isLowFenceObj then
+                                randomOverlay = WDecay_Vines.getRandomWallNWLow()
                             end
 
-                            if hasWallProperty(sprite, "WallW") or hasWallProperty(sprite, "WindowW") or
-                                hasWallProperty(sprite, "doorW") or hasWallProperty(sprite, "DoorWallW") or
-                                hasWallProperty(sprite, "attachedW") or hasWallProperty(sprite, "WallWTrans") then
+                            if randomOverlay then
+                                local obj2 = WDecay_Object_Buffer.getObject(randomOverlay)
+                                obj2:setSquare(square)
+                                square:AddTileObject(obj2)
+                                obj2:transmitCompleteItemToClients()
+                            end
+                        end
 
-                                local randomOverlay = WDecay_Vines.getRandomWallW()
+                        if hasWallProperty(sprite, "WallW") or hasWallProperty(sprite, "WindowW") or
+                            hasWallProperty(sprite, "doorW") or hasWallProperty(sprite, "DoorWallW") or
+                            hasWallProperty(sprite, "attachedW") or hasWallProperty(sprite, "WallWTrans") then
 
-                                if isLowFenceObj then
-                                    randomOverlay = WDecay_Vines.getRandomWallWLow()
-                                end
+                            local randomOverlay = WDecay_Vines.getRandomWallW()
 
-                                if randomOverlay then
-                                    local obj2 = IsoObject.new(getCell(), square, randomOverlay)
-                                    square:AddTileObject(obj2)
-                                    obj2:transmitCompleteItemToClients()
-                                    local obj2ModData = obj2:getModData()
-                                    obj2ModData["WDecay_Cleanable"] = "vine"
-
-                                    if false then
-                                        local neighbour = getCell():getGridSquare(square:getX(), square:getY(), level + 1)
-                                        if neighbour then
-                                            local neighbourObjs = neighbour:getObjects()
-                                            if neighbourObjs then
-                                                for j = 0, neighbourObjs:size() - 1 do
-                                                    local neighbourObj = neighbourObjs:get(j)
-                                                    if neighbourObj then
-                                                        local neighbourSprite = neighbourObj:getSprite()
-                                                        if neighbourSprite then
-                                                            local neighbourSpriteName = neighbourSprite:getName()
-                                                            if neighbourSpriteName and
-                                                                luautils.stringStarts(tostring(neighbourSpriteName), "walls_") and
-                                                                not luautils.stringStarts(tostring(neighbourSpriteName), "walls_detailling") and
-                                                                not luautils.stringStarts(tostring(neighbourSpriteName), "walls_exterior_roofs") and
-                                                                not luautils.stringStarts(tostring(neighbourSpriteName), "walls_interior") then
-
-                                                                local randomOverlay2 = WDecay_Vines.getRandomWallWTop()
-                                                                if randomOverlay2 then
-                                                                    local obj3 = IsoObject.new(getCell(), neighbour, randomOverlay2)
-                                                                    neighbour:AddSpecialObject(obj3)
-                                                                    obj3:transmitCompleteItemToClients()
-                                                                    local obj3ModData = obj3:getModData()
-                                                                    obj3ModData["WDecay_Cleanable"] = "vine"
-                                                                end
-
-                                                                break
-                                                            end
-                                                        end
-                                                    end
-                                                end
-                                            end
-                                        end
-                                    end
-                                end
+                            if isLowFenceObj then
+                                randomOverlay = WDecay_Vines.getRandomWallWLow()
                             end
 
-                            if hasWallProperty(sprite, "WallN") or hasWallProperty(sprite, "WindowN") then
-                                local randomOverlay = WDecay_Vines.getRandomWallN()
+                            if randomOverlay then
+                                local obj2 = WDecay_Object_Buffer.getObject(randomOverlay)
+                                obj2:setSquare(square)
+                                square:AddTileObject(obj2)
+                                obj2:transmitCompleteItemToClients()
+                            end
+                        end
 
-                                if isLowFenceObj then
-                                    randomOverlay = WDecay_Vines.getRandomWallNLow()
-                                end
+                        if hasWallProperty(sprite, "WallN") or hasWallProperty(sprite, "WindowN") then
+                            local randomOverlay = WDecay_Vines.getRandomWallN()
 
-                                if randomOverlay then
-                                    local obj2 = IsoObject.new(getCell(), square, randomOverlay)
-                                    square:AddTileObject(obj2)
-                                    obj2:transmitCompleteItemToClients()
-                                    local obj2ModData = obj2:getModData()
-                                    obj2ModData["WDecay_Cleanable"] = "vine"
+                            if isLowFenceObj then
+                                randomOverlay = WDecay_Vines.getRandomWallNLow()
+                            end
 
-                                    if false then
-                                        local neighbour = getCell():getGridSquare(square:getX(), square:getY(), level + 1)
-                                        if neighbour then
-                                            local neighbourObjs = neighbour:getObjects()
-                                            if neighbourObjs then
-                                                for j = 0, neighbourObjs:size() - 1 do
-                                                    local neighbourObj = neighbourObjs:get(j)
-                                                    if neighbourObj then
-                                                        local neighbourSprite = neighbourObj:getSprite()
-                                                        if neighbourSprite then
-                                                            local neighbourSpriteName = neighbourSprite:getName()
-                                                            if neighbourSpriteName and
-                                                                luautils.stringStarts(tostring(neighbourSpriteName), "walls_") and
-                                                                not luautils.stringStarts(tostring(neighbourSpriteName), "walls_detailling") and
-                                                                not luautils.stringStarts(tostring(neighbourSpriteName), "walls_exterior_roofs") and
-                                                                not luautils.stringStarts(tostring(neighbourSpriteName), "walls_interior") then
-
-                                                                local randomOverlay2 = WDecay_Vines.getRandomWallNTop()
-                                                                if randomOverlay2 then
-                                                                    local obj3 = IsoObject.new(getCell(), neighbour, randomOverlay2)
-                                                                    neighbour:AddSpecialObject(obj3)
-                                                                    obj3:transmitCompleteItemToClients()
-                                                                    local obj3ModData = obj3:getModData()
-                                                                    obj3ModData["WDecay_Cleanable"] = "vine"
-                                                                end
-
-                                                                break
-                                                            end
-                                                        end
-                                                    end
-                                                end
-                                            end
-                                        end
-                                    end
-                                end
+                            if randomOverlay then
+                                local obj2 = WDecay_Object_Buffer.getObject(randomOverlay)
+                                obj2:setSquare(square)
+                                square:AddTileObject(obj2)
+                                obj2:transmitCompleteItemToClients()
                             end
                         end
                     end

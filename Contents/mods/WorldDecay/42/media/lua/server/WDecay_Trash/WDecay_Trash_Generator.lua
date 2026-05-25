@@ -1,3 +1,5 @@
+local WDecay_Object_Buffer = require("WDecay_Object_Buffer")
+
 local randomizer = newrandom()
 randomizer:seed(ZombRand(1, 2147483647))
 
@@ -47,28 +49,16 @@ local function LoadGridsquare(square, checkResult, level)
     end
 
     if percentage >= randomizer:random(1, 101) then
-        local currentFloorTile = square:getFloor() and square:getFloor():getSprite():getName()
+        local randomTrash = WDecay_Trash.getRandomTrash()
 
-        if currentFloorTile ~= nil then
-            local randomTrash = WDecay_Trash.getRandomTrash()
-
-            if randomTrash then
-                local newSprite = IsoObject.new(getCell(), square, randomTrash)
-                if newSprite then
-                    square:AddSpecialObject(newSprite)
-                    square:RecalcProperties()
-
-                    WDecay_CustomNames_Integration.applyCustomNameToObject(newSprite)
-
-                    local objModData = newSprite:getModData()
-                    if objModData then
-                        objModData["WDecay_Cleanable"] = "trash"
-                    end
-
-                    newSprite:transmitCompleteItemToClients()
-                    return true
-                end
-            end
+        if randomTrash then
+            local newSprite = WDecay_Object_Buffer.getObject(randomTrash)
+            newSprite:setSquare(square)
+            square:AddSpecialObject(newSprite)
+            square:RecalcPropertiesIfNeeded()
+            newSprite:transmitCompleteItemToClients()
+            return true
+            
         end
     end
 
