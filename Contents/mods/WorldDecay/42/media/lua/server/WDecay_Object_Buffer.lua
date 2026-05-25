@@ -1,10 +1,6 @@
+local WDecay_Object_Buffer_Types = require("WDecay_Object_Buffer_Types")
 local WDecay_Object_Buffer = {}
 local isDebug = isDebugEnabled()
-
---Buffered objectData
-local bufferedKey = ""
-local bufferedModDataKey = nil
-local bufferedModDataValue = nil
 
 --Buffer Vars
 local MAX_OBJECT_BUFFER_SIZE = 500000
@@ -17,8 +13,8 @@ local lookUpKeys = table.newarray()
 local isBufferActivate = true
 
 --Time Vars
-local OBJECT_BUFFER_SCHEDULE_MS = 500
-local MAX_AVAILABLE_TIME_MS = 4
+local OBJECT_BUFFER_SCHEDULE_MS = 300
+local MAX_AVAILABLE_TIME_MS = 6
 local MIN_AVAILABLE_TIME_MS = 2
 local previousBufferDelta = 0
 local scheduleTimeCounterMs = 0
@@ -26,7 +22,7 @@ local globalStartTimeMs = 0
 local globalDelta = 0
 
 --Ticks
-local MAX_TICKS_FOR_ACTION = 10
+local MAX_TICKS_FOR_ACTION = 20
 local tickCounter = 0
 
 --Sprite Vars
@@ -35,6 +31,16 @@ local spriteLookup = {}
 --Moddata Vars
 --modDataLookup[keyName] = { key = modDataKey, value = modDataValue }
 local modDataLookup = {}
+
+--objectTypeLookup[Key] = WDecay_Object_Buffer_Types
+local objectTypeLookup = {}
+--objectCreationFunctionLookup[WDecay_Object_Buffer_Types] = function(key)
+local objectCreationFunctionLookup = {}
+--bufferObjectCreationFunctionLookup[WDecay_Object_Buffer_Types] = function(key)
+local bufferObjectCreationFunctionLookup = {}
+
+--Object Configurator
+local objectConfiguratorLookUp = {}
 
 --#################  Print Buffer  ################# 
 local writeBufferTimeCounterMs = 0
@@ -70,23 +76,69 @@ end
 
 --#################  Object Buffer  ################# 
 
+local function callConfigurator(key, object, modDataLookup)
+    local configurator = objectConfiguratorLookUp[key]
+
+    if configurator then
+        configurator(key, object, modDataLookup)
+    end
+end
+
+local function setModData(modDataKey, modData)
+    if modDataLookup and modDataLookup[modDataKey] then
+        for key, value in pairs(modDataLookup[modDataKey]) do
+            modData[key] = value
+        end
+    else
+        writeLogDebug("Moddata not found for key '" .. tostring(modDataKey) .. "'.")
+    end
+end
+
+local function createIsoTreeObject(key)
+    writeLogDebug("Create new IsoObject with spriteName '" .. key .. "'.")
+
+    local object = IsoTree.new()
+    local modData = object:getModData()
+    object:setSpriteFromName(key)
+    setModData(key, modData)
+    callConfigurator(key, object, modData)
+    return object
+end
+
+local function allocateNewIsoTree(key)
+    local object = 0
+    local buffer = objectBufferLookup[key].buffer
+    local count = objectBufferLookup[key].calculatedPart
+    local hasModData = modDataLookup[key]
+    local modData = nil
+
+    if buffer then
+        local bufferCount = #buffer
+
+        for i = 1, count do
+            object = IsoTree.new()
+            object:setSpriteFromName(key)
+
+            if hasModData then
+                modData = object:getModData()
+                setModData(key, modData)
+            end
+
+            callConfigurator(key, object, modData)
+            buffer[bufferCount + i] = object
+            objectCount = objectCount + 1
+        end
+    end
+end
+
 local function createIsoObject(key)
     writeLogDebug("Create new IsoObject with spriteName '" .. key .. "'.")
 
-    if bufferedKey ~= key then
-        local modData = modDataLookup[key]
-        if modData then
-            bufferedKey = key
-            bufferedModDataKey = modData.key
-            bufferedModDataValue = modData.value
-        else
-            writeLogDebug("Moddata not found for key '" .. tostring(key) .. "'.")
-        end
-    end
-
-    local object = IsoObject.new()
-    object:setSprite(key)
-    object:getModData()[bufferedModDataKey] = bufferedModDataValue
+    local object = IsoObject.new(key)
+    object:setSpriteFromName(key)
+    local modData = object:getModData()
+    setModData(key, modData)
+    callConfigurator(key, object, modData)
     return object
 end
 
@@ -94,30 +146,24 @@ local function allocateNewIsoObjects(key)
     local object = 0
     local buffer = objectBufferLookup[key].buffer
     local count = objectBufferLookup[key].calculatedPart
-    local modData = modDataLookup[key]
-    local modDataKey = nil
-    local modDataValue = nil
-    local hasModData = false
-
-    if modData then
-        modDataKey = modData.key
-        modDataValue = modData.value
-        hasModData = modDataKey and modDataValue
-    end
-
-    local objModData = nil
+    local hasModData = modDataLookup[key]
+    local modData = nil
 
     if buffer then
-        for j = 1, count do
-            object = IsoObject.new()
-            object:setSprite(key)
+        local bufferCount = #buffer
+
+        for i = 1, count do
+            object = IsoObject.new(key)
+            object:setSpriteFromName(key)
 
             if hasModData then
-                objModData = object:getModData()
-                objModData[modDataKey] = modDataValue
+                modData = object:getModData()
+                setModData(key, modData)
             end
 
-            buffer[#buffer + 1] = object
+            callConfigurator(key, object, modData)
+
+            buffer[bufferCount + i] = object
             objectCount = objectCount + 1
         end
     end
@@ -198,7 +244,7 @@ local function fillBuffer()
                 partSum = partSum + objectBufferLookup[keyName].calculatedPart
 
                 if keyName then
-                    allocateNewIsoObjects(keyName)
+                    bufferObjectCreationFunctionLookup[objectTypeLookup[keyName]](keyName)
                 else
                     writeLogDebug("Cannot fill buffer: unknown key '" .. tostring(keyName) .. "'.")
                 end
@@ -215,7 +261,17 @@ local function fillBuffer()
     scheduleTimeCounterMs = scheduleTimeCounterMs + globalDelta
 end
 
+local function initCreationFunctions()
+    bufferObjectCreationFunctionLookup[WDecay_Object_Buffer_Types.IsoObjectType] = allocateNewIsoObjects
+    objectCreationFunctionLookup[WDecay_Object_Buffer_Types.IsoObjectType] = createIsoObject
+
+    bufferObjectCreationFunctionLookup[WDecay_Object_Buffer_Types.IsoTreeType] = allocateNewIsoTree
+    objectCreationFunctionLookup[WDecay_Object_Buffer_Types.IsoTreeType] = createIsoTreeObject
+end
+
 local function initObjectBuffer()
+    if isClient() then return end
+
     writeLog("Initialize object buffer...")
     local startTime = getTimestampMs()
 
@@ -223,46 +279,115 @@ local function initObjectBuffer()
         objectBufferLookup[lookUpKeys[i]] = { buffer = table.newarray(), calculatedPart = 0, partOfTotalBuffer = 0 }
     end
 
+    initCreationFunctions()
+
     local initDelta = getTimestampMs() - startTime
     writeLog("Object buffer initialized successfully in " .. tostring(initDelta) .. "ms!")
     printBuffer()
 end
 
-function WDecay_Object_Buffer.register(spriteNames)
-    WDecay_Object_Buffer.registerWithModData(spriteNames, nil, nil)
+--- Function to register tables of spritenames, to buffer the data for later usage
+---@param spriteNames table
+---@param type IsoObjectType | IsoTreeType
+function WDecay_Object_Buffer.register(spriteNames, type)
+    if isClient() then return end
+
+    WDecay_Object_Buffer.registerWithModData(spriteNames, nil, nil, type)
 end
 
-function WDecay_Object_Buffer.registerWithModData(spriteNames, modDataKey, modDataValue)
-    writeLog("Loading '" .. tostring(#spriteNames) .. "' sprites in the buffer.")
-    local keyName = nil
-    local startTime = getTimestampMs()
-    local beginPos = #lookUpKeys
-    local validSpriteCount = 0
+--- Function to register tables of spritenames, to buffer the data for later usage
+---@param spriteNames table
+---@param modDataKey string
+---@param modDataValue string
+---@param type IsoObjectType | IsoTreeType
+function WDecay_Object_Buffer.registerWithModData(spriteNames, modDataKey, modDataValue, type)
+    if isClient() then return end
 
-    for i = 1, #spriteNames do
-        keyName = spriteNames[i]
+    if modDataKey and modDataValue then  
+        WDecay_Object_Buffer.registerWithModDataPairList(spriteNames, { [modDataKey] = modDataValue }, type)
+    else
+        WDecay_Object_Buffer.registerWithModDataPairList(spriteNames, nil, type)
+    end
+end
 
-        if keyName then
-            --Buffer moddata
-            if modDataKey and modDataValue and not modDataLookup[keyName] then
-                modDataLookup[keyName] = { key = modDataKey, value = modDataValue }
-            end
+--- Function to register tables of spritenames, to buffer the data for later usage. 
+--- Example of a modDataPairs table = { [key] = value }
+---@param spriteNames table
+---@param modDataPairs table
+---@param type IsoObjectType | IsoTreeType
+function WDecay_Object_Buffer.registerWithModDataPairList(spriteNames, modDataPairs, type)
+    if isClient() then return end
 
-            if not spriteLookup[keyName] then
-                lookUpKeys[beginPos + validSpriteCount + 1] = keyName
-                spriteLookup[keyName] = true
-                validSpriteCount = validSpriteCount + 1
-            else
-                writeLogDebug("Duplicate error: Sprite name '" .. keyName .. "' is existing in the sprite lockup table!")
+    if WDecay_Object_Buffer_Types.isValidObjectType(type) then
+        writeLog("Loading '" .. tostring(#spriteNames) .. "' sprites in the buffer.")
+        local keyName = nil
+        local startTime = getTimestampMs()
+        local beginPos = #lookUpKeys
+        local validSpriteCount = 0
+
+        for i = 1, #spriteNames do
+            keyName = spriteNames[i]
+
+            if keyName then
+                if modDataPairs and not modDataLookup[keyName] then
+                    modDataLookup[keyName] = {}
+
+                    for key, value in pairs(modDataPairs) do
+                        modDataLookup[keyName][key] = value
+                        writeLogDebug("Added moddata to the sprite '" .. tostring(keyName) .. "' with modData[" .. tostring(key) .. "] = '" .. tostring(value) .. "'.")
+                    end
+                end
+
+                if not objectTypeLookup[keyName] then
+                    objectTypeLookup[keyName] = type
+                end
+
+                if not spriteLookup[keyName] then
+                    lookUpKeys[beginPos + validSpriteCount + 1] = keyName
+                    spriteLookup[keyName] = true
+                    validSpriteCount = validSpriteCount + 1
+                else
+                    writeLogDebug("Duplicate error: Sprite name '" .. keyName .. "' is existing in the sprite lockup table!")
+                end
             end
         end
+
+        local spriteDelta = getTimestampMs() - startTime
+        writeLog("Time needed to load " .. tostring(validSpriteCount) .. " valid sprites: " .. tostring(spriteDelta) .. "ms")
+    else
+        writeLogDebug("Incompatible type '" .. tostring(type) .. "' in sprite-array '" .. tostring(spriteNames) .. "'.")
     end
 
-    local spriteDelta = getTimestampMs() - startTime
-    writeLog("Time needed to load " .. tostring(validSpriteCount) .. " valid sprites: " .. tostring(spriteDelta) .. "ms")
     printBuffer()
 end
 
+--- Registers a list of sprite names with an optional configurator function to customize objects during buffer allocation and direct creation.
+--- The configurator function is applied to each object, allowing modifications before the object is stored in the buffer or returned.
+---@param spriteName string A list of sprite names to register in the buffer.
+---@param configurator function A function that receives the object and the key, used to configure each object individually. Example function header = function config(spriteName, object, modData) ModData can be nil!
+function WDecay_Object_Buffer.registerConfigurator(spriteNames, configurator)
+    if isClient() then return end
+
+    if spriteNames then 
+        for __, value in pairs(spriteNames) do
+            writeLogDebug("Registering new configurator for sprite name '" .. value .. "'.")
+            --Is the sprite existing
+            if spriteLookup[value] then 
+                objectConfiguratorLookUp[value] = configurator
+            else
+                writeLogDebug("Registering failed, because the sprite name '" .. value .. "' is not found in the object buffer.")
+            end 
+        end
+    else
+        writeLogDebug("An error occured in registerWithObjectBufferConfigurator, because spriteNames is not a key/value table.")
+    end
+
+    printBuffer()
+end
+
+--- Function to get buffered objects, when these are generated. When they are not generated, a new object get created
+---@param spriteName string
+---@return IsoObject | IsoTree
 function WDecay_Object_Buffer.getObject(spriteName)
     local element = objectBufferLookup[spriteName]
 
@@ -278,7 +403,7 @@ function WDecay_Object_Buffer.getObject(spriteName)
 
             return obj
         else
-            return createIsoObject(spriteName)
+            return objectCreationFunctionLookup[objectTypeLookup[spriteName]](spriteName)
         end
     else
         writeLogDebug("Error: Element with spritename '" .. spriteName .. "' not found.")
@@ -293,6 +418,8 @@ local function OnTick()
 
     --Limit ticks for performance on bad computer
     if tickCounter == MAX_TICKS_FOR_ACTION then
+        if isClient() then return end
+
         globalDelta = getTimestampMs() - globalStartTimeMs
         fillBuffer()
         printToConsole()

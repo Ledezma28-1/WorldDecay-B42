@@ -184,7 +184,7 @@ local function processChunkSquares(chunk)
 
                     if not ok then
                         sqErrors = sqErrors + 1
-                        
+
                         if sqErrors == 1 then
                             print("[WDecay] Square dispatch error: " .. tostring(err):sub(1, 120))
                         end
@@ -565,7 +565,8 @@ end)
 
 Events.LoadChunk.Add(function(chunk)
     --We want to populate chunks on server as soon as they are loaded
-    if not isServer() then  return false end
+    if not isServer() then return false end
+
     queueChunk(chunk)
 end)
 

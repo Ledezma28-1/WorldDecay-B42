@@ -1,3 +1,4 @@
+local WDecay_Object_Buffer_Types = require("WDecay_Object_Buffer_Types")
 local WDecay_Object_Buffer = require('WDecay_Object_Buffer')
 
 local randomizer = newrandom()
@@ -40,7 +41,7 @@ WDecay_Bushes.bushes = {
     "f_bushes_1_74"
 }
 
-WDecay_Object_Buffer.registerWithModData(WDecay_Bushes.bushes, "WDecay_Cleanable", "bush")
+WDecay_Object_Buffer.registerWithModData(WDecay_Bushes.bushes, "WDecay_Cleanable", "bush", WDecay_Object_Buffer_Types.IsoObjectType)
 
 function WDecay_Bushes.getRandomBush()
     if #WDecay_Bushes.bushes == 0 then

@@ -1,3 +1,6 @@
+local WDecay_Object_Buffer = require("WDecay_Object_Buffer")
+local WDecay_Object_Buffer_Types = require("WDecay_Object_Buffer_Types")
+
 local randomizer = newrandom()
 randomizer:seed(ZombRand(1, 2147483647))
 
@@ -50,6 +53,10 @@ WDecay_Trees.treeSprites = {
     "e_virginiapineJUMBO_1_1"
 }
 
+WDecay_Object_Buffer.registerWithModDataPairList(WDecay_Trees.treeSprites,
+    { ["WDecay_Tree"] = true, ["WDecay_Cleanable"] = "tree" },
+    WDecay_Object_Buffer_Types.IsoTreeType)
+
 WDecay_Trees.foliageIndices = { 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 }
 
 WDecay_Trees._foliageLookup = {}
@@ -82,8 +89,6 @@ function WDecay_Trees.getRandomFoliageIndex()
     return WDecay_Trees.foliageIndices[randomizer:random(1, #WDecay_Trees.foliageIndices + 1)]
 end
 
-local DEFAULT_SPRITE_ID = 20000000
-
 function WDecay_Trees.getFoliageSpriteName(treeSpriteName, foliageIndex)
     if not treeSpriteName or not foliageIndex then
         return nil
@@ -101,21 +106,25 @@ function WDecay_Trees.getFoliageSpriteName(treeSpriteName, foliageIndex)
     return nil
 end
 
-function WDecay_Trees.isTreeSprite(spriteName)
-    if not spriteName then return false end
+local function applyFoliageVariant(spriteName, object, modData)
+    local attachedSprites = ArrayList.new()
+    object:setAttachedAnimSprite(attachedSprites)
 
-    return luautils.stringStarts(spriteName, "e_") and
-        (luautils.stringStarts(spriteName, "e_dogwood_") or
-            luautils.stringStarts(spriteName, "e_riverbirch_") or
-            luautils.stringStarts(spriteName, "e_easternredbud_") or
-            luautils.stringStarts(spriteName, "e_redmaple_") or
-            luautils.stringStarts(spriteName, "e_americanlinden_") or
-            luautils.stringStarts(spriteName, "e_yellowwood_") or
-            luautils.stringStarts(spriteName, "e_cockspurhawthorn_") or
-            luautils.stringStarts(spriteName, "e_carolinasilverbell_") or
-            luautils.stringStarts(spriteName, "e_americanholly_") or
-            luautils.stringStarts(spriteName, "e_canadianhemlock_") or
-            luautils.stringStarts(spriteName, "e_virginiapine_"))
+    local foliageIndex = WDecay_Trees.getRandomFoliageIndex()
+
+    if foliageIndex then
+        local foliageSpriteName = WDecay_Trees.getFoliageSpriteName(spriteName, foliageIndex)
+
+        if foliageSpriteName then
+            local foliageSprite = getSprite(foliageSpriteName)
+
+            if foliageSprite then
+                attachedSprites:add(foliageSprite:newInstance())
+            end
+        end
+    end
 end
+
+WDecay_Object_Buffer.registerConfigurator(WDecay_Trees.treeSprites, applyFoliageVariant)
 
 return WDecay_Trees

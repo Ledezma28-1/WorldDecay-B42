@@ -90,15 +90,15 @@ WDecay_Vines.wallProperties = {
     "DoorWallN"
 }
 
-WDecay_Object_Buffer.registerWithModData(WDecay_Vines.wallW, "WDecay_Cleanable", "vine")
-WDecay_Object_Buffer.registerWithModData(WDecay_Vines.wallW_top, "WDecay_Cleanable", "vine")
-WDecay_Object_Buffer.registerWithModData(WDecay_Vines.wallW_low, "WDecay_Cleanable", "vine")
-WDecay_Object_Buffer.registerWithModData(WDecay_Vines.wallN, "WDecay_Cleanable", "vine")
-WDecay_Object_Buffer.registerWithModData(WDecay_Vines.wallN_top, "WDecay_Cleanable", "vine")
-WDecay_Object_Buffer.registerWithModData(WDecay_Vines.wallN_low, "WDecay_Cleanable", "vine")
-WDecay_Object_Buffer.registerWithModData(WDecay_Vines.wallNW, "WDecay_Cleanable", "vine")
-WDecay_Object_Buffer.registerWithModData(WDecay_Vines.wallNW_top, "WDecay_Cleanable", "vine")
-WDecay_Object_Buffer.registerWithModData(WDecay_Vines.wallNW_low, "WDecay_Cleanable", "vine")
+WDecay_Object_Buffer.registerWithModData(WDecay_Vines.wallW, "WDecay_Cleanable", "vine", WDecay_Object_Buffer_Types.IsoObjectType)
+WDecay_Object_Buffer.registerWithModData(WDecay_Vines.wallW_top, "WDecay_Cleanable", "vine", WDecay_Object_Buffer_Types.IsoObjectType)
+WDecay_Object_Buffer.registerWithModData(WDecay_Vines.wallW_low, "WDecay_Cleanable", "vine", WDecay_Object_Buffer_Types.IsoObjectType)
+WDecay_Object_Buffer.registerWithModData(WDecay_Vines.wallN, "WDecay_Cleanable", "vine", WDecay_Object_Buffer_Types.IsoObjectType)
+WDecay_Object_Buffer.registerWithModData(WDecay_Vines.wallN_top, "WDecay_Cleanable", "vine", WDecay_Object_Buffer_Types.IsoObjectType)
+WDecay_Object_Buffer.registerWithModData(WDecay_Vines.wallN_low, "WDecay_Cleanable", "vine", WDecay_Object_Buffer_Types.IsoObjectType)
+WDecay_Object_Buffer.registerWithModData(WDecay_Vines.wallNW, "WDecay_Cleanable", "vine", WDecay_Object_Buffer_Types.IsoObjectType)
+WDecay_Object_Buffer.registerWithModData(WDecay_Vines.wallNW_top, "WDecay_Cleanable", "vine", WDecay_Object_Buffer_Types.IsoObjectType)
+WDecay_Object_Buffer.registerWithModData(WDecay_Vines.wallNW_low, "WDecay_Cleanable", "vine", WDecay_Object_Buffer_Types.IsoObjectType)
 
 function WDecay_Vines.getRandomWallW()
     if #WDecay_Vines.wallW == 0 then

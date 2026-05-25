@@ -1,3 +1,5 @@
+local WDecay_Object_Buffer = require("WDecay_Object_Buffer")
+
 local randomizer = newrandom()
 randomizer:seed(ZombRand(1, 2147483647))
 
@@ -60,47 +62,18 @@ local function LoadGridsquare(square, checkResult, level)
         local randomTreeSprite = WDecay_Trees.getRandomTreeSprite()
 
         if randomTreeSprite then
-            local newTree = IsoTree.new(square, getSprite(randomTreeSprite))
+            local newTree = WDecay_Object_Buffer.getObject(randomTreeSprite)
+            newTree:setSquare(square)
+            square:AddSpecialObject(newTree)
 
-            if newTree then
-                square:AddSpecialObject(newTree)
-
-                local attachedSprites = ArrayList.new()
-                newTree:setAttachedAnimSprite(attachedSprites)
-
-                local treeSprite = newTree:getSprite()
-                if treeSprite then
-                    local treeSpriteName = treeSprite:getName()
-
-                    local foliageIndex = WDecay_Trees.getRandomFoliageIndex()
-
-                    if foliageIndex then
-                        local foliageSpriteName = WDecay_Trees.getFoliageSpriteName(treeSpriteName, foliageIndex)
-
-                        if foliageSpriteName then
-                            local foliageSprite = getSprite(foliageSpriteName)
-
-                            if foliageSprite then
-                                attachedSprites:add(foliageSprite:newInstance())
-                            end
-                        end
-                    end
-                end
-
-                local treeModData = newTree:getModData()
-                if treeModData then
-                    treeModData["WDecay_Tree"] = true
-                    treeModData["WDecay_Cleanable"] = "tree"
-                end
-
-                newTree:transmitCompleteItemToClients()
-                local sqModData = square:getModData()
-                if sqModData then
-                    sqModData["WDecay_HasTree"] = true
-                end
-
-                return true
+            newTree:transmitCompleteItemToClients()
+            local sqModData = square:getModData()
+            if sqModData then
+                sqModData["WDecay_HasTree"] = true
             end
+
+            return true
+
         end
     end
 

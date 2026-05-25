@@ -60,7 +60,7 @@ WDecay_Trash.trashSprites = {
     "trash_01_51"
 }
 
-WDecay_Object_Buffer.registerWithModData(WDecay_Trash.trashSprites, "WDecay_Cleanable", "trash")
+WDecay_Object_Buffer.registerWithModData(WDecay_Trash.trashSprites, "WDecay_Cleanable", "trash", WDecay_Object_Buffer_Types.IsoObjectType)
 
 WDecay_Trash.customName = {
     ["trash_01_0"] = "Trash",
