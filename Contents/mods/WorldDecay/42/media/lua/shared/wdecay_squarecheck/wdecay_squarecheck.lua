@@ -51,10 +51,27 @@ local naturalTiles = {
 local naturalTilesSet = {}
 for _, v in ipairs(naturalTiles) do naturalTilesSet[v] = true end
 
+local IS_WATER = IsoFlagType.water
+local IS_CLIMB_SHEET_TOP_W = IsoFlagType.climbSheetTopW
+local IS_CLIMB_SHEET_TOP_N = IsoFlagType.climbSheetTopN
+local IS_CLIMB_SHEET_TOP_E = IsoFlagType.climbSheetTopE
+local IS_CLIMB_SHEET_TOP_S = IsoFlagType.climbSheetTopS
+local IS_CLIMB_SHEET_W = IsoFlagType.climbSheetW
+local IS_CLIMB_SHEET_N = IsoFlagType.climbSheetN
+local IS_CLIMB_SHEET_E = IsoFlagType.climbSheetE
+local IS_CLIMB_SHEET_S = IsoFlagType.climbSheetS
+local IS_SOLID = IsoFlagType.solid
+local IS_SOLID_TRANS = IsoFlagType.solidtrans
+local IS_SOLID_FLOOR = IsoFlagType.solidfloor
+local IS_DOOR_WALL_W = IsoFlagType.DoorWallW
+local IS_DOOR_WALL_N = IsoFlagType.DoorWallN
+local IS_COLLIDE_W = IsoFlagType.collideW
+local IS_COLLIDE_N = IsoFlagType.collideN
+
 function WDecay_SquareCheck.isWater(square)
     if not square then return false end
 
-    return square:getProperties():has(IsoFlagType.water)
+    return square:getProperties():has(IS_WATER)
 end
 
 function WDecay_SquareCheck.checkWater(square)
@@ -113,14 +130,14 @@ function WDecay_SquareCheck.hasLadderOrRope(square)
     local props = square:getProperties()
     if not props then return false end
 
-    return props:has(IsoFlagType.climbSheetTopW) or
-        props:has(IsoFlagType.climbSheetTopN) or
-        props:has(IsoFlagType.climbSheetTopE) or
-        props:has(IsoFlagType.climbSheetTopS) or
-        props:has(IsoFlagType.climbSheetW) or
-        props:has(IsoFlagType.climbSheetN) or
-        props:has(IsoFlagType.climbSheetE) or
-        props:has(IsoFlagType.climbSheetS)
+    return props:has(IS_CLIMB_SHEET_TOP_W) or
+        props:has(IS_CLIMB_SHEET_TOP_N) or
+        props:has(IS_CLIMB_SHEET_TOP_E) or
+        props:has(IS_CLIMB_SHEET_TOP_S) or
+        props:has(IS_CLIMB_SHEET_W) or
+        props:has(IS_CLIMB_SHEET_N) or
+        props:has(IS_CLIMB_SHEET_E) or
+        props:has(IS_CLIMB_SHEET_S)
 end
 
 function WDecay_SquareCheck.checkSquare(square)
@@ -300,19 +317,19 @@ function WDecay_SquareCheck.isPhysicsSaturated(square)
     if not props then return true end
 
     local count = 0
-    if props:has(IsoFlagType.solid) then count = count + 1 end
+    if props:has(IS_SOLID) then count = count + 1 end
 
-    if props:has(IsoFlagType.solidtrans) then count = count + 1 end
+    if props:has(IS_SOLIDtrans) then count = count + 1 end
 
-    if props:has(IsoFlagType.solidfloor) then count = count + 1 end
+    if props:has(IS_SOLIDfloor) then count = count + 1 end
 
-    if props:has(IsoFlagType.DoorWallW) then count = count + 1 end
+    if props:has(IS_DOOR_WALL_W) then count = count + 1 end
 
-    if props:has(IsoFlagType.DoorWallN) then count = count + 1 end
+    if props:has(IS_DOOR_WALL_N) then count = count + 1 end
 
-    if props:has(IsoFlagType.collideW) then count = count + 1 end
+    if props:has(IS_COLLIDE_W) then count = count + 1 end
 
-    if props:has(IsoFlagType.collideN) then count = count + 1 end
+    if props:has(IS_COLLIDE_N) then count = count + 1 end
 
     return count >= 4
 end
@@ -331,7 +348,7 @@ function WDecay_SquareCheck.checkPlacement(square)
         hasFurniture = false
     }
     r.objects = square:getObjects()
-    r.water = square:getProperties():has(IsoFlagType.water)
+    r.water = square:getProperties():has(IS_WATER)
     if r.water then return r end
 
     r.room = square:getRoom()

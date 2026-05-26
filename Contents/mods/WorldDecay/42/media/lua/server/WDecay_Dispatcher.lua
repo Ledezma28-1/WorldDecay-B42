@@ -84,7 +84,8 @@ local function dispatchGenerators(square, checkResult, level)
 
     if not checkResult or (not checkResult.hasWalls and not checkResult.hasWindows
         and not checkResult.isRoad and not checkResult.room
-        and not checkResult.hasFences and not checkResult.hasRoof) then
+        and not checkResult.hasFences and not checkResult.hasRoof
+        and checkResult.water) then
         return
     end
 
@@ -97,46 +98,39 @@ local function dispatchGenerators(square, checkResult, level)
             if WDecay_DebugCountModifier then WDecay_DebugCountModifier(1) end
         end
 
-        if checkResult.isRoad then
+        if checkResult.room then
             local fn = mg[2]
             if fn then fn(square, checkResult, level) end
 
             if WDecay_DebugCountModifier then WDecay_DebugCountModifier(2) end
         end
 
-        if checkResult.room then
+        if checkResult.hasFences then
             local fn = mg[3]
             if fn then fn(square, checkResult, level) end
 
             if WDecay_DebugCountModifier then WDecay_DebugCountModifier(3) end
         end
 
-        if checkResult.hasFences then
+        if checkResult.hasWalls or checkResult.hasFences then
             local fn = mg[4]
             if fn then fn(square, checkResult, level) end
 
             if WDecay_DebugCountModifier then WDecay_DebugCountModifier(4) end
         end
 
-        if checkResult.room then
+        if checkResult.hasWalls or checkResult.hasFences then
             local fn = mg[5]
             if fn then fn(square, checkResult, level) end
 
             if WDecay_DebugCountModifier then WDecay_DebugCountModifier(5) end
         end
 
-        if checkResult.hasWalls or checkResult.hasFences then
+        if checkResult.room then
             local fn = mg[6]
             if fn then fn(square, checkResult, level) end
 
             if WDecay_DebugCountModifier then WDecay_DebugCountModifier(6) end
-        end
-
-        if checkResult.room then
-            local fn = mg[7]
-            if fn then fn(square, checkResult, level) end
-
-            if WDecay_DebugCountModifier then WDecay_DebugCountModifier(7) end
         end
 
         if checkResult.hasRoof then

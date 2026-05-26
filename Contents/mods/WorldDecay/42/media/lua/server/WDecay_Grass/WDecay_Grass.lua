@@ -6,32 +6,22 @@ randomizer:seed(ZombRand(1, 2147483647))
 local WDecay_Grass = {}
 
 WDecay_Grass.custom_grass = {
-    "d_generic_1_1",
-    "d_generic_1_2",
-    "d_generic_1_7",
-    "d_generic_1_8",
-    "d_generic_1_11",
-    "d_generic_1_12",
-    "d_generic_1_13",
-    "d_generic_1_14",
-    "d_generic_1_15",
-    "d_generic_1_17",
-    "d_generic_1_18",
-    "d_generic_1_23",
-    "d_generic_1_24",
-    "d_generic_1_25",
-    "d_generic_1_26",
-    "d_generic_1_27",
-    "d_generic_1_36",
-    "d_generic_1_37",
-    "d_generic_1_40",
-    "d_generic_1_41",
-    "d_generic_1_42",
-    "d_generic_1_43",
-    "d_generic_1_44",
-    "d_generic_1_45",
-    "d_generic_1_46",
-    "d_generic_1_47"
+    "d_plants_1_1",
+    "d_plants_1_2",
+    "d_plants_1_3",
+    "d_plants_1_4",
+    "d_plants_1_5",
+    "d_plants_1_6",
+    "d_plants_1_7",
+    "d_plants_1_8",
+    "d_plants_1_17",
+    "d_plants_1_18",
+    "d_plants_1_19",
+    "d_plants_1_20",
+    "d_plants_1_21",
+    "d_plants_1_22",
+    "d_plants_1_23",
+    "d_plants_1_24"
 }
 
 WDecay_Grass.vanilla_grass = {

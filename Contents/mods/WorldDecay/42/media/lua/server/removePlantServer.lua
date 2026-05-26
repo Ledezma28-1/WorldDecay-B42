@@ -10,6 +10,9 @@ local function isCleanDebug()
     return cachedDebugMode
 end
 
+local IS_CAN_BE_CUT = IsoFlagType.canBeCut
+local IS_CAN_BE_REMOVED = IsoFlagType.canBeRemoved
+
 local function cleanLog(msg)
     if isCleanDebug() then
         print("[WDecay-Clean] " .. msg)
@@ -52,7 +55,7 @@ function ISRemovePlantCursor:getRemovableObject(square)
                     local parentSprite = sprite:getParentSprite()
 
                     if self.removeType == "bush" and parentSprite and parentSprite:getProperties()
-                        and parentSprite:getProperties():has(IsoFlagType.canBeCut) then
+                        and parentSprite:getProperties():has(IS_CAN_BE_CUT) then
                         cleanLog("getRemovableObject MATCH bush attached anim, parent=" .. tostring(parentSprite:getName()) .. " at " .. square:getX() .. "," .. square:getY() .. "," .. square:getZ())
                         return object
                     end
@@ -60,8 +63,8 @@ function ISRemovePlantCursor:getRemovableObject(square)
                     if self.removeType == "grass" and parentSprite then
                         local props = parentSprite:getProperties()
                         local hasFlag = false
-                        if props and IsoFlagType.canBeRemoved then
-                            hasFlag = props:has(IsoFlagType.canBeRemoved)
+                        if props and IS_CAN_BE_REMOVED then
+                            hasFlag = props:has(IS_CAN_BE_REMOVED)
                         end
 
                         if hasFlag and (not luautils.stringStarts(parentSprite:getName(), "f_wallvines_")) then

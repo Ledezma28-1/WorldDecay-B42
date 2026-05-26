@@ -1,7 +1,7 @@
-local WDecay_Object_Buffer = require("WDecay_Object_Buffer")
-
 local randomizer = newrandom()
 randomizer:seed(ZombRand(1, 2147483647))
+
+local DEFAULT_SPRITE_ID = 20000000
 
 local WDecay_Vines = require('WDecay_Vines/WDecay_Vines')
 
@@ -36,6 +36,28 @@ local function isVinesExteriorOnly()
     return cachedVinesExteriorOnly
 end
 
+local cachedVinesOnWalls = nil
+local function isVinesOnWalls()
+    if cachedVinesOnWalls == nil then
+        local opt = getSandboxOptions():getOptionByName('WDecay.vinesOnWalls')
+        cachedVinesOnWalls = opt and opt:getValue()
+        if cachedVinesOnWalls == nil then cachedVinesOnWalls = true end
+    end
+
+    return cachedVinesOnWalls
+end
+
+local cachedVinesOnFences = nil
+local function isVinesOnFences()
+    if cachedVinesOnFences == nil then
+        local opt = getSandboxOptions():getOptionByName('WDecay.vinesOnFences')
+        cachedVinesOnFences = opt and opt:getValue()
+        if cachedVinesOnFences == nil then cachedVinesOnFences = true end
+    end
+
+    return cachedVinesOnFences
+end
+
 local function isWallTile(textureName)
     if not textureName then return false end
 
@@ -50,12 +72,6 @@ local function isExteriorWall(textureName)
 
     return luautils.stringStarts(textureName, "walls_exterior_") and
         not luautils.stringStarts(textureName, "walls_exterior_roofs_")
-end
-
-local function isInteriorWall(textureName)
-    if not textureName then return false end
-
-    return luautils.stringStarts(textureName, "walls_interior_")
 end
 
 local function isFenceTile(textureName)
@@ -80,19 +96,120 @@ local function isLowFence(sprite)
     return sprite:getProperties():has('FenceTypeLow')
 end
 
+local function attachVineSprite(obj, spriteName)
+    if not obj or not spriteName then return end
+
+    local vineSprite = getSprite(spriteName)
+    if not vineSprite then return end
+
+    if vineSprite:getID() == DEFAULT_SPRITE_ID then return end
+
+    local attachedSprites = obj:getAttachedAnimSprite()
+    if not attachedSprites then
+        attachedSprites = ArrayList.new()
+        obj:setAttachedAnimSprite(attachedSprites)
+    end
+
+    local alreadyAttached = false
+    for n = 0, attachedSprites:size() - 1 do
+        local existing = attachedSprites:get(n)
+        if existing and existing:getParentSprite() and existing:getParentSprite():getID() == vineSprite:getID() then
+            alreadyAttached = true
+            break
+        end
+    end
+
+    if not alreadyAttached then
+        attachedSprites:add(vineSprite:newInstance())
+        local modData = obj:getModData()
+        if modData then
+            modData["WDecay_Vines"] = "placed"
+            modData["WDecay_Cleanable"] = "vine"
+        end
+
+        obj:transmitCompleteItemToClients()
+    end
+end
+
+local function processWallObject(obj)
+    if not obj then return end
+
+    local modData = obj:getModData()
+    if modData and modData["WDecay_Vines"] == "placed" then return end
+
+    local sprite = obj:getSprite()
+    if not sprite then return end
+
+    local textureName = obj:getTextureName()
+    if not textureName then return end
+
+    if not isWallTile(textureName) then return end
+
+    if luautils.stringStarts(textureName, "walls_detailling") then return end
+
+    local isLowFenceObj = isLowFence(sprite)
+
+    if isVinesOnWalls() then
+        if hasWallProperty(sprite, "WallNW") or hasWallProperty(sprite, "attachedNW") then
+            local randomOverlay = WDecay_Vines.getRandomWallNW()
+            if isLowFenceObj then
+                randomOverlay = WDecay_Vines.getRandomWallNWLow()
+            end
+
+            if randomOverlay then
+                attachVineSprite(obj, randomOverlay)
+            end
+        end
+
+        if hasWallProperty(sprite, "WallW") or hasWallProperty(sprite, "WindowW") or
+            hasWallProperty(sprite, "doorW") or hasWallProperty(sprite, "DoorWallW") or
+            hasWallProperty(sprite, "attachedW") or hasWallProperty(sprite, "WallWTrans") or
+            hasWallProperty(sprite, "attachedE") then
+
+            local randomOverlay = WDecay_Vines.getRandomWallW()
+            if isLowFenceObj then
+                randomOverlay = WDecay_Vines.getRandomWallWLow()
+            end
+
+            if randomOverlay then
+                attachVineSprite(obj, randomOverlay)
+            end
+        end
+
+        if hasWallProperty(sprite, "WallN") or hasWallProperty(sprite, "WindowN") or
+            hasWallProperty(sprite, "doorN") or hasWallProperty(sprite, "DoorWallN") or
+            hasWallProperty(sprite, "attachedN") or hasWallProperty(sprite, "attachedS") then
+            local randomOverlay = WDecay_Vines.getRandomWallN()
+            if isLowFenceObj then
+                randomOverlay = WDecay_Vines.getRandomWallNLow()
+            end
+
+            if randomOverlay then
+                attachVineSprite(obj, randomOverlay)
+            end
+        end
+    end
+
+    if isVinesOnFences() and isFenceTile(textureName) then
+        local randomOverlay = WDecay_Vines.getRandomWallW()
+        if isLowFenceObj then
+            randomOverlay = WDecay_Vines.getRandomWallWLow()
+        end
+
+        if randomOverlay then
+            attachVineSprite(obj, randomOverlay)
+        end
+    end
+end
+
 local function LoadGridsquare(square, checkResult, level)
     if not square then return end
 
-    local modData = square:getModData()
-    if not modData then return end
-
-    if modData["WDecay_Vines"] then return end
-
-    modData["WDecay_Vines"] = true
+    if not checkResult then return end
 
     if not getMultiFloorVines() and level ~= 0 then return end
 
-    if isVinesExteriorOnly() and square:getRoom() then return end
+    if isVinesExteriorOnly() and checkResult and checkResult.room then return end
 
     if getVinePercentage() < randomizer:random(1, 101) then
         return
@@ -106,66 +223,7 @@ local function LoadGridsquare(square, checkResult, level)
     for i = 0, objectCount - 1 do
         local obj = objects:get(i)
         if obj then
-            local sprite = obj:getSprite()
-            if sprite then
-                local textureName = obj:getTextureName()
-
-                if textureName and isWallTile(textureName) then
-                    if not luautils.stringStarts(textureName, "walls_detailling") then
-
-                        local isLowFenceObj = isLowFence(sprite)
-
-
-                        if hasWallProperty(sprite, "WallNW") then
-                            local randomOverlay = WDecay_Vines.getRandomWallNW()
-
-                            if isLowFenceObj then
-                                randomOverlay = WDecay_Vines.getRandomWallNWLow()
-                            end
-
-                            if randomOverlay then
-                                local obj2 = WDecay_Object_Buffer.getObject(randomOverlay)
-                                obj2:setSquare(square)
-                                square:AddTileObject(obj2)
-                                obj2:transmitCompleteItemToClients()
-                            end
-                        end
-
-                        if hasWallProperty(sprite, "WallW") or hasWallProperty(sprite, "WindowW") or
-                            hasWallProperty(sprite, "doorW") or hasWallProperty(sprite, "DoorWallW") or
-                            hasWallProperty(sprite, "attachedW") or hasWallProperty(sprite, "WallWTrans") then
-
-                            local randomOverlay = WDecay_Vines.getRandomWallW()
-
-                            if isLowFenceObj then
-                                randomOverlay = WDecay_Vines.getRandomWallWLow()
-                            end
-
-                            if randomOverlay then
-                                local obj2 = WDecay_Object_Buffer.getObject(randomOverlay)
-                                obj2:setSquare(square)
-                                square:AddTileObject(obj2)
-                                obj2:transmitCompleteItemToClients()
-                            end
-                        end
-
-                        if hasWallProperty(sprite, "WallN") or hasWallProperty(sprite, "WindowN") then
-                            local randomOverlay = WDecay_Vines.getRandomWallN()
-
-                            if isLowFenceObj then
-                                randomOverlay = WDecay_Vines.getRandomWallNLow()
-                            end
-
-                            if randomOverlay then
-                                local obj2 = WDecay_Object_Buffer.getObject(randomOverlay)
-                                obj2:setSquare(square)
-                                square:AddTileObject(obj2)
-                                obj2:transmitCompleteItemToClients()
-                            end
-                        end
-                    end
-                end
-            end
+            processWallObject(obj)
         end
     end
 end

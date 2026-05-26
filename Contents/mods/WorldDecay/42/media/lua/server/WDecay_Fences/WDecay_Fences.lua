@@ -1,6 +1,9 @@
 local randomizer = newrandom()
 randomizer:seed(ZombRand(1, 2147483647))
 
+local IS_COLLIDE_N = IsoFlagType.collideN
+local IS_COLLIDE_W = IsoFlagType.collideW
+
 local WDecay_Fences = {}
 
 function WDecay_Fences.isBreakableFence(obj)
@@ -42,13 +45,13 @@ function WDecay_Fences.determineDirection(obj)
     local properties = sprite:getProperties()
     if not properties then return nil end
 
-    if properties:has(IsoFlagType.collideN) then
+    if properties:has(IS_COLLIDE_N) then
         if randomizer:random(0, 2) == 0 then
             return IsoDirections.N
         else
             return IsoDirections.S
         end
-    elseif properties:has(IsoFlagType.collideW) then
+    elseif properties:has(IS_COLLIDE_W) then
         if randomizer:random(0, 2) == 0 then
             return IsoDirections.W
         else
