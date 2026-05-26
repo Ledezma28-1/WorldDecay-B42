@@ -67,6 +67,9 @@ local IS_DOOR_WALL_W = IsoFlagType.DoorWallW
 local IS_DOOR_WALL_N = IsoFlagType.DoorWallN
 local IS_COLLIDE_W = IsoFlagType.collideW
 local IS_COLLIDE_N = IsoFlagType.collideN
+local ISO_OBJECT_CLASS = IsoObject.class
+local ISO_WINDOW_CLASS = IsoWindow.class
+local ISO_WINDOW_FRAME = IsoWindowFrame.class
 
 function WDecay_SquareCheck.isWater(square)
     if not square then return false end
@@ -87,7 +90,7 @@ function WDecay_SquareCheck.hasRoadTiles(square)
     if objects then
         for i = 0, objects:size() - 1 do
             local obj = objects:get(i)
-            if obj:getClass() == IsoObject.class and obj:getSprite() and obj:getSprite():getName() then
+            if obj:getClass() == ISO_OBJECT_CLASS and obj:getSprite() and obj:getSprite():getName() then
                 if roadTilesSet[obj:getSprite():getName()] then
                     return true
                 end
@@ -109,7 +112,7 @@ function WDecay_SquareCheck.hasNaturalTiles(square)
     if objects then
         for i = 0, objects:size() - 1 do
             local obj = objects:get(i)
-            if obj:getClass() == IsoObject.class and obj:getSprite() and obj:getSprite():getName() then
+            if obj:getClass() == ISO_OBJECT_CLASS and obj:getSprite() and obj:getSprite():getName() then
                 if naturalTilesSet[obj:getSprite():getName()] then
                     return true
                 end
@@ -158,7 +161,7 @@ function WDecay_SquareCheck.checkSquare(square)
     if objects then
         for i = 0, objects:size() - 1 do
             local obj = objects:get(i)
-            if obj:getClass() == IsoObject.class and obj:getSprite() and
+            if obj:getClass() == ISO_OBJECT_CLASS and obj:getSprite() and
                 obj:getSprite():getProperties() and
                 obj:getSprite():getProperties():isTable() and
                 obj:getSprite():getProperties():isTableTop() then
@@ -206,7 +209,7 @@ function WDecay_SquareCheck.checkSquareForTrees(square)
     if objects then
         for i = 0, objects:size() - 1 do
             local obj = objects:get(i)
-            if obj:getClass() == IsoObject.class and obj:getSprite() and
+            if obj:getClass() == ISO_OBJECT_CLASS and obj:getSprite() and
                 obj:getSprite():getProperties() and
                 obj:getSprite():getProperties():isTable() and
                 obj:getSprite():getProperties():isTableTop() then
@@ -280,7 +283,7 @@ function WDecay_SquareCheck.hasRoadTilesFast(square, objects)
     if objects then
         for i = 0, objects:size() - 1 do
             local obj = objects:get(i)
-            if obj:getClass() == IsoObject.class and obj:getSprite() and obj:getSprite():getName() then
+            if obj:getClass() == ISO_OBJECT_CLASS and obj:getSprite() and obj:getSprite():getName() then
                 if roadTilesSet[obj:getSprite():getName()] then
                     return true
                 end
@@ -299,7 +302,7 @@ function WDecay_SquareCheck.hasNaturalTilesFast(square, objects)
     if objects then
         for i = 0, objects:size() - 1 do
             local obj = objects:get(i)
-            if obj:getClass() == IsoObject.class and obj:getSprite() and obj:getSprite():getName() then
+            if obj:getClass() == ISO_OBJECT_CLASS and obj:getSprite() and obj:getSprite():getName() then
                 if naturalTilesSet[obj:getSprite():getName()] then
                     return true
                 end
@@ -319,9 +322,9 @@ function WDecay_SquareCheck.isPhysicsSaturated(square)
     local count = 0
     if props:has(IS_SOLID) then count = count + 1 end
 
-    if props:has(IS_SOLIDtrans) then count = count + 1 end
+    if props:has(IS_SOLID_TRANS) then count = count + 1 end
 
-    if props:has(IS_SOLIDfloor) then count = count + 1 end
+    if props:has(IS_SOLID_FLOOR) then count = count + 1 end
 
     if props:has(IS_DOOR_WALL_W) then count = count + 1 end
 
@@ -376,7 +379,9 @@ function WDecay_SquareCheck.checkPlacement(square)
                         end
                     end
 
-                    if obj:getClass() == IsoWindow.class or instanceof(obj, "IsoWindowFrame") then
+                    local objClazz = obj:getClass()
+
+                    if objClazz == ISO_WINDOW_CLASS or objClazz == ISO_WINDOW_FRAME then
                         r.hasWindows = true
                     end
 
@@ -417,7 +422,7 @@ function WDecay_SquareCheck.checkPlacement(square)
     if r.objects then
         for i = 0, r.objects:size() - 1 do
             local obj = r.objects:get(i)
-            if obj:getClass() == IsoObject.class and obj:getSprite() and
+            if obj:getClass() == ISO_OBJECT_CLASS and obj:getSprite() and
                 obj:getSprite():getProperties() and
                 obj:getSprite():getProperties():isTable() and
                 obj:getSprite():getProperties():isTableTop() then
@@ -519,7 +524,9 @@ function WDecay_SquareCheck.checkPlacement(square)
                     end
                 end
 
-                if obj:getClass() == IsoWindow.class or instanceof(obj, "IsoWindowFrame") then
+                local objClazz = obj:getClass() 
+
+                if objClazz == ISO_WINDOW_CLASS or objClazz == objClazz == ISO_WINDOW_FRAME then
                     r.hasWindows = true
                 end
 
