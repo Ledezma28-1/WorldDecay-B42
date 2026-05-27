@@ -34,8 +34,6 @@ local function LoadGridsquare(square, checkResult, level)
 
     if level ~= 0 then return end
 
-    if checkResult.water then return end
-
     local objects = checkResult.objects
     if not objects or objects:size() == 0 then return end
 

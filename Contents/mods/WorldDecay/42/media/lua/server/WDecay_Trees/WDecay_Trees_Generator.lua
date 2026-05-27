@@ -25,36 +25,18 @@ local function getTreePercentageOnRoad()
     return cachedTreePercentageOnRoad
 end
 
-local function hasNaturalFloor(square, objects)
-    if not square then return false end
-
-    if not objects then return false end
-
-    for i = 0, objects:size() - 1 do
-        local obj = objects:get(i)
-        if obj and obj:getSprite() then
-            local spriteName = obj:getSprite():getName()
-            if spriteName and luautils.stringStarts(spriteName, "blends_natural") then
-                return true
-            end
-        end
-    end
-
-    return false
-end
-
 local function LoadGridsquare(square, checkResult, level)
     if not square then return end
 
-    if not checkResult or not checkResult.passed then return end
+    if not checkResult then return end
 
-    if not checkResult.isSolidFloor then return end
+    if not checkResult.isSolid then return end
 
     if level ~= 0 then return end
 
     local isRoad = checkResult.isRoad
 
-    if not isRoad and not hasNaturalFloor(square, checkResult.objects) then return end
+    if not isRoad and not checkResult.isNatural then return end
 
     local percentage = isRoad and getTreePercentageOnRoad() or getTreePercentage()
 

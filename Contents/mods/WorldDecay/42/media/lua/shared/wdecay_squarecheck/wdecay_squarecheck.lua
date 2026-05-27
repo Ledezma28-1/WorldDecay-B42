@@ -1,5 +1,9 @@
 local WDecay_SquareCheck = {}
 
+--package zombie.iso.zones;
+local ZONE_TOWN = "TownZone"
+local ZONE_TRAILER_PARK = "TrailerPark"
+
 local roadTiles = {
     "blends_street_01_0",
     "blends_street_01_5",
@@ -51,297 +55,26 @@ local naturalTiles = {
 local naturalTilesSet = {}
 for _, v in ipairs(naturalTiles) do naturalTilesSet[v] = true end
 
-local IS_WATER = IsoFlagType.water
-local IS_CLIMB_SHEET_TOP_W = IsoFlagType.climbSheetTopW
-local IS_CLIMB_SHEET_TOP_N = IsoFlagType.climbSheetTopN
-local IS_CLIMB_SHEET_TOP_E = IsoFlagType.climbSheetTopE
-local IS_CLIMB_SHEET_TOP_S = IsoFlagType.climbSheetTopS
-local IS_CLIMB_SHEET_W = IsoFlagType.climbSheetW
-local IS_CLIMB_SHEET_N = IsoFlagType.climbSheetN
-local IS_CLIMB_SHEET_E = IsoFlagType.climbSheetE
-local IS_CLIMB_SHEET_S = IsoFlagType.climbSheetS
-local IS_SOLID = IsoFlagType.solid
-local IS_SOLID_TRANS = IsoFlagType.solidtrans
-local IS_SOLID_FLOOR = IsoFlagType.solidfloor
-local IS_DOOR_WALL_W = IsoFlagType.DoorWallW
-local IS_DOOR_WALL_N = IsoFlagType.DoorWallN
-local IS_COLLIDE_W = IsoFlagType.collideW
-local IS_COLLIDE_N = IsoFlagType.collideN
 local ISO_OBJECT_CLASS = IsoObject.class
-local ISO_WINDOW_CLASS = IsoWindow.class
-local ISO_WINDOW_FRAME = IsoWindowFrame.class
 
-function WDecay_SquareCheck.isWater(square)
-    if not square then return false end
-
-    return square:getProperties():has(IS_WATER)
-end
-
-function WDecay_SquareCheck.checkWater(square)
-    if not square then return false end
-
-    return not WDecay_SquareCheck.isWater(square)
-end
-
-function WDecay_SquareCheck.hasRoadTiles(square)
-    if not square then return false end
-
-    local objects = square:getObjects()
-    if objects then
-        for i = 0, objects:size() - 1 do
-            local obj = objects:get(i)
-            if obj:getClass() == ISO_OBJECT_CLASS and obj:getSprite() and obj:getSprite():getName() then
-                if roadTilesSet[obj:getSprite():getName()] then
-                    return true
-                end
-            end
-        end
+local function hasRoadTilesFast(spriteName)
+    if roadTilesSet[spriteName] then
+        return true
+    else
+        return false
     end
 
-    return false
 end
 
-function WDecay_SquareCheck.checkRoad(square)
-    return WDecay_SquareCheck.hasRoadTiles(square)
+local function isPhysicsSaturated(props)
+    return props:getFlagsList():size() >= 5
 end
 
-function WDecay_SquareCheck.hasNaturalTiles(square)
-    if not square then return false end
-
-    local objects = square:getObjects()
-    if objects then
-        for i = 0, objects:size() - 1 do
-            local obj = objects:get(i)
-            if obj:getClass() == ISO_OBJECT_CLASS and obj:getSprite() and obj:getSprite():getName() then
-                if naturalTilesSet[obj:getSprite():getName()] then
-                    return true
-                end
-            end
-        end
-    end
-
-    return false
-end
-
-function WDecay_SquareCheck.checkNatural(square)
-    return WDecay_SquareCheck.hasNaturalTiles(square)
-end
-
-function WDecay_SquareCheck.hasLadderOrRope(square)
-    if not square then return false end
-
-    local props = square:getProperties()
-    if not props then return false end
-
-    return props:has(IS_CLIMB_SHEET_TOP_W) or
-        props:has(IS_CLIMB_SHEET_TOP_N) or
-        props:has(IS_CLIMB_SHEET_TOP_E) or
-        props:has(IS_CLIMB_SHEET_TOP_S) or
-        props:has(IS_CLIMB_SHEET_W) or
-        props:has(IS_CLIMB_SHEET_N) or
-        props:has(IS_CLIMB_SHEET_E) or
-        props:has(IS_CLIMB_SHEET_S)
-end
-
-function WDecay_SquareCheck.checkSquare(square)
-    if not square then return false end
-
-    if WDecay_SquareCheck.isWater(square) then return false end
-
-    if square:getRoom() then return false end
-
-    if square:HasStairs() then return false end
-
-    if not square:hasFloor(true) then return false end
-
-    local door = square:getDoor(true) or square:getDoor(false) or square:haveDoor()
-    if door then return false end
-
-    local objects = square:getObjects()
-    if objects then
-        for i = 0, objects:size() - 1 do
-            local obj = objects:get(i)
-            if obj:getClass() == ISO_OBJECT_CLASS and obj:getSprite() and
-                obj:getSprite():getProperties() and
-                obj:getSprite():getProperties():isTable() and
-                obj:getSprite():getProperties():isTableTop() then
-                return false
-            end
-        end
-    end
-
-    if WDecay_SquareCheck.hasLadderOrRope(square) then return false end
-
-    if square:isSolid() or square:isSolidTrans() then return false end
-
-    local cell = square:getCell()
-    local x, y, z = square:getX(), square:getY(), square:getZ()
-    local adjacent = cell:getGridSquare(x - 1, y, z)
-    if adjacent and square:getDoorFrameTo(adjacent) then return false end
-
-    adjacent = cell:getGridSquare(x + 1, y, z)
-    if adjacent and square:getDoorFrameTo(adjacent) then return false end
-
-    adjacent = cell:getGridSquare(x, y - 1, z)
-    if adjacent and square:getDoorFrameTo(adjacent) then return false end
-
-    adjacent = cell:getGridSquare(x, y + 1, z)
-    if adjacent and square:getDoorFrameTo(adjacent) then return false end
-
-    return true
-end
-
-function WDecay_SquareCheck.checkSquareForTrees(square)
-    if not square then return false end
-
-    if WDecay_SquareCheck.isWater(square) then return false end
-
-    if square:getRoom() then return false end
-
-    if square:HasStairs() then return false end
-
-    if not square:hasFloor(true) then return false end
-
-    local door = square:getDoor(true) or square:getDoor(false) or square:haveDoor()
-    if door then return false end
-
-    local objects = square:getObjects()
-    if objects then
-        for i = 0, objects:size() - 1 do
-            local obj = objects:get(i)
-            if obj:getClass() == ISO_OBJECT_CLASS and obj:getSprite() and
-                obj:getSprite():getProperties() and
-                obj:getSprite():getProperties():isTable() and
-                obj:getSprite():getProperties():isTableTop() then
-                return false
-            end
-        end
-    end
-
-    if WDecay_SquareCheck.hasLadderOrRope(square) then return false end
-
-    if square:isSolid() or square:isSolidTrans() then return false end
-
-    local cell = square:getCell()
-    local x, y, z = square:getX(), square:getY(), square:getZ()
-    local adjacent = cell:getGridSquare(x - 1, y, z)
-    if adjacent and square:getDoorFrameTo(adjacent) then return false end
-
-    adjacent = cell:getGridSquare(x + 1, y, z)
-    if adjacent and square:getDoorFrameTo(adjacent) then return false end
-
-    adjacent = cell:getGridSquare(x, y - 1, z)
-    if adjacent and square:getDoorFrameTo(adjacent) then return false end
-
-    adjacent = cell:getGridSquare(x, y + 1, z)
-    if adjacent and square:getDoorFrameTo(adjacent) then return false end
-
-    if not square:isSolidFloor() then return false end
-
-    return true
-end
-
-function WDecay_SquareCheck.checkSquareForVehicles(square)
-    if not square then return false end
-
-    if WDecay_SquareCheck.isWater(square) then return false end
-
-    if not WDecay_SquareCheck.hasRoadTiles(square) then return false end
-
-    return true
-end
-
-function WDecay_SquareCheck.checkSquareForStories(square)
-    if not square then return false end
-
-    if WDecay_SquareCheck.isWater(square) then return false end
-
-    if not square:isSolidFloor() then return false end
-
-    if not WDecay_SquareCheck.hasNaturalTiles(square) then return false end
-
-    if WDecay_SquareCheck.hasRoadTiles(square) then return false end
-
-    return true
-end
-
-function WDecay_SquareCheck.checkSquareForBarricades(square)
-    if not square then return false end
-
-    if WDecay_SquareCheck.isWater(square) then return false end
-
-    if not square:hasFloor(true) then return false end
-
-    return true
-end
-
-function WDecay_SquareCheck.hasRoadTilesFast(square, objects)
-    if not square then return false end
-
-    if not objects then objects = square:getObjects() end
-
-    if objects then
-        for i = 0, objects:size() - 1 do
-            local obj = objects:get(i)
-            if obj:getClass() == ISO_OBJECT_CLASS and obj:getSprite() and obj:getSprite():getName() then
-                if roadTilesSet[obj:getSprite():getName()] then
-                    return true
-                end
-            end
-        end
-    end
-
-    return false
-end
-
-function WDecay_SquareCheck.hasNaturalTilesFast(square, objects)
-    if not square then return false end
-
-    if not objects then objects = square:getObjects() end
-
-    if objects then
-        for i = 0, objects:size() - 1 do
-            local obj = objects:get(i)
-            if obj:getClass() == ISO_OBJECT_CLASS and obj:getSprite() and obj:getSprite():getName() then
-                if naturalTilesSet[obj:getSprite():getName()] then
-                    return true
-                end
-            end
-        end
-    end
-
-    return false
-end
-
-function WDecay_SquareCheck.isPhysicsSaturated(square)
-    if not square then return true end
-
-    local props = square:getProperties()
-    if not props then return true end
-
-    local count = 0
-    if props:has(IS_SOLID) then count = count + 1 end
-
-    if props:has(IS_SOLID_TRANS) then count = count + 1 end
-
-    if props:has(IS_SOLID_FLOOR) then count = count + 1 end
-
-    if props:has(IS_DOOR_WALL_W) then count = count + 1 end
-
-    if props:has(IS_DOOR_WALL_N) then count = count + 1 end
-
-    if props:has(IS_COLLIDE_W) then count = count + 1 end
-
-    if props:has(IS_COLLIDE_N) then count = count + 1 end
-
-    return count >= 4
-end
-
-function WDecay_SquareCheck.checkPlacement(square)
+local function fastCheckPlacement(square, level)
     if not square then return nil end
 
     local r = {
-        water = false,
+        isGoodSquare = square:isGoodSquare(),
         room = nil,
         passed = false,
         tooManyPhysicsShapes = false,
@@ -350,217 +83,82 @@ function WDecay_SquareCheck.checkPlacement(square)
         isUrban = false,
         hasFurniture = false
     }
-    r.objects = square:getObjects()
-    r.water = square:getProperties():has(IS_WATER)
-    if r.water then return r end
 
-    r.room = square:getRoom()
-    if r.room then
-        r.hasWalls = false
-        r.hasFences = false
-        r.hasWindows = false
-        r.isUrban = true
-        if r.objects then
-            for i = 0, r.objects:size() - 1 do
-                local obj = r.objects:get(i)
-                if obj and obj:getSprite() then
-                    local sprite = obj:getSprite()
-                    local props = sprite:getProperties()
-                    if props then
-                        if props:has("WallN") or props:has("WallW") then
-                            r.hasWalls = true
-                        end
-                    end
+    if square and r.isGoodSquare then
+        r.objects = square:getObjects()
+        r.props = square:getProperties()
 
-                    local name = sprite:getName()
-                    if name then
-                        if luautils.stringStarts(name, "fencing_") then
-                            r.hasFences = true
-                        end
-                    end
+        r.hasDoorFrame = square:isDoorSquare()
+        if r.hasDoorFrame then return r end
 
-                    local objClazz = obj:getClass()
+        if r.props then
+            r.tooManyPhysicsShapes = isPhysicsSaturated(r.props)
+            if r.tooManyPhysicsShapes then return r end
 
-                    if objClazz == ISO_WINDOW_CLASS or objClazz == ISO_WINDOW_FRAME then
-                        r.hasWindows = true
-                    end
-
-                    if not r.hasFurniture then
-                        local texName = obj:getTextureName()
-                        if texName and luautils.stringStarts(texName, "fixtures_") then
-                            r.hasFurniture = true
-                        end
-                    end
-
-                    if r.hasWalls and r.hasFences and r.hasWindows and r.hasFurniture then break end
-                end
-            end
-        end
-
-        return r
-    end
-
-    if not square:hasFloor(true) then return r end
-
-    if square:getDoor(true) or square:getDoor(false) or square:haveDoor() then return r end
-
-    r.hasStairs = false
-    r.hasFloor = true
-    r.hasDoor = false
-    r.hasTable = false
-    r.hasLadder = false
-    r.isSolid = false
-    r.hasDoorFrame = false
-    r.isSolidFloor = false
-    r.isRoad = false
-    r.isNatural = false
-    r.hasWalls = false
-    r.hasFences = false
-    r.hasWindows = false
-    r.isUrban = false
-    r.hasFurniture = false
-    if r.objects then
-        for i = 0, r.objects:size() - 1 do
-            local obj = r.objects:get(i)
-            if obj:getClass() == ISO_OBJECT_CLASS and obj:getSprite() and
-                obj:getSprite():getProperties() and
-                obj:getSprite():getProperties():isTable() and
-                obj:getSprite():getProperties():isTableTop() then
+            if r.props:isTable() and r.props:isTableTop() then
                 r.hasTable = true
-                break
+                return r
             end
         end
-    end
 
-    if r.hasTable then return r end
+        r.room = square:getRoom()
 
-    r.hasLadder = WDecay_SquareCheck.hasLadderOrRope(square)
-    if r.hasLadder then return r end
+        if r.room then
+            r.hasWalls = square:isWallSquareNW()
+            r.hasFences = square:hasFence()
+            r.hasWindows = square:hasWindowOrWindowFrame()
+            r.isIndoor = true
+            r.isUrban = true
+        end
 
-    r.isSolid = square:isSolid() or square:isSolidTrans()
-    if r.isSolid then return r end
+        if r.objects then
+            local objCount = r.objects:size() - 1
 
-    local cell = square:getCell()
-    local x, y, z = square:getX(), square:getY(), square:getZ()
-    local adjacent = cell:getGridSquare(x - 1, y, z)
-    if adjacent and square:getDoorFrameTo(adjacent) then r.hasDoorFrame = true end
+            for i = 0, objCount do
+                local obj = r.objects:get(i)
 
-    if not r.hasDoorFrame then
-        adjacent = cell:getGridSquare(x + 1, y, z)
-        if adjacent and square:getDoorFrameTo(adjacent) then r.hasDoorFrame = true end
-    end
+                if obj:getClass() == ISO_OBJECT_CLASS then
+                    local sprite = obj:getSprite()
 
-    if not r.hasDoorFrame then
-        adjacent = cell:getGridSquare(x, y - 1, z)
-        if adjacent and square:getDoorFrameTo(adjacent) then r.hasDoorFrame = true end
-    end
+                    if sprite then
+                        local spriteName = sprite:getName()
 
-    if not r.hasDoorFrame then
-        adjacent = cell:getGridSquare(x, y + 1, z)
-        if adjacent and square:getDoorFrameTo(adjacent) then r.hasDoorFrame = true end
-    end
-
-    if r.hasDoorFrame then return r end
-
-    r.isSolidFloor = square:isSolidFloor()
-    r.isRoad = WDecay_SquareCheck.hasRoadTilesFast(square, r.objects)
-    r.isNatural = WDecay_SquareCheck.hasNaturalTilesFast(square, r.objects)
-    r.tooManyPhysicsShapes = WDecay_SquareCheck.isPhysicsSaturated(square)
-    if r.tooManyPhysicsShapes then return r end
-
-    if r.isRoad then
-        r.isUrban = true
-    elseif r.hasWalls then
-        r.isUrban = true
-    else
-        local cell = square:getCell()
-        local x, y, z = square:getX(), square:getY(), square:getZ()
-        for dx = -3, 3 do
-            for dy = -3, 3 do
-                if dx ~= 0 or dy ~= 0 then
-                    local adj = cell:getGridSquare(x + dx, y + dy, z)
-                    if adj then
-                        local adjObjs = adj:getObjects()
-                        if adjObjs then
-                            for j = 0, adjObjs:size() - 1 do
-                                local adjObj = adjObjs:get(j)
-                                if adjObj and adjObj:getSprite() then
-                                    local adjProps = adjObj:getSprite():getProperties()
-                                    if adjProps then
-                                        if adjProps:has("WallN") or adjProps:has("WallW") then
-                                            r.isUrban = true
-                                            break
-                                        end
-                                    end
-                                end
-                            end
+                        if spriteName then
+                            r.isRoad = hasRoadTilesFast(spriteName)
                         end
                     end
-
-                    if r.isUrban then break end
-                end
-            end
-
-            if r.isUrban then break end
-        end
-    end
-
-    if r.objects then
-        for i = 0, r.objects:size() - 1 do
-            local obj = r.objects:get(i)
-            if obj and obj:getSprite() then
-                local sprite = obj:getSprite()
-                local props = sprite:getProperties()
-                if props then
-                    if props:has("WallN") or props:has("WallW") then
-                        r.hasWalls = true
-                    end
-                end
-
-                local name = sprite:getName()
-                if name then
-                    if luautils.stringStarts(name, "fencing_") then
-                        r.hasFences = true
-                    end
-                end
-
-                local objClazz = obj:getClass() 
-
-                if objClazz == ISO_WINDOW_CLASS or objClazz == objClazz == ISO_WINDOW_FRAME then
-                    r.hasWindows = true
-                end
-
-                if not r.hasFurniture then
-                    local texName = obj:getTextureName()
-                    if texName and luautils.stringStarts(texName, "fixtures_") then
-                        r.hasFurniture = true
-                    end
-                end
-
-                if r.hasWalls and r.hasFences and r.hasWindows and r.hasFurniture then break end
-            end
-        end
-    end
-
-    r.passed = true
-    if r.objects then
-        for i = 0, r.objects:size() - 1 do
-            local obj = r.objects:get(i)
-            if obj and obj:getSprite() then
-                local name = obj:getSprite():getName()
-                if name and luautils.stringStarts(name, "roofs_") then
-                    r.hasRoof = true
-                    break
                 end
             end
         end
+
+        if r.isRoad then
+            r.isUrban = true
+        elseif r.hasWalls then
+            r.isUrban = true
+        else
+            local squareZone = square:getZoneType()
+            r.isUrban = squareZone == ZONE_TOWN or
+                squareZone == ZONE_TRAILER_PARK
+        end
+
+        if level == 0 then
+            r.isNatural = square:hasNaturalFloor()
+            if r.isNatural then return r end
+        end
+
+        if level > 0 then
+            r.hasRoof = square:getSquareAbove() == nil or square:haveRoofFull()
+        end
+
+        r.isSolid = square:isSolidFloor()
+        if r.isSolid then return r end
     end
 
     return r
 end
 
-function WDecay_SquareCheck.checkAll(square)
-    return WDecay_SquareCheck.checkPlacement(square)
+function WDecay_SquareCheck.checkAll(square, level)
+    return fastCheckPlacement(square, level)
 end
 
 return WDecay_SquareCheck

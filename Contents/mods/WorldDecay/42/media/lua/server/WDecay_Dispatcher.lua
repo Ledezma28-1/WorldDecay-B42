@@ -65,10 +65,6 @@ local function sqDist(px, py, wx, wy)
 end
 
 local function dispatchGenerators(square, checkResult, level)
-    if checkResult and checkResult.tooManyPhysicsShapes then
-        return
-    end
-
     if WDecay_PlacementGenerators then
         for i = 1, #WDecay_PlacementGenerators do
             local fn = WDecay_PlacementGenerators[i]
@@ -82,10 +78,9 @@ local function dispatchGenerators(square, checkResult, level)
         end
     end
 
-    if not checkResult or (not checkResult.hasWalls and not checkResult.hasWindows
+    if not checkResult.hasWalls and not checkResult.hasWindows
         and not checkResult.isRoad and not checkResult.room
-        and not checkResult.hasFences and not checkResult.hasRoof
-        and checkResult.water) then
+        and not checkResult.hasFences then
         return
     end
 
@@ -173,18 +168,21 @@ local function processChunkSquares(chunk)
             for y = 0, 7 do
                 local square = chunk:getGridSquare(x, y, z)
                 if square then
-                    local checkResult = WDecay_SquareCheck.checkAll(square)
-                    local ok, err = pcall(dispatchGenerators, square, checkResult, z)
+                    local checkResult = WDecay_SquareCheck.checkAll(square, z)
 
-                    if not ok then
-                        sqErrors = sqErrors + 1
+                    if checkResult and checkResult.isGoodSquare and not checkResult.tooManyPhysicsShapes then
+                        local ok, err = pcall(dispatchGenerators, square, checkResult, z)
 
-                        if sqErrors == 1 then
-                            print("[WDecay] Square dispatch error: " .. tostring(err):sub(1, 120))
-                        end
-                    else
-                        if sqModData then
-                            sqModData["WDecay_Processed"] = true
+                        if not ok then
+                            sqErrors = sqErrors + 1
+
+                            if sqErrors == 1 then
+                                print("[WDecay] Square dispatch error: " .. tostring(err):sub(1, 120))
+                            end
+                        else
+                            if sqModData then
+                                sqModData["WDecay_Processed"] = true
+                            end
                         end
                     end
                 end

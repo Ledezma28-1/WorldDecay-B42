@@ -19,7 +19,6 @@ local function LoadGridsquare(square, checkResult, level)
 
     if not checkResult then return end
 
-    if checkResult.water then return end
 
     if not checkResult.hasFloor then return end
 

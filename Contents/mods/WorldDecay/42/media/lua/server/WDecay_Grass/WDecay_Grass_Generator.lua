@@ -61,28 +61,24 @@ local function LoadGridsquare(square, checkResult, level)
 
     if not checkResult then return false end
 
-    if level ~= 0 then return false end
+    if level ~= 0 and not checkResult.hasRoof then return false end
 
-    local squareCheckOk = checkResult.passed
-    if not squareCheckOk and getIndoorGrassPercentage() <= 0 then return false end
+    if getIndoorGrassPercentage() <= 0 then return false end
 
-    if not squareCheckOk then
-        if getIndoorGrassPercentage() > 0 and checkResult.room and not checkResult.water
-            and not checkResult.isSolid and not checkResult.hasStairs
-            and not checkResult.hasDoor then
-            if getIndoorGrassPercentage() >= randomizer:random(1, 101) then
-                local randomGrass = WDecay_Grass.getRandomVanillaGrass()
-                if randomGrass then
-                    local obj = WDecay_Object_Buffer.getObject(randomGrass)
-                    obj:setSquare(square)
-                    square:AddSpecialObject(obj)
-                    obj:transmitCompleteItemToClients()
-                    return true
-                end
+
+    if getIndoorGrassPercentage() > 0 and checkResult.room
+        and not checkResult.isSolid and not checkResult.hasStairs
+        and not checkResult.hasDoor then
+        if getIndoorGrassPercentage() >= randomizer:random(1, 101) then
+            local randomGrass = WDecay_Grass.getRandomVanillaGrass()
+            if randomGrass then
+                local obj = WDecay_Object_Buffer.getObject(randomGrass)
+                obj:setSquare(square)
+                square:AddSpecialObject(obj)
+                obj:transmitCompleteItemToClients()
+                return true
             end
         end
-
-        return false
     end
 
     local isRoad = checkResult.isRoad

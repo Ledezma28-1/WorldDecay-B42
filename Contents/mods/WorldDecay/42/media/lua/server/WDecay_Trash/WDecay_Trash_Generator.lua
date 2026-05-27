@@ -29,7 +29,7 @@ end
 local function LoadGridsquare(square, checkResult, level)
     if not square then return end
 
-    if not checkResult or not checkResult.passed then return end
+    if not checkResult then return end
 
     if not checkResult.objects then return end
 
@@ -37,7 +37,6 @@ local function LoadGridsquare(square, checkResult, level)
 
     local isRoad = checkResult.isRoad
     local isUrban = checkResult.isUrban
-    if isUrban == nil then isUrban = true end
 
     local percentage
     if isRoad then

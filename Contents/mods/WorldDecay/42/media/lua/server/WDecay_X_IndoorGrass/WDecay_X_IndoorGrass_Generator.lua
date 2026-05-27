@@ -16,10 +16,7 @@ local function LoadGridsquare(square, checkResult, level)
     if not square then return end
     if not checkResult then return end
 
-    local isIndoor = checkResult.room ~= nil
-    if not isIndoor then return end
-
-    if checkResult.water then return end
+    if not checkResult.isIndoor then return end
 
     local floor = square:getFloor()
     if not floor then return end

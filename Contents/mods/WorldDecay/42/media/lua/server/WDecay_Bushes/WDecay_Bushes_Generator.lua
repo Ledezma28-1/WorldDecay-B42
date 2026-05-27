@@ -41,17 +41,12 @@ local function LoadGridsquare(square, checkResult, level)
 
     if not checkResult then return end
 
-    if not checkResult.objects then return end
+    if level ~= 0 and not checkResult.hasRoof then return end
 
-    if level ~= 0 then return end
-
-    local isIndoor = checkResult.room ~= nil
     local isRoad = checkResult.isRoad
 
-    if not checkResult.passed and not isIndoor then return end
-
     local percentage
-    if isIndoor then
+    if checkResult.isIndoor then
         percentage = getIndoorBushesPercentage()
     else
         percentage = isRoad and getBushesPercentageOnRoad() or getBushesPercentage()
