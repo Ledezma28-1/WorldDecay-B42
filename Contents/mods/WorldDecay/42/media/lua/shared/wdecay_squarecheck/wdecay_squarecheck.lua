@@ -157,6 +157,17 @@ local function fastCheckPlacement(square, level)
     return r
 end
 
+function WDecay_SquareCheck.printCheckResult(checkresult)
+    print("########## CHECKRESULT-DEBUG-INFORMATIONS ##########")
+    if checkresult then
+        for key, value in pairs(checkresult) do
+            print(tostring(key) .. ": " .. tostring(value))
+        end
+    else
+        print("checkresult: " .. tostring(checkresult))
+    end
+end
+
 function WDecay_SquareCheck.checkAll(square, level)
     return fastCheckPlacement(square, level)
 end

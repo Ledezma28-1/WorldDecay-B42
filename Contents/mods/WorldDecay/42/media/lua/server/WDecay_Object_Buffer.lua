@@ -46,13 +46,14 @@ local objectConfiguratorLookUp = {}
 local writeBufferTimeCounterMs = 0
 local WB_WAIT_FOR_WRITE = 1000
 local writeBuffer = ""
+local isEnabled = true
 
 local function writeLog(line)
     writeBuffer = writeBuffer .. "\n" .. "[WDecay] -> [WDecay_Object_Buffer]: " .. line
 end
 
 local function writeLogDebug(line)
-    if isDebug then
+    if isDebug and isEnabled then
         writeBuffer = writeBuffer .. "\n" .. "[DEBUG-WDecay] -> [WDecay_Object_Buffer]: " .. line
     end
 end
@@ -284,6 +285,10 @@ local function initObjectBuffer()
     local initDelta = getTimestampMs() - startTime
     writeLog("Object buffer initialized successfully in " .. tostring(initDelta) .. "ms!")
     printBuffer()
+end
+
+function WDecay_Object_Buffer.disableLog()
+    isEnabled = false
 end
 
 --- Function to register tables of spritenames, to buffer the data for later usage
