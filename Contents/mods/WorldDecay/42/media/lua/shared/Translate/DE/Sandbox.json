@@ -94,7 +94,4 @@
     "Sandbox_WDecay_indoorGrassPercentage": "Innenbereich Grassanteil in Prozent",
     "Sandbox_WDecay_indoorGrassPercentage_tooltip": "Wie viel Grass im Gebäude generiert werden soll.",
     "Sandbox_WDecay_indoorBushesPercentage": "Innenbereich Buschanteil in Prozent",
-    "Sandbox_WDecay_indoorBushesPercentage_tooltip": "Wie viele Büsche im Gebäude generiert werden soll.",
-    "Sandbox_WDecay_enableLegacyOverlays": "Aktiviere Legacy Tile Overlays",
-    "Sandbox_WDecay_enableLegacyOverlays_tooltip": "Aktiviert die legacy tile overlay System für zusätzliche Vegetationsabdeckung. Standartmäßig deaktiviert."
-}
+    "Sandbox_WDecay_indoorBushesPercentage_tooltip": "Wie viele Büsche im Gebäude generiert werden soll."}

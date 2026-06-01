@@ -357,15 +357,6 @@ option WDecay.roofCustomGrassPercentage
 	translation = WDecay_roofCustomGrassPercentage,
 }
 
-option WDecay.vehicleRarity
-{
-	type = enum,
-	numValues = 5,
-	default = 2,
-	page = WDecay_World,
-	translation = WDecay_vehicleRarity,
-}
-
 option WDecay.storiesRarity
 {
 	type = enum,
@@ -375,10 +366,845 @@ option WDecay.storiesRarity
 	translation = WDecay_storiesRarity,
 }
 
-option WDecay.enableLegacyOverlays
+option WDecay.vehicleDecayEnabled
+{
+	type = boolean,
+	default = true,
+	page = WDecay_Vehicles,
+	translation = WDecay_vehicleDecayEnabled,
+}
+
+option WDecay.generalCondition
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 100,
+	page = WDecay_Vehicles,
+	translation = WDecay_generalCondition,
+}
+
+option WDecay.generalConditionChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 100,
+	page = WDecay_Vehicles,
+	translation = WDecay_generalConditionChance,
+}
+
+option WDecay.vehicleRustMin
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 80,
+	page = WDecay_Vehicles,
+	translation = WDecay_vehicleRustMin,
+}
+
+option WDecay.vehicleRustMax
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 100,
+	page = WDecay_Vehicles,
+	translation = WDecay_vehicleRustMax,
+}
+
+option WDecay.vehicleBloodMin
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 0,
+	page = WDecay_Vehicles,
+	translation = WDecay_vehicleBloodMin,
+}
+
+option WDecay.vehicleBloodMax
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 30,
+	page = WDecay_Vehicles,
+	translation = WDecay_vehicleBloodMax,
+}
+
+option Text.WDecay_Divider_Engine
+{
+	type = boolean,
+	default = true,
+	page = WDecay_Vehicles,
+	translation = WDecay_Divider_Engine,
+}
+
+option WDecay.engineDamageChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 80,
+	page = WDecay_Vehicles,
+	translation = WDecay_engineDamageChance,
+}
+
+option WDecay.engineConditionMin
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 0,
+	page = WDecay_Vehicles,
+	translation = WDecay_engineConditionMin,
+}
+
+option WDecay.engineConditionMax
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 20,
+	page = WDecay_Vehicles,
+	translation = WDecay_engineConditionMax,
+}
+
+option Text.WDecay_Divider_FuelElectrical
+{
+	type = boolean,
+	default = true,
+	page = WDecay_Vehicles,
+	translation = WDecay_Divider_FuelElectrical,
+}
+
+option WDecay.batteryDamageChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 90,
+	page = WDecay_Vehicles,
+	translation = WDecay_batteryDamageChance,
+}
+
+option WDecay.batteryMissingChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 20,
+	page = WDecay_Vehicles,
+	translation = WDecay_batteryMissingChance,
+}
+
+option WDecay.batteryChargeMin
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 0,
+	page = WDecay_Vehicles,
+	translation = WDecay_batteryChargeMin,
+}
+
+option WDecay.batteryChargeMax
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 20,
+	page = WDecay_Vehicles,
+	translation = WDecay_batteryChargeMax,
+}
+
+option WDecay.batteryConditionMin
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 0,
+	page = WDecay_Vehicles,
+	translation = WDecay_batteryConditionMin,
+}
+
+option WDecay.batteryConditionMax
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 0,
+	page = WDecay_Vehicles,
+	translation = WDecay_batteryConditionMax,
+}
+
+option WDecay.gasTankDamageChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 60,
+	page = WDecay_Vehicles,
+	translation = WDecay_gasTankDamageChance,
+}
+
+option WDecay.gasTankMissingChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 5,
+	page = WDecay_Vehicles,
+	translation = WDecay_gasTankMissingChance,
+}
+
+option WDecay.gasTankConditionMin
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 10,
+	page = WDecay_Vehicles,
+	translation = WDecay_gasTankConditionMin,
+}
+
+option WDecay.gasTankConditionMax
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 40,
+	page = WDecay_Vehicles,
+	translation = WDecay_gasTankConditionMax,
+}
+
+option Text.WDecay_Divider_RunningGear
+{
+	type = boolean,
+	default = true,
+	page = WDecay_Vehicles,
+	translation = WDecay_Divider_RunningGear,
+}
+
+option WDecay.tireDamageChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 30,
+	page = WDecay_Vehicles,
+	translation = WDecay_tireDamageChance,
+}
+
+option WDecay.tireMissingChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 20,
+	page = WDecay_Vehicles,
+	translation = WDecay_tireMissingChance,
+}
+
+option WDecay.tireConditionMin
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 0,
+	page = WDecay_Vehicles,
+	translation = WDecay_tireConditionMin,
+}
+
+option WDecay.tireConditionMax
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 0,
+	page = WDecay_Vehicles,
+	translation = WDecay_tireConditionMax,
+}
+
+option WDecay.brakeDamageChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 50,
+	page = WDecay_Vehicles,
+	translation = WDecay_brakeDamageChance,
+}
+
+option WDecay.brakeMissingChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 8,
+	page = WDecay_Vehicles,
+	translation = WDecay_brakeMissingChance,
+}
+
+option WDecay.brakeConditionMin
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 10,
+	page = WDecay_Vehicles,
+	translation = WDecay_brakeConditionMin,
+}
+
+option WDecay.brakeConditionMax
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 40,
+	page = WDecay_Vehicles,
+	translation = WDecay_brakeConditionMax,
+}
+
+option WDecay.suspensionDamageChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 40,
+	page = WDecay_Vehicles,
+	translation = WDecay_suspensionDamageChance,
+}
+
+option WDecay.suspensionMissingChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 8,
+	page = WDecay_Vehicles,
+	translation = WDecay_suspensionMissingChance,
+}
+
+option WDecay.suspensionConditionMin
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 20,
+	page = WDecay_Vehicles,
+	translation = WDecay_suspensionConditionMin,
+}
+
+option WDecay.suspensionConditionMax
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 50,
+	page = WDecay_Vehicles,
+	translation = WDecay_suspensionConditionMax,
+}
+
+option Text.WDecay_Divider_Exhaust
+{
+	type = boolean,
+	default = true,
+	page = WDecay_Vehicles,
+	translation = WDecay_Divider_Exhaust,
+}
+
+option WDecay.mufflerDamageChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 50,
+	page = WDecay_Vehicles,
+	translation = WDecay_mufflerDamageChance,
+}
+
+option WDecay.mufflerMissingChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 10,
+	page = WDecay_Vehicles,
+	translation = WDecay_mufflerMissingChance,
+}
+
+option WDecay.mufflerConditionMin
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 10,
+	page = WDecay_Vehicles,
+	translation = WDecay_mufflerConditionMin,
+}
+
+option WDecay.mufflerConditionMax
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 40,
+	page = WDecay_Vehicles,
+	translation = WDecay_mufflerConditionMax,
+}
+
+option Text.WDecay_Divider_BodyPanels
+{
+	type = boolean,
+	default = true,
+	page = WDecay_Vehicles,
+	translation = WDecay_Divider_BodyPanels,
+}
+
+option WDecay.doorDamageChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 40,
+	page = WDecay_Vehicles,
+	translation = WDecay_doorDamageChance,
+}
+
+option WDecay.doorMissingChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 10,
+	page = WDecay_Vehicles,
+	translation = WDecay_doorMissingChance,
+}
+
+option WDecay.doorConditionMin
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 10,
+	page = WDecay_Vehicles,
+	translation = WDecay_doorConditionMin,
+}
+
+option WDecay.doorConditionMax
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 40,
+	page = WDecay_Vehicles,
+	translation = WDecay_doorConditionMax,
+}
+
+option WDecay.hoodDamageChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 50,
+	page = WDecay_Vehicles,
+	translation = WDecay_hoodDamageChance,
+}
+
+option WDecay.hoodMissingChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 10,
+	page = WDecay_Vehicles,
+	translation = WDecay_hoodMissingChance,
+}
+
+option WDecay.hoodConditionMin
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 10,
+	page = WDecay_Vehicles,
+	translation = WDecay_hoodConditionMin,
+}
+
+option WDecay.hoodConditionMax
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 50,
+	page = WDecay_Vehicles,
+	translation = WDecay_hoodConditionMax,
+}
+
+option WDecay.trunkDamageChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 40,
+	page = WDecay_Vehicles,
+	translation = WDecay_trunkDamageChance,
+}
+
+option WDecay.trunkMissingChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 10,
+	page = WDecay_Vehicles,
+	translation = WDecay_trunkMissingChance,
+}
+
+option WDecay.trunkConditionMin
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 10,
+	page = WDecay_Vehicles,
+	translation = WDecay_trunkConditionMin,
+}
+
+option WDecay.trunkConditionMax
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 50,
+	page = WDecay_Vehicles,
+	translation = WDecay_trunkConditionMax,
+}
+
+option Text.WDecay_Divider_GlassLighting
+{
+	type = boolean,
+	default = true,
+	page = WDecay_Vehicles,
+	translation = WDecay_Divider_GlassLighting,
+}
+
+option WDecay.windowDamageChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 50,
+	page = WDecay_Vehicles,
+	translation = WDecay_windowDamageChance,
+}
+
+option WDecay.windowMissingChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 30,
+	page = WDecay_Vehicles,
+	translation = WDecay_windowMissingChance,
+}
+
+option WDecay.windowConditionMin
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 0,
+	page = WDecay_Vehicles,
+	translation = WDecay_windowConditionMin,
+}
+
+option WDecay.windowConditionMax
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 0,
+	page = WDecay_Vehicles,
+	translation = WDecay_windowConditionMax,
+}
+
+option WDecay.headlightDamageChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 60,
+	page = WDecay_Vehicles,
+	translation = WDecay_headlightDamageChance,
+}
+
+option WDecay.headlightMissingChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 15,
+	page = WDecay_Vehicles,
+	translation = WDecay_headlightMissingChance,
+}
+
+option WDecay.headlightConditionMin
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 0,
+	page = WDecay_Vehicles,
+	translation = WDecay_headlightConditionMin,
+}
+
+option WDecay.headlightConditionMax
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 30,
+	page = WDecay_Vehicles,
+	translation = WDecay_headlightConditionMax,
+}
+
+option WDecay.taillightDamageChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 60,
+	page = WDecay_Vehicles,
+	translation = WDecay_taillightDamageChance,
+}
+
+option WDecay.taillightMissingChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 15,
+	page = WDecay_Vehicles,
+	translation = WDecay_taillightMissingChance,
+}
+
+option WDecay.taillightConditionMin
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 0,
+	page = WDecay_Vehicles,
+	translation = WDecay_taillightConditionMin,
+}
+
+option WDecay.taillightConditionMax
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 30,
+	page = WDecay_Vehicles,
+	translation = WDecay_taillightConditionMax,
+}
+
+option Text.WDecay_Divider_Interior
+{
+	type = boolean,
+	default = true,
+	page = WDecay_Vehicles,
+	translation = WDecay_Divider_Interior,
+}
+
+option WDecay.gloveBoxDamageChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 70,
+	page = WDecay_Vehicles,
+	translation = WDecay_gloveBoxDamageChance,
+}
+
+option WDecay.gloveBoxMissingChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 15,
+	page = WDecay_Vehicles,
+	translation = WDecay_gloveBoxMissingChance,
+}
+
+option WDecay.gloveBoxConditionMin
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 10,
+	page = WDecay_Vehicles,
+	translation = WDecay_gloveBoxConditionMin,
+}
+
+option WDecay.gloveBoxConditionMax
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 40,
+	page = WDecay_Vehicles,
+	translation = WDecay_gloveBoxConditionMax,
+}
+
+option WDecay.radioDamageChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 80,
+	page = WDecay_Vehicles,
+	translation = WDecay_radioDamageChance,
+}
+
+option WDecay.radioMissingChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 20,
+	page = WDecay_Vehicles,
+	translation = WDecay_radioMissingChance,
+}
+
+option WDecay.radioConditionMin
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 0,
+	page = WDecay_Vehicles,
+	translation = WDecay_radioConditionMin,
+}
+
+option WDecay.radioConditionMax
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 20,
+	page = WDecay_Vehicles,
+	translation = WDecay_radioConditionMax,
+}
+
+option WDecay.heaterDamageChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 60,
+	page = WDecay_Vehicles,
+	translation = WDecay_heaterDamageChance,
+}
+
+option WDecay.heaterMissingChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 10,
+	page = WDecay_Vehicles,
+	translation = WDecay_heaterMissingChance,
+}
+
+option WDecay.heaterConditionMin
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 10,
+	page = WDecay_Vehicles,
+	translation = WDecay_heaterConditionMin,
+}
+
+option WDecay.heaterConditionMax
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 40,
+	page = WDecay_Vehicles,
+	translation = WDecay_heaterConditionMax,
+}
+
+option WDecay.survivorCampsEnabled
+{
+	type = boolean,
+	default = true,
+	page = WDecay_SurvivorCamps,
+	translation = WDecay_survivorCampsEnabled,
+}
+
+option WDecay.survivorCampsChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 5,
+	page = WDecay_SurvivorCamps,
+	translation = WDecay_survivorCampsChance,
+}
+
+option WDecay.survivorCampsDensity
+{
+	type = integer,
+	min = 1,
+	max = 5,
+	default = 2,
+	page = WDecay_SurvivorCamps,
+	translation = WDecay_survivorCampsDensity,
+}
+
+option WDecay.survivorCampsLoot
+{
+	type = enum,
+	numValues = 4,
+	default = 2,
+	page = WDecay_SurvivorCamps,
+	translation = WDecay_survivorCampsLoot,
+}
+
+option WDecay.survivorCampsCorpses
+{
+	type = boolean,
+	default = true,
+	page = WDecay_SurvivorCamps,
+	translation = WDecay_survivorCampsCorpses,
+}
+
+option WDecay.survivorCampsForest
+{
+	type = boolean,
+	default = true,
+	page = WDecay_SurvivorCamps,
+	translation = WDecay_survivorCampsForest,
+}
+
+option WDecay.survivorCampsFarmland
 {
 	type = boolean,
 	default = false,
-	page = WDecay_World,
-	translation = WDecay_enableLegacyOverlays,
+	page = WDecay_SurvivorCamps,
+	translation = WDecay_survivorCampsFarmland,
+}
+
+option WDecay.survivorCampsCleanArea
+{
+	type = boolean,
+	default = true,
+	page = WDecay_SurvivorCamps,
+	translation = WDecay_survivorCampsCleanArea,
 }

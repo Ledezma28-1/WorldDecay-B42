@@ -94,7 +94,4 @@
     "Sandbox_WDecay_indoorGrassPercentage": "Porcentagem de Grama Interna",
     "Sandbox_WDecay_indoorGrassPercentage_tooltip": "Quanta grama e vegetação surge dentro de edifícios nos blocos de chão.",
     "Sandbox_WDecay_indoorBushesPercentage": "Porcentagem de Arbustos Internos",
-    "Sandbox_WDecay_indoorBushesPercentage_tooltip": "Quantos arbustos surgem dentro de edifícios nos blocos de chão.",
-    "Sandbox_WDecay_enableLegacyOverlays": "Ativar Sobreposições de Blocos antigos",
-    "Sandbox_WDecay_enableLegacyOverlays_tooltip": "Ativa o sistema antigo de sobreposição de blocos para cobertura adicional de vegetação. Desativado por padrão."
-}
+    "Sandbox_WDecay_indoorBushesPercentage_tooltip": "Quantos arbustos surgem dentro de edifícios nos blocos de chão."}

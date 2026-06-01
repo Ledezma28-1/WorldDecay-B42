@@ -559,8 +559,33 @@ function WDecay_SquareCheck.checkPlacement(square)
     return r
 end
 
-function WDecay_SquareCheck.checkAll(square)
+function WDecay_SquareCheck.checkAll(square, level)
     return WDecay_SquareCheck.checkPlacement(square)
+end
+
+function WDecay_SquareCheck.printCheckResult(r)
+    if not r then print("[WDecay-Debug] checkResult is nil"); return end
+    print("[WDecay-Debug] === CheckResult ===")
+    print("[WDecay-Debug] passed = " .. tostring(r.passed))
+    print("[WDecay-Debug] water = " .. tostring(r.water))
+    print("[WDecay-Debug] room = " .. tostring(r.room ~= nil))
+    print("[WDecay-Debug] isRoad = " .. tostring(r.isRoad))
+    print("[WDecay-Debug] isSolid = " .. tostring(r.isSolid))
+    print("[WDecay-Debug] isSolidFloor = " .. tostring(r.isSolidFloor))
+    print("[WDecay-Debug] hasFloor = " .. tostring(r.hasFloor))
+    print("[WDecay-Debug] hasWalls = " .. tostring(r.hasWalls))
+    print("[WDecay-Debug] hasFences = " .. tostring(r.hasFences))
+    print("[WDecay-Debug] hasWindows = " .. tostring(r.hasWindows))
+    print("[WDecay-Debug] hasRoof = " .. tostring(r.hasRoof))
+    print("[WDecay-Debug] hasDoor = " .. tostring(r.hasDoor))
+    print("[WDecay-Debug] hasStairs = " .. tostring(r.hasStairs))
+    print("[WDecay-Debug] hasLadder = " .. tostring(r.hasLadder))
+    print("[WDecay-Debug] hasDoorFrame = " .. tostring(r.hasDoorFrame))
+    print("[WDecay-Debug] hasFurniture = " .. tostring(r.hasFurniture))
+    print("[WDecay-Debug] isUrban = " .. tostring(r.isUrban))
+    print("[WDecay-Debug] isNatural = " .. tostring(r.isNatural))
+    print("[WDecay-Debug] tooManyPhysicsShapes = " .. tostring(r.tooManyPhysicsShapes))
+    print("[WDecay-Debug] ===================")
 end
 
 return WDecay_SquareCheck

@@ -435,4 +435,8 @@ end
 Events.OnTickEvenPaused.Add(OnTick)
 Events.OnInitGlobalModData.Add(initObjectBuffer)
 
+function WDecay_Object_Buffer.disableLog()
+    isDebug = false
+end
+
 return WDecay_Object_Buffer
