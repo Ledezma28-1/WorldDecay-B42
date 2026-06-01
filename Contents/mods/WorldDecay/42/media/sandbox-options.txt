@@ -1,13 +1,5 @@
 VERSION = 1,
 
-option WDecay.ReadPlease
-{
-	type = boolean,
-	default = false,
-	page = WDecay,
-	translation = WDecay_ReadPlease,
-}
-
 option WDecay.timeBudgetMs
 {
 	type = integer,
@@ -56,12 +48,20 @@ option WDecay.debugMode
 	translation = WDecay_debugMode,
 }
 
+option Text.WDecay_Divider_Nature_Trees
+{
+	type = boolean,
+	default = true,
+	page = WDecay_Nature,
+	translation = WDecay_Divider_Nature_Trees,
+}
+
 option WDecay.treePercentage
 {
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 17,
+	default = 40,
 	page = WDecay_Nature,
 	translation = WDecay_treePercentage,
 }
@@ -71,9 +71,17 @@ option WDecay.treePercentageOnRoad
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 0,
+	default = 40,
 	page = WDecay_Nature,
 	translation = WDecay_treePercentageOnRoad,
+}
+
+option Text.WDecay_Divider_Nature_Bushes
+{
+	type = boolean,
+	default = true,
+	page = WDecay_Nature,
+	translation = WDecay_Divider_Nature_Bushes,
 }
 
 option WDecay.bushesPercentage
@@ -81,7 +89,7 @@ option WDecay.bushesPercentage
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 17,
+	default = 40,
 	page = WDecay_Nature,
 	translation = WDecay_bushesPercentage,
 }
@@ -91,7 +99,7 @@ option WDecay.bushesPercentageOnRoad
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 0,
+	default = 40,
 	page = WDecay_Nature,
 	translation = WDecay_bushesPercentageOnRoad,
 }
@@ -101,9 +109,17 @@ option WDecay.indoorBushesPercentage
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 5,
+	default = 30,
 	page = WDecay_Nature,
 	translation = WDecay_indoorBushesPercentage,
+}
+
+option Text.WDecay_Divider_Nature_Grass
+{
+	type = boolean,
+	default = true,
+	page = WDecay_Nature,
+	translation = WDecay_Divider_Nature_Grass,
 }
 
 option WDecay.grassPercentage
@@ -111,7 +127,7 @@ option WDecay.grassPercentage
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 40,
+	default = 90,
 	page = WDecay_Nature,
 	translation = WDecay_grassPercentage,
 }
@@ -121,7 +137,7 @@ option WDecay.grassPercentageOnRoad
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 40,
+	default = 90,
 	page = WDecay_Nature,
 	translation = WDecay_grassPercentageOnRoad,
 }
@@ -131,7 +147,7 @@ option WDecay.customGrassPercentage
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 20,
+	default = 0,
 	page = WDecay_Nature,
 	translation = WDecay_customGrassPercentage,
 }
@@ -141,9 +157,69 @@ option WDecay.customGrassPercentageOnRoad
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 20,
+	default = 0,
 	page = WDecay_Nature,
 	translation = WDecay_customGrassPercentageOnRoad,
+}
+
+option WDecay.dryGrassPercentage
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 0,
+	page = WDecay_Nature,
+	translation = WDecay_dryGrassPercentage,
+}
+
+option WDecay.dryGrassPercentageOnRoad
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 0,
+	page = WDecay_Nature,
+	translation = WDecay_dryGrassPercentageOnRoad,
+}
+
+option WDecay.floorLeavesPercentage
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 20,
+	page = WDecay_Nature,
+	translation = WDecay_floorLeavesPercentage,
+}
+
+option WDecay.floorLeavesPercentageOnRoad
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 20,
+	page = WDecay_Nature,
+	translation = WDecay_floorLeavesPercentageOnRoad,
+}
+
+option WDecay.groundDebrisPercentage
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 0,
+	page = WDecay_Nature,
+	translation = WDecay_groundDebrisPercentage,
+}
+
+option WDecay.groundDebrisPercentageOnRoad
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 0,
+	page = WDecay_Nature,
+	translation = WDecay_groundDebrisPercentageOnRoad,
 }
 
 option WDecay.indoorGrassPercentage
@@ -151,9 +227,17 @@ option WDecay.indoorGrassPercentage
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 30,
+	default = 100,
 	page = WDecay_Nature,
 	translation = WDecay_indoorGrassPercentage,
+}
+
+option Text.WDecay_Divider_Nature_Vines
+{
+	type = boolean,
+	default = true,
+	page = WDecay_Nature,
+	translation = WDecay_Divider_Nature_Vines,
 }
 
 option WDecay.vinePercentage
@@ -161,7 +245,7 @@ option WDecay.vinePercentage
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 80,
+	default = 100,
 	page = WDecay_Nature,
 	translation = WDecay_vinePercentage,
 }
@@ -198,6 +282,14 @@ option WDecay.vinesOnFences
 	translation = WDecay_vinesOnFences,
 }
 
+option Text.WDecay_Divider_Nature_Trash
+{
+	type = boolean,
+	default = true,
+	page = WDecay_Nature,
+	translation = WDecay_Divider_Nature_Trash,
+}
+
 option WDecay.trashPercentage
 {
 	type = integer,
@@ -218,12 +310,20 @@ option WDecay.trashPercentageOnRoad
 	translation = WDecay_trashPercentageOnRoad,
 }
 
+option Text.WDecay_Divider_Urban_Cracks
+{
+	type = boolean,
+	default = true,
+	page = WDecay_UrbanDecay,
+	translation = WDecay_Divider_Urban_Cracks,
+}
+
 option WDecay.roadCrackOverlayPercentage
 {
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 10,
+	default = 1,
 	page = WDecay_UrbanDecay,
 	translation = WDecay_roadCrackOverlayPercentage,
 }
@@ -236,6 +336,14 @@ option WDecay.dirtCrackOverlayPercentage
 	default = 10,
 	page = WDecay_UrbanDecay,
 	translation = WDecay_dirtCrackOverlayPercentage,
+}
+
+option Text.WDecay_Divider_Urban_Walls
+{
+	type = boolean,
+	default = true,
+	page = WDecay_UrbanDecay,
+	translation = WDecay_Divider_Urban_Walls,
 }
 
 option WDecay.wallPercentage
@@ -258,6 +366,14 @@ option WDecay.barricadePercentage
 	translation = WDecay_barricadePercentage,
 }
 
+option Text.WDecay_Divider_Urban_Doors
+{
+	type = boolean,
+	default = true,
+	page = WDecay_UrbanDecay,
+	translation = WDecay_Divider_Urban_Doors,
+}
+
 option WDecay.destroyedDoorsPercentage
 {
 	type = integer,
@@ -276,6 +392,14 @@ option WDecay.destroyedWindowsPercentage
 	default = 40,
 	page = WDecay_UrbanDecay,
 	translation = WDecay_destroyedWindowsPercentage,
+}
+
+option Text.WDecay_Divider_Urban_Fences
+{
+	type = boolean,
+	default = true,
+	page = WDecay_UrbanDecay,
+	translation = WDecay_Divider_Urban_Fences,
 }
 
 option WDecay.fencePercentage
@@ -327,6 +451,14 @@ option WDecay.fenceBendSeverity
 	translation = WDecay_fenceBendSeverity,
 }
 
+option Text.WDecay_Divider_Urban_Roofs
+{
+	type = boolean,
+	default = true,
+	page = WDecay_UrbanDecay,
+	translation = WDecay_Divider_Urban_Roofs,
+}
+
 option WDecay.roofPercentage
 {
 	type = integer,
@@ -357,15 +489,6 @@ option WDecay.roofCustomGrassPercentage
 	translation = WDecay_roofCustomGrassPercentage,
 }
 
-option WDecay.storiesRarity
-{
-	type = enum,
-	numValues = 5,
-	default = 2,
-	page = WDecay_World,
-	translation = WDecay_storiesRarity,
-}
-
 option WDecay.vehicleDecayEnabled
 {
 	type = boolean,
@@ -379,7 +502,7 @@ option WDecay.generalCondition
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 100,
+	default = 20,
 	page = WDecay_Vehicles,
 	translation = WDecay_generalCondition,
 }
@@ -389,7 +512,7 @@ option WDecay.generalConditionChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 100,
+	default = 20,
 	page = WDecay_Vehicles,
 	translation = WDecay_generalConditionChance,
 }
@@ -399,7 +522,7 @@ option WDecay.vehicleRustMin
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 80,
+	default = 100,
 	page = WDecay_Vehicles,
 	translation = WDecay_vehicleRustMin,
 }
@@ -447,7 +570,7 @@ option WDecay.engineDamageChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 80,
+	default = 100,
 	page = WDecay_Vehicles,
 	translation = WDecay_engineDamageChance,
 }
@@ -485,7 +608,7 @@ option WDecay.batteryDamageChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 90,
+	default = 100,
 	page = WDecay_Vehicles,
 	translation = WDecay_batteryDamageChance,
 }
@@ -495,7 +618,7 @@ option WDecay.batteryMissingChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 20,
+	default = 40,
 	page = WDecay_Vehicles,
 	translation = WDecay_batteryMissingChance,
 }
@@ -515,7 +638,7 @@ option WDecay.batteryChargeMax
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 20,
+	default = 0,
 	page = WDecay_Vehicles,
 	translation = WDecay_batteryChargeMax,
 }
@@ -535,7 +658,7 @@ option WDecay.batteryConditionMax
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 0,
+	default = 10,
 	page = WDecay_Vehicles,
 	translation = WDecay_batteryConditionMax,
 }
@@ -545,7 +668,7 @@ option WDecay.gasTankDamageChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 60,
+	default = 100,
 	page = WDecay_Vehicles,
 	translation = WDecay_gasTankDamageChance,
 }
@@ -555,7 +678,7 @@ option WDecay.gasTankMissingChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 5,
+	default = 40,
 	page = WDecay_Vehicles,
 	translation = WDecay_gasTankMissingChance,
 }
@@ -593,7 +716,7 @@ option WDecay.tireDamageChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 30,
+	default = 100,
 	page = WDecay_Vehicles,
 	translation = WDecay_tireDamageChance,
 }
@@ -603,7 +726,7 @@ option WDecay.tireMissingChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 20,
+	default = 40,
 	page = WDecay_Vehicles,
 	translation = WDecay_tireMissingChance,
 }
@@ -623,7 +746,7 @@ option WDecay.tireConditionMax
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 0,
+	default = 10,
 	page = WDecay_Vehicles,
 	translation = WDecay_tireConditionMax,
 }
@@ -633,7 +756,7 @@ option WDecay.brakeDamageChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 50,
+	default = 100,
 	page = WDecay_Vehicles,
 	translation = WDecay_brakeDamageChance,
 }
@@ -643,7 +766,7 @@ option WDecay.brakeMissingChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 8,
+	default = 40,
 	page = WDecay_Vehicles,
 	translation = WDecay_brakeMissingChance,
 }
@@ -673,7 +796,7 @@ option WDecay.suspensionDamageChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 40,
+	default = 100,
 	page = WDecay_Vehicles,
 	translation = WDecay_suspensionDamageChance,
 }
@@ -683,7 +806,7 @@ option WDecay.suspensionMissingChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 8,
+	default = 40,
 	page = WDecay_Vehicles,
 	translation = WDecay_suspensionMissingChance,
 }
@@ -713,7 +836,7 @@ option Text.WDecay_Divider_Exhaust
 	type = boolean,
 	default = true,
 	page = WDecay_Vehicles,
-	translation = WDecay_Divider_Exhaust,
+	translation = WDecay_Divider_RunningGear,
 }
 
 option WDecay.mufflerDamageChance
@@ -721,7 +844,7 @@ option WDecay.mufflerDamageChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 50,
+	default = 100,
 	page = WDecay_Vehicles,
 	translation = WDecay_mufflerDamageChance,
 }
@@ -731,7 +854,7 @@ option WDecay.mufflerMissingChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 10,
+	default = 40,
 	page = WDecay_Vehicles,
 	translation = WDecay_mufflerMissingChance,
 }
@@ -769,7 +892,7 @@ option WDecay.doorDamageChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 40,
+	default = 100,
 	page = WDecay_Vehicles,
 	translation = WDecay_doorDamageChance,
 }
@@ -779,7 +902,7 @@ option WDecay.doorMissingChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 10,
+	default = 40,
 	page = WDecay_Vehicles,
 	translation = WDecay_doorMissingChance,
 }
@@ -809,7 +932,7 @@ option WDecay.hoodDamageChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 50,
+	default = 100,
 	page = WDecay_Vehicles,
 	translation = WDecay_hoodDamageChance,
 }
@@ -819,7 +942,7 @@ option WDecay.hoodMissingChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 10,
+	default = 40,
 	page = WDecay_Vehicles,
 	translation = WDecay_hoodMissingChance,
 }
@@ -849,7 +972,7 @@ option WDecay.trunkDamageChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 40,
+	default = 100,
 	page = WDecay_Vehicles,
 	translation = WDecay_trunkDamageChance,
 }
@@ -859,7 +982,7 @@ option WDecay.trunkMissingChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 10,
+	default = 40,
 	page = WDecay_Vehicles,
 	translation = WDecay_trunkMissingChance,
 }
@@ -897,7 +1020,7 @@ option WDecay.windowDamageChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 50,
+	default = 100,
 	page = WDecay_Vehicles,
 	translation = WDecay_windowDamageChance,
 }
@@ -907,7 +1030,7 @@ option WDecay.windowMissingChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 30,
+	default = 40,
 	page = WDecay_Vehicles,
 	translation = WDecay_windowMissingChance,
 }
@@ -937,7 +1060,7 @@ option WDecay.headlightDamageChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 60,
+	default = 100,
 	page = WDecay_Vehicles,
 	translation = WDecay_headlightDamageChance,
 }
@@ -947,7 +1070,7 @@ option WDecay.headlightMissingChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 15,
+	default = 40,
 	page = WDecay_Vehicles,
 	translation = WDecay_headlightMissingChance,
 }
@@ -977,7 +1100,7 @@ option WDecay.taillightDamageChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 60,
+	default = 100,
 	page = WDecay_Vehicles,
 	translation = WDecay_taillightDamageChance,
 }
@@ -987,7 +1110,7 @@ option WDecay.taillightMissingChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 15,
+	default = 40,
 	page = WDecay_Vehicles,
 	translation = WDecay_taillightMissingChance,
 }
@@ -1025,7 +1148,7 @@ option WDecay.gloveBoxDamageChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 70,
+	default = 100,
 	page = WDecay_Vehicles,
 	translation = WDecay_gloveBoxDamageChance,
 }
@@ -1035,7 +1158,7 @@ option WDecay.gloveBoxMissingChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 15,
+	default = 40,
 	page = WDecay_Vehicles,
 	translation = WDecay_gloveBoxMissingChance,
 }
@@ -1065,7 +1188,7 @@ option WDecay.radioDamageChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 80,
+	default = 100,
 	page = WDecay_Vehicles,
 	translation = WDecay_radioDamageChance,
 }
@@ -1075,7 +1198,7 @@ option WDecay.radioMissingChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 20,
+	default = 40,
 	page = WDecay_Vehicles,
 	translation = WDecay_radioMissingChance,
 }
@@ -1105,7 +1228,7 @@ option WDecay.heaterDamageChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 60,
+	default = 100,
 	page = WDecay_Vehicles,
 	translation = WDecay_heaterDamageChance,
 }
@@ -1115,7 +1238,7 @@ option WDecay.heaterMissingChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 10,
+	default = 40,
 	page = WDecay_Vehicles,
 	translation = WDecay_heaterMissingChance,
 }
