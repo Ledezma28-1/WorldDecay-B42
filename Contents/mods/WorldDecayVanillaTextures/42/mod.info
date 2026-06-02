@@ -1,0 +1,8 @@
+name=World Decay [B42] Vanilla Textures
+id=WorldDecayVanillaTextures
+description=Transforms Knox County into a decaying post-apocalyptic wasteland. Advanced vegetation, urban decay, abandoned vehicles, barricades, trash, and a full cleaning system. Fully configurable via sandbox options. Save-safe.
+poster=poster.png
+pzversion=42
+modversion=2.0.0
+versionMin=42.17.0
+author=Ledezma
