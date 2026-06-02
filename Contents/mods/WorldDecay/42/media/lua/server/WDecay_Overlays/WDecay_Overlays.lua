@@ -18,8 +18,10 @@ local function sb(key, fallback)
     return sandboxCache[key]
 end
 
+local OVERLAY_DENSITY = 60
+
 local function computeChance(intensity)
-    local c = math.ceil(60 / intensity)
+    local c = math.ceil(OVERLAY_DENSITY / intensity)
     return math.max(1, c)
 end
 
